@@ -65,6 +65,7 @@ class RegisterController extends Controller
     {
         $user = User::create([
             'referral_code' => $data['referral'],
+            'role'          => ($data['referral']) ? '0' : '8',
             'email'         => $data['email'],
             'password'      => Hash::make($data['password']),
         ]);

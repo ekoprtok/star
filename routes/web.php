@@ -3,6 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Landing\LandingController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\PackagesController;
+use App\Http\Controllers\Dashboard\DepositController;
+use App\Http\Controllers\Dashboard\WithdrawalController;
+use App\Http\Controllers\Dashboard\InternalTransferController;
+use App\Http\Controllers\Dashboard\HistoryController;
+use App\Http\Controllers\Dashboard\DialyChallengeController;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
@@ -26,6 +32,47 @@ Auth::routes(['verify' => true]);
 
 Route::prefix('dashboard')->middleware(['auth','verified'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+});
+
+Route::prefix('packages')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [PackagesController::class, 'index'])->name('dashboard.packages');
+});
+
+Route::prefix('deposit')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [DepositController::class, 'index'])->name('dashboard.deposit');
+});
+
+Route::prefix('withdrawal')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [WithdrawalController::class, 'index'])->name('dashboard.withdrawal');
+});
+
+Route::prefix('internaltransfer')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [InternalTransferController::class, 'index'])->name('dashboard.internaltransfer');
+});
+
+Route::prefix('transaction-history')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [HistoryController::class, 'transaction'])->name('dashboard.history.transaction');
+});
+
+Route::prefix('deposit-request')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [HistoryController::class, 'deposit'])->name('dashboard.deposit.request');
+});
+
+Route::prefix('withdrawal-request')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [HistoryController::class, 'withdrawal'])->name('dashboard.withdrawal.request');
+});
+
+Route::prefix('admin-package')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [PackagesController::class, 'package'])->name('admin.package');
+});
+
+Route::prefix('admin-package-add')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [PackagesController::class, 'packageAdd'])->name('admin.package.add');
+});
+
+Route::prefix('admin-dialy')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [DialyChallengeController::class, 'index'])->name('admin.dialy');
+    Route::get('/form', [DialyChallengeController::class, 'form'])->name('admin.dialy.form');
 });
 
 // Route::prefix('deposit')->middleware('auth')->group(function () {

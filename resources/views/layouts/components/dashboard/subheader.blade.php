@@ -30,7 +30,7 @@
                 </div>
                 <div class="nk-header-tools">
                     <ul class="nk-quick-nav">
-                        <li class="dropdown language-dropdown d-none d-sm-block me-n1">
+                        {{-- <li class="dropdown language-dropdown d-none d-sm-block me-n1">
                             <a href="#" class="dropdown-toggle nk-quick-nav-icon" data-bs-toggle="dropdown">
                                 <div class="quick-icon border border-light">
                                     <img class="icon" src="{{ asset('account/images/flags/english-sq.png') }}" alt="">
@@ -46,7 +46,7 @@
                                     </li>
                                 </ul>
                             </div>
-                        </li>
+                        </li> --}}
                         <li class="dropdown user-dropdown">
                             <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
                                 <div class="user-toggle">
@@ -55,7 +55,7 @@
                                     </div>
                                     <div class="user-info d-none d-md-block">
                                         {{-- <div class="user-status user-status-unverified">Unverified</div> --}}
-                                        <div class="user-name dropdown-indicator">{{ Auth::user()->name }}</div>
+                                        <div class="user-name dropdown-indicator">{{ Auth::user()->email }}</div>
                                     </div>
                                 </div>
                             </a>
@@ -74,17 +74,17 @@
                                 <div class="dropdown-inner">
                                     <ul class="link-list">
                                         <li>
-                                            <a href="">
-                                                <em class="icon ni ni-user-alt"></em>
-                                                <span>View Profile</span>
+                                            <a href="{{ route('dashboard') }}">
+                                                <em class="icon ni ni-lock-alt"></em>
+                                                <span>Change Password</span>
                                             </a>
                                         </li>
-                                        {{-- <li>
+                                        <li>
                                             <a href="{{ route('dashboard') }}">
                                                 <em class="icon ni ni-activity-alt"></em>
-                                                <span>Login Activity</span>
+                                                <span>Activity Log</span>
                                             </a>
-                                        </li> --}}
+                                        </li>
                                         {{-- <li><a class="dark-switch" href="#"><em class="icon ni ni-moon"></em><span>Dark Mode</span></a></li> --}}
                                     </ul>
                                 </div>

@@ -5,7 +5,8 @@
     <div class="nk-content-body">
 
         <div class="nk-block-head">
-            <div class="nk-block-head-sub"><span>Welcome!</span>
+            <div class="nk-block-head-sub">
+                <span>Welcome!</span>
             </div>
             <div class="nk-block-between-md g-4">
                 <div class="nk-block-head-content">
@@ -14,146 +15,163 @@
                         <p>At a glance summary of your account. Have fun!</p>
                     </div>
                 </div>
-                <div class="nk-block-head-content">
-                    <ul class="nk-block-tools gx-3">
-                        <li>
-                            <a href="" class="btn btn-primary">
-                                <span>Deposit</span> <em class="icon ni ni-arrow-long-right"></em>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                @if (Auth::user()->role == '0')
+                    <div class="nk-block-head-content">
+                        <ul class="nk-block-tools gx-3">
+                            <li>
+                                <a href="{{ route('dashboard.deposit') }}" class="btn btn-primary">
+                                    <span>Deposit</span> <em class="icon ni ni-arrow-long-right"></em>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                @endif
             </div>
         </div>
 
-        <div class="nk-block nk-block-lg">
-            <div class="row gy-gs">
-                <div class="col-md-6">
-                    <div class="card-head">
-                        <div class="card-title  mb-0">
-                            <h5 class="title">Recent Activities</h5>
-                        </div>
-                        <div class="card-tools">
-                            <ul class="card-tools-nav">
-                                <li class="active">
-                                    <a href="#">All</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="tranx-list card card-bordered">
-                        <div class="tranx-item">
-                            <div class="tranx-col">
-                                <div class="tranx-info">
-                                    <div class="tranx-data">
-                                        <div class="tranx-label">Deposit</div>
-                                        <div class="tranx-date">Nov 12, 2019 11:34 PM</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tranx-col">
-                                <div class="tranx-amount">
-                                    <div class="number">53 <span class="currency currency-btc">$</span></div>
-                                    <div class="number-sm">826.959 <span class="currency currency-usd">IDR</span></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="tranx-item">
-                            <div class="tranx-col">
-                                <div class="tranx-info">
-                                    <div class="tranx-data">
-                                        <div class="tranx-label">Deposit</div>
-                                        <div class="tranx-date">Nov 12, 2019 11:34 PM</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tranx-col">
-                                <div class="tranx-amount">
-                                    <div class="number">53 <span class="currency currency-btc">$</span></div>
-                                    <div class="number-sm">826.959 <span class="currency currency-usd">IDR</span></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="tranx-item">
-                            <div class="tranx-col">
-                                <div class="tranx-info">
-                                    <div class="tranx-data">
-                                        <div class="tranx-label">Deposit</div>
-                                        <div class="tranx-date">Nov 12, 2019 11:34 PM</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tranx-col">
-                                <div class="tranx-amount">
-                                    <div class="number">53 <span class="currency currency-btc">$</span></div>
-                                    <div class="number-sm">826.959 <span class="currency currency-usd">IDR</span></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="tranx-item">
-                            <div class="tranx-col">
-                                <div class="tranx-info">
-                                    <div class="tranx-data">
-                                        <div class="tranx-label">Deposit</div>
-                                        <div class="tranx-date">Nov 12, 2019 11:34 PM</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tranx-col">
-                                <div class="tranx-amount">
-                                    <div class="number">53 <span class="currency currency-btc">$</span></div>
-                                    <div class="number-sm">826.959 <span class="currency currency-usd">IDR</span></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card-head">
-                        <div class="card-title mb-0">
-                            <h5 class="title">Balance Flow</h5>
-                        </div>
-                        <div class="card-tools">
-                            <ul class="card-tools-nav">
-                                <li><a href="#">This Month</a></li>
-                                <li class="active"><a href="#">This Years</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="card card-bordered">
-                        <div class="card-inner">
-                            <div class="nk-wg4">
-                                <div class="nk-wg4-group justify-center gy-3 gx-4">
-                                    <div class="nk-wg4-item">
-                                        <div class="sub-text">
-                                            <div class="dot dot-lg sq" data-bg="#5ce0aa"></div> <span>Received</span>
-                                        </div>
-                                    </div>
-                                    <div class="nk-wg4-item">
-                                        <div class="sub-text">
-                                            <div class="dot dot-lg sq" data-bg="#798bff"></div> <span>Send</span>
-                                        </div>
-                                    </div>
-                                    <div class="nk-wg4-item">
-                                        <div class="sub-text">
-                                            <div class="dot dot-lg sq" data-bg="#f6ca3e"></div><span>Withdraw</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="nk-ck3">
-                                <canvas class="chart-account-summary" id="summaryBalance"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        @if (Auth::user()->role != '0')
         <div class="nk-block">
+            <div class="">
+                <div class="nk-block-head-xs">
+                    <div class="nk-block-between-md g-2">
+                        <div class="nk-block-head-content">
+                            <h5 class="nk-block-title title">Unapprove Status</h5>
+                        </div>
+                        <div class="nk-block-head-content">
+                            <a href="/demo5/crypto/wallets.html" class="link link-primary">See All</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-sm-4">
+                        <div class="card bg-light">
+                            <div class="nk-wgw sm">
+                                <a class="nk-wgw-inner" href="/demo5/crypto/wallet-bitcoin.html">
+                                    <div class="nk-wgw-name">
+                                        <h5 class="nk-wgw-title title">Dialy Challenge</h5>
+                                    </div>
+                                    <div class="nk-wgw-balance">
+                                        <div class="amount">
+                                            10
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card bg-light">
+                            <div class="nk-wgw sm">
+                                <a class="nk-wgw-inner" href="/demo5/crypto/wallet-bitcoin.html">
+                                    <div class="nk-wgw-name">
+                                        <h5 class="nk-wgw-title title">Deposit Wallet</h5>
+                                    </div>
+                                    <div class="nk-wgw-balance">
+                                        <div class="amount">
+                                            4
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card bg-light">
+                            <div class="nk-wgw sm">
+                                <a class="nk-wgw-inner" href="/demo5/crypto/wallet-bitcoin.html">
+                                    <div class="nk-wgw-name">
+                                        <h5 class="nk-wgw-title title">Withdrawal Wallet</h5>
+                                    </div>
+                                    <div class="nk-wgw-balance">
+                                        <div class="amount">
+                                            1
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        @if (Auth::user()->role == '0')
+        <div class="nk-block">
+
+            <div class="d-flex flex-row mb-4">
+                <div class="card card-bordered text-light is-dark h-100 w-25">
+                    <div class="card-inner">
+                        <div class="nk-wg7">
+                            <div class="nk-wg7-stats">
+                                <div class="nk-wg7-title">Available balance in USD</div>
+                                <div class="number-lg amount">179,8</div>
+                            </div>
+                            <div class="nk-wg7-foot">
+                                <span class="nk-wg7-note">Last activity at <span>19 Nov, 2019</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ms-4 w-75">
+                    <div class="nk-block-head-xs">
+                        <div class="nk-block-between-md g-2">
+                            <div class="nk-block-head-content">
+                                <h5 class="nk-block-title title">Donation Packages</h5>
+                            </div>
+                            <div class="nk-block-head-content">
+                                <a href="/demo5/crypto/wallets.html" class="link link-primary">See All</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-sm-4">
+                            <div class="card bg-light">
+                                <div class="nk-wgw sm">
+                                    <a class="nk-wgw-inner" href="/demo5/crypto/wallet-bitcoin.html">
+                                        <div class="nk-wgw-name">
+                                            <h5 class="nk-wgw-title title">Package Regular</h5>
+                                        </div>
+                                        <a class="nk-wgw-balance btn btn-primary mx-3 mb-2">
+                                            Dialy Challenge
+                                        </a>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="card bg-light">
+                                <div class="nk-wgw sm">
+                                    <a class="nk-wgw-inner" href="/demo5/crypto/wallet-bitcoin.html">
+                                        <div class="nk-wgw-name">
+                                            <h5 class="nk-wgw-title title">Package Regular</h5>
+                                        </div>
+                                        <a class="nk-wgw-balance btn btn-primary mx-3 mb-2">
+                                            Dialy Challenge
+                                        </a>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="card bg-light">
+                                <div class="nk-wgw sm">
+                                    <a class="nk-wgw-inner" href="/demo5/crypto/wallet-bitcoin.html">
+                                        <div class="nk-wgw-name">
+                                            <h5 class="nk-wgw-title title">Package Regular</h5>
+                                        </div>
+                                        <a class="nk-wgw-balance btn btn-primary mx-3 mb-2">
+                                            Dialy Challenge
+                                        </a>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="card card-bordered">
                 <div class="nk-refwg">
                     <div class="nk-refwg-invite card-inner">
@@ -179,16 +197,16 @@
                     <div class="nk-refwg-stats card-inner bg-lighter">
                         <div class="nk-refwg-group g-3">
                             <div class="nk-refwg-name">
-                                <h6 class="title">My Referral <em class="icon ni ni-info" data-bs-toggle="tooltip" data-bs-placement="right" title="Referral Informations"></em></h6>
+                                <h6 class="title">Team Information <em class="icon ni ni-info" data-bs-toggle="tooltip" data-bs-placement="right" title="Referral Informations"></em></h6>
                             </div>
                             <div class="nk-refwg-info g-3">
                                 <div class="nk-refwg-sub">
-                                    <div class="title">394</div>
-                                    <div class="sub-text">Total Joined</div>
+                                    <div class="title">3/$1000</div>
+                                    <div class="sub-text">Direction Donation</div>
                                 </div>
                                 <div class="nk-refwg-sub">
-                                    <div class="title">548.49</div>
-                                    <div class="sub-text">Referral Earn</div>
+                                    <div class="title">30/$12000</div>
+                                    <div class="sub-text">Team Donation</div>
                                 </div>
                             </div>
                             <div class="nk-refwg-more dropdown mt-n1 me-n1">
@@ -206,6 +224,25 @@
                             <canvas class="chart-refer-stats" id="refBarChart"></canvas>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="nk-block nk-block-lg">
+            <h5 class="title">Request Status</h5>
+            <div class="card card-bordered card-preview">
+                <div class="card-inner">
+                    <table class="table datatable">
+                        <thead>
+                            <tr>
+                                <th>Date Of Submitted</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                                <th>File</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
         </div>
@@ -230,10 +267,33 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
 </div>
 @endsection
 
 @push('script')
 <script src="{{ asset('account/assets/js/charts/chart-crypto.js?ver=3.0.2') }}"></script>
+
+<script>
+    NioApp.DataTable('.datatable', {
+        processing: true,
+        serverSide: true,
+        ajax : {
+            url  : '{{ route('request.list') }}',
+            type : 'POST',
+            data : {
+                user_id : '{{ Auth::user()->id }}'
+            }
+        },
+        columns: [
+            { data: 'date' },
+            { data: 'type' },
+            { data: 'desc' },
+            { data: 'file' },
+            { data: 'status' }
+        ],
+        ordering : false
+    });
+</script>
 @endpush

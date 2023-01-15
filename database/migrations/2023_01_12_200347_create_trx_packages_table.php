@@ -18,8 +18,7 @@ class CreateTrxPackagesTable extends Migration
             $table->string('submitted_at');
             $table->string('user_id');
             $table->string('package_id');
-            $table->text('file_path');
-            $table->enum('status', ['0', '1', '2'])->default('0');
+            $table->text('file_path')->nullable();;
             $table->string('responsed_by')->nullable();
             $table->string('responsed_at')->nullable();
             $table->timestamps();

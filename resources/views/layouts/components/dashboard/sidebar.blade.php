@@ -14,146 +14,101 @@
     <div class="nk-sidebar-element">
         <div class="nk-sidebar-body" data-simplebar>
             <div class="nk-sidebar-content">
-                <div class="nk-sidebar-widget d-none d-xl-block">
-                    <div class="user-account-info between-center">
-                        <div class="user-account-main">
-                            <h6 class="overline-title-alt">Available Balance</h6>
-                            <div class="user-balance">2.014095 <small class="currency currency-btc">$</small></div>
-                            <div class="user-balance-alt">18,934.84 <span class="currency currency-btc">$</span></div>
-                        </div>
-                        {{-- <a href="#" class="btn btn-white btn-icon btn-light"><em class="icon ni ni-line-chart"></em></a> --}}
-                    </div>
-                    <ul class="user-account-data gy-1">
-                        <li>
-                            <div class="user-account-label">
-                                <span class="sub-text">Profits (7d)</span>
-                            </div>
-                            <div class="user-account-value">
-                                <span class="lead-text">+ 0.0526 <span class="currency currency-btc">$</span></span>
-                                <span class="text-success ms-2">3.1% <em class="icon ni ni-arrow-long-up"></em></span>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="user-account-label">
-                                <span class="sub-text">Deposit in orders</span>
-                            </div>
-                            <div class="user-account-value">
-                                <span class="sub-text">0.005400 <span class="currency currency-btc">$</span></span>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="nk-sidebar-widget nk-sidebar-widget-full d-xl-none pt-0">
-                    <a class="nk-profile-toggle toggle-expand" data-target="sidebarProfile" href="#">
-                        <div class="user-card-wrap">
-                            <div class="user-card">
-                                <div class="user-avatar">
-                                    <span>{{ substr(Auth::user()->name,0,1) }}</span>
-                                </div>
-                                <div class="user-info">
-                                    <span class="lead-text">{{ Auth::user()->name }}</span>
-                                    <span class="sub-text">{{ Auth::user()->email }}</span>
-                                </div>
-                                <div class="user-action">
-                                    <em class="icon ni ni-chevron-down"></em>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                    <div class="nk-profile-content toggle-expand-content" data-content="sidebarProfile">
-                        <div class="user-account-info between-center">
-                            <div class="user-account-main">
-                                <h6 class="overline-title-alt">Available Balance</h6>
-                                <div class="user-balance">2.014095 <small class="currency currency-btc">$</small></div>
-                                <div class="user-balance-alt">18,934.84 <span class="currency currency-btc">$</span></div>
-                            </div>
-                            {{-- <a href="#" class="btn btn-icon btn-light"><em class="icon ni ni-line-chart"></em></a> --}}
-                        </div>
-                        <ul class="user-account-data">
-                            <li>
-                                <div class="user-account-label">
-                                    <span class="sub-text">Profits (7d)</span>
-                                </div>
-                                <div class="user-account-value">
-                                    <span class="lead-text">+ 0.0526 <span class="currency currency-btc">$</span></span>
-                                    <span class="text-success ms-2">3.1% <em class="icon ni ni-arrow-long-up"></em></span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="user-account-label">
-                                    <span class="sub-text">Deposit in orders</span>
-                                </div>
-                                <div class="user-account-value">
-                                    <span class="sub-text text-base">0.005400 <span class="currency currency-btc">$</span></span>
-                                </div>
-                            </li>
-                        </ul>
-                        <ul class="link-list">
-                            <li>
-                                <a href="{{ route('dashboard.activity') }}">
-                                    <em class="icon ni ni-activity-alt"></em>
-                                    <span>Login Activity</span>
-                                </a>
-                            </li>
-                        </ul>
-                        <ul class="link-list">
-                            <li>
-                                <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"">
-                                    <em class="icon ni ni-signout"></em>
-                                    <span>Sign out</span>
-                                </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
                 <div class="nk-sidebar-menu">
                     <ul class="nk-menu">
+                        @if (Auth::user()->role != '9')
                         <li class="nk-menu-heading">
                             <h6 class="overline-title">Menu</h6>
                         </li>
                         <li class="nk-menu-item">
                             <a href="{{ route('dashboard') }}" class="nk-menu-link">
                                 <span class="nk-menu-icon"><em class="icon ni ni-dashboard"></em></span>
-                                <span class="nk-menu-text">Dashboard</span>
+                                <span class="nk-menu-text">Home</span>
                             </a>
                         </li>
                         <li class="nk-menu-item">
-                            <a href="" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-user-c"></em></span>
-                                <span class="nk-menu-text">Buy Packages</span>
-                            </a>
-                        </li>
-                        <li class="nk-menu-item">
-                            <a href="" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-user-c"></em></span>
+                            <a href="{{ route('dashboard.packages') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-package"></em></span>
                                 <span class="nk-menu-text">Packages</span>
                             </a>
                         </li>
                         <li class="nk-menu-item">
-                            <a href="" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-user-c"></em></span>
-                                <span class="nk-menu-text">Settings</span>
+                            <a href="{{ route('dashboard.deposit') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-wallet-saving"></em></span>
+                                <span class="nk-menu-text">Deposit</span>
                             </a>
                         </li>
+                        <li class="nk-menu-item">
+                            <a href="{{ route('dashboard.withdrawal') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-wallet-out"></em></span>
+                                <span class="nk-menu-text">Withdrawal</span>
+                            </a>
+                        </li>
+                        <li class="nk-menu-item">
+                            <a href="{{ route('dashboard.internaltransfer') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-wallet-in"></em></span>
+                                <span class="nk-menu-text">Internal Transfer</span>
+                            </a>
+                        </li>
+                        @endif
 
+                        @if (Auth::user()->role == '9')
                         <li class="nk-menu-heading">
                             <h6 class="overline-title">Admin Panel</h6>
                         </li>
                         <li class="nk-menu-item">
-                            <a href="" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-wallet-alt"></em></span>
-                                <span class="nk-menu-text">Package</span>
+                            <a href="{{ route('dashboard.history.transaction') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-invest"></em></span>
+                                <span class="nk-menu-text">Transactions History</span>
                             </a>
                         </li>
                         <li class="nk-menu-item">
-                            <a href="" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-coins"></em></span>
-                                <span class="nk-menu-text">Event</span>
+                            <a href="{{ route('dashboard.deposit.request') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-wallet-saving"></em></span>
+                                <span class="nk-menu-text">Deposit Request</span>
                             </a>
                         </li>
+                        <li class="nk-menu-item">
+                            <a href="{{ route('dashboard.withdrawal.request') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-wallet-out"></em></span>
+                                <span class="nk-menu-text">Withdrawal Request</span>
+                            </a>
+                        </li>
+                        <li class="nk-menu-item">
+                            <a href="#!1" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-wallet-in"></em></span>
+                                <span class="nk-menu-text">Internal Transfer History</span>
+                            </a>
+                        </li>
+                        <li class="nk-menu-item">
+                            <a href="#!2" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-wallet-saving"></em></span>
+                                <span class="nk-menu-text">Users</span>
+                            </a>
+                        </li>
+                        <li class="nk-menu-item has-sub">
+                            <a href="#" class="nk-menu-link nk-menu-toggle">
+                                <span class="nk-menu-icon">
+                                    <em class="icon ni ni-setting"></em>
+                                </span>
+                                <span class="nk-menu-text">Settings</span>
+                            </a>
+                            <ul class="nk-menu-sub" style="display: none;">
+                                <li class="nk-menu-item">
+                                    <a href="{{ route('admin.package') }}" class="nk-menu-link">
+                                        <span class="nk-menu-text">Packages</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nk-menu-sub" style="display: none;">
+                                <li class="nk-menu-item">
+                                    <a href="{{ route('admin.dialy') }}" class="nk-menu-link">
+                                        <span class="nk-menu-text">Dialy Challenges</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        @endif
                     </ul>
                 </div>
                 <div class="nk-sidebar-footer">

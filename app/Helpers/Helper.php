@@ -62,4 +62,15 @@ class Helper {
         return ($id != '-') ? $data[$id] : $data;
     }
 
+    public static function role($id = '-') {
+        $id = (string)$id;
+        $data = [
+            '0' => 'Member',
+            '8' => 'Owner PT',
+            '9' => 'Admin',
+        ];
+
+        return ($id != '-') ? $data[$id] : $data;
+    }
+
 }
