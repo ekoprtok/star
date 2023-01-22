@@ -8,7 +8,7 @@ use App\Http\Controllers\Dashboard\DepositController;
 use App\Http\Controllers\Dashboard\WithdrawalController;
 use App\Http\Controllers\Dashboard\InternalTransferController;
 use App\Http\Controllers\Dashboard\HistoryController;
-use App\Http\Controllers\Dashboard\DialyChallengeController;
+use App\Http\Controllers\Dashboard\DailyChallengeController;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
@@ -23,7 +23,10 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 |
 */
 
-Route::get('/', [LandingController::class, 'index'])->name('landing');
+Route::get('/', function () {
+    return redirect(route('login'));
+})->name('landing');
+
 Route::get('/help', [LandingController::class, 'help'])->name('landing.help');
 Route::get('/contact', [LandingController::class, 'contact'])->name('landing.contact');
 Route::get('/news', [LandingController::class, 'news'])->name('landing.news');
@@ -36,6 +39,7 @@ Route::prefix('dashboard')->middleware(['auth','verified'])->group(function () {
 
 Route::prefix('packages')->middleware(['auth','verified'])->group(function () {
     Route::get('/', [PackagesController::class, 'index'])->name('dashboard.packages');
+    Route::get('/my-packages', [PackagesController::class, 'my'])->name('dashboard.mypackages');
 });
 
 Route::prefix('deposit')->middleware(['auth','verified'])->group(function () {
@@ -58,8 +62,16 @@ Route::prefix('deposit-request')->middleware(['auth','verified'])->group(functio
     Route::get('/', [HistoryController::class, 'deposit'])->name('dashboard.deposit.request');
 });
 
+Route::prefix('internal-trf')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [HistoryController::class, 'internalTrf'])->name('dashboard.internaltrf');
+});
+
 Route::prefix('withdrawal-request')->middleware(['auth','verified'])->group(function () {
     Route::get('/', [HistoryController::class, 'withdrawal'])->name('dashboard.withdrawal.request');
+});
+
+Route::prefix('dialy-request')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [HistoryController::class, 'dialyUnapp'])->name('dashboard.dialy.request');
 });
 
 Route::prefix('admin-package')->middleware(['auth','verified'])->group(function () {
@@ -70,9 +82,18 @@ Route::prefix('admin-package-add')->middleware(['auth','verified'])->group(funct
     Route::get('/', [PackagesController::class, 'packageAdd'])->name('admin.package.add');
 });
 
-Route::prefix('admin-dialy')->middleware(['auth','verified'])->group(function () {
-    Route::get('/', [DialyChallengeController::class, 'index'])->name('admin.dialy');
-    Route::get('/form', [DialyChallengeController::class, 'form'])->name('admin.dialy.form');
+Route::prefix('admin-daily')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [DailyChallengeController::class, 'index'])->name('admin.daily');
+    Route::get('/form', [DailyChallengeController::class, 'form'])->name('admin.daily.form');
+});
+
+Route::prefix('admin-blessing')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [DailyChallengeController::class, 'blessing'])->name('admin.daily.blessing');
+    Route::get('/form', [DailyChallengeController::class, 'form_blessing'])->name('admin.daily.blessing.form');
+});
+
+Route::prefix('admin-users')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [DashboardController::class, 'users'])->name('dashboard.users');
 });
 
 // Route::prefix('deposit')->middleware('auth')->group(function () {

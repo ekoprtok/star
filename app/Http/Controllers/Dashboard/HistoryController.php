@@ -19,4 +19,12 @@ class HistoryController extends Controller {
         return view('dashboard.history.withdrawal');
     }
 
+    public function internalTrf() {
+        return view('dashboard.history.internaltrf');
+    }
+
+    public function dialyUnapp() {
+        return view('dashboard.history.dialyUnapp');
+    }
+
 }

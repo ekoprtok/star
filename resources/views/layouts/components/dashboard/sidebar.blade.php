@@ -4,7 +4,6 @@
             <a href="{{ route('dashboard') }}" class="logo-link nk-sidebar-logo">
                 <img class="logo-light logo-img" src="{{ asset('account/images/logo.png') }}" srcset="{{ asset('account/images/logo2x.png') }} 2x" alt="logo">
                 <img class="logo-dark logo-img" src="{{ asset('account/images/logo-dark.png') }}" srcset="{{ asset('account/images/logo-dark2x.png') }} 2x" alt="logo-dark">
-                <span class="nio-version">{{ config('app.name', 'Laravel') }}</span>
             </a>
         </div>
         <div class="nk-menu-trigger me-n2">
@@ -29,10 +28,10 @@
                         <li class="nk-menu-item">
                             <a href="{{ route('dashboard.packages') }}" class="nk-menu-link">
                                 <span class="nk-menu-icon"><em class="icon ni ni-package"></em></span>
-                                <span class="nk-menu-text">Packages</span>
+                                <span class="nk-menu-text">Buy Packages</span>
                             </a>
                         </li>
-                        <li class="nk-menu-item">
+                        {{-- <li class="nk-menu-item">
                             <a href="{{ route('dashboard.deposit') }}" class="nk-menu-link">
                                 <span class="nk-menu-icon"><em class="icon ni ni-wallet-saving"></em></span>
                                 <span class="nk-menu-text">Deposit</span>
@@ -49,7 +48,7 @@
                                 <span class="nk-menu-icon"><em class="icon ni ni-wallet-in"></em></span>
                                 <span class="nk-menu-text">Internal Transfer</span>
                             </a>
-                        </li>
+                        </li> --}}
                         @endif
 
                         @if (Auth::user()->role == '9')
@@ -57,9 +56,21 @@
                             <h6 class="overline-title">Admin Panel</h6>
                         </li>
                         <li class="nk-menu-item">
+                            <a href="{{ route('dashboard') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-dashboard"></em></span>
+                                <span class="nk-menu-text">Home</span>
+                            </a>
+                        </li>
+                        <li class="nk-menu-item">
                             <a href="{{ route('dashboard.history.transaction') }}" class="nk-menu-link">
                                 <span class="nk-menu-icon"><em class="icon ni ni-invest"></em></span>
                                 <span class="nk-menu-text">Transactions History</span>
+                            </a>
+                        </li>
+                        <li class="nk-menu-item">
+                            <a href="{{ route('dashboard.dialy.request') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-check-fill-c"></em></span>
+                                <span class="nk-menu-text">Daily Request</span>
                             </a>
                         </li>
                         <li class="nk-menu-item">
@@ -75,13 +86,13 @@
                             </a>
                         </li>
                         <li class="nk-menu-item">
-                            <a href="#!1" class="nk-menu-link">
+                            <a href="{{ route('dashboard.internaltrf') }}" class="nk-menu-link">
                                 <span class="nk-menu-icon"><em class="icon ni ni-wallet-in"></em></span>
                                 <span class="nk-menu-text">Internal Transfer History</span>
                             </a>
                         </li>
                         <li class="nk-menu-item">
-                            <a href="#!2" class="nk-menu-link">
+                            <a href="{{ route('dashboard.users') }}" class="nk-menu-link">
                                 <span class="nk-menu-icon"><em class="icon ni ni-wallet-saving"></em></span>
                                 <span class="nk-menu-text">Users</span>
                             </a>
@@ -102,11 +113,18 @@
                             </ul>
                             <ul class="nk-menu-sub" style="display: none;">
                                 <li class="nk-menu-item">
-                                    <a href="{{ route('admin.dialy') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">Dialy Challenges</span>
+                                    <a href="{{ route('admin.daily') }}" class="nk-menu-link">
+                                        <span class="nk-menu-text">Daily Challenges</span>
                                     </a>
                                 </li>
                             </ul>
+                            {{-- <ul class="nk-menu-sub" style="display: none;">
+                                <li class="nk-menu-item">
+                                    <a href="{{ route('admin.daily.blessing') }}" class="nk-menu-link">
+                                        <span class="nk-menu-text">Daily Blessing</span>
+                                    </a>
+                                </li>
+                            </ul> --}}
                         </li>
                         @endif
                     </ul>

@@ -12,4 +12,8 @@ class DashboardController extends Controller {
         return view('dashboard.home');
     }
 
+    public function users() {
+        return view('dashboard.users.index');
+    }
+
 }

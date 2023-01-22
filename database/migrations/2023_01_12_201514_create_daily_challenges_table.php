@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDialyChallengesTable extends Migration
+class CreateDailyChallengesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateDialyChallengesTable extends Migration
      */
     public function up()
     {
-        Schema::create('dialy_challenges', function (Blueprint $table) {
+        Schema::create('daily_challenges', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->integer('percentage');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ class CreateDialyChallengesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dialy_challenges');
+        Schema::dropIfExists('daily_challenges');
     }
 }

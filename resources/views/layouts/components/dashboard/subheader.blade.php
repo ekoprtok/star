@@ -15,7 +15,7 @@
                         <span class="nio-version">{{ config('app.name', 'Laravel') }}</span>
                     </a>
                 </div>
-                <div class="nk-header-news d-none d-xl-block">
+                {{-- <div class="nk-header-news d-none d-xl-block">
                     <div class="nk-news-list">
                         <a class="nk-news-item" href="#">
                             <div class="nk-news-icon">
@@ -27,7 +27,7 @@
                             </div>
                         </a>
                     </div>
-                </div>
+                </div> --}}
                 <div class="nk-header-tools">
                     <ul class="nk-quick-nav">
                         {{-- <li class="dropdown language-dropdown d-none d-sm-block me-n1">

@@ -10,6 +10,14 @@ use Tarikh\PhpMeta\MetaTraderClient;
 
 class Helper {
 
+    public static function encrypt($string) {
+        return Crypt::encryptString($string);
+    }
+
+    public static function decrypt($string) {
+        return Crypt::decryptString($string);
+    }
+
     public static function format_harga($angka, $prefix = '$'){
         $hasil_rupiah = $prefix.number_format($angka,2,',','.');
         return $hasil_rupiah;

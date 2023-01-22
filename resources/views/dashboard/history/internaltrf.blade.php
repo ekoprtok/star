@@ -17,8 +17,10 @@
                         <thead>
                             <tr>
                                 <th>Date</th>
-                                <th>User</th>
-                                <th>Product</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Amount</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                     </table>
@@ -35,7 +37,7 @@
         processing: true,
         serverSide: true,
         ajax : {
-            url  : '{{ route('transaction.list') }}',
+            url  : '{{ route('internaltrf.list') }}',
             type : 'POST',
             data : {
                 user_id : '{{ Auth::user()->id }}'
@@ -43,8 +45,10 @@
         },
         columns: [
             { data: 'date' },
-            { data: 'user' },
-            { data: 'product' }
+            { data: 'from' },
+            { data: 'to' },
+            { data: 'amount' },
+            { data: 'action' }
         ],
         ordering : false
     });

@@ -6,8 +6,17 @@
        <div class="nk-block-head nk-block-head-sm">
           <div class="nk-block-between">
              <div class="nk-block-head-content">
-                <h3 class="nk-block-title page-title">Transaction History</h3>
+                <h3 class="nk-block-title page-title">Daily Blessing</h3>
              </div>
+             <div class="nk-block-head-content">
+                <ul class="nk-block-tools gx-3">
+                    <li>
+                        <a href="{{ route('admin.daily.blessing.form') }}" class="btn btn-primary">
+                            <span>Add Daily Blassing</span> <em class="icon ni ni-arrow-long-right"></em>
+                        </a>
+                    </li>
+                </ul>
+            </div>
           </div>
        </div>
        <div class="nk-block">
@@ -16,9 +25,9 @@
                     <table class="table datatable">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>User</th>
-                                <th>Product</th>
+                                <th>No</th>
+                                <th>Daily</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                     </table>
@@ -35,16 +44,16 @@
         processing: true,
         serverSide: true,
         ajax : {
-            url  : '{{ route('transaction.list') }}',
+            url  : '{{ route('admin.daily.list') }}',
             type : 'POST',
             data : {
                 user_id : '{{ Auth::user()->id }}'
             }
         },
         columns: [
-            { data: 'date' },
-            { data: 'user' },
-            { data: 'product' }
+            { data: 'no' },
+            { data: 'daily' },
+            { data: 'action' },
         ],
         ordering : false
     });

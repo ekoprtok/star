@@ -19,4 +19,8 @@ class PackagesController extends Controller {
         return view('dashboard.packages.admin_package_add');
     }
 
+    public function my() {
+        return view('dashboard.packages.my_packages');
+    }
+
 }

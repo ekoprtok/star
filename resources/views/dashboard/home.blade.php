@@ -4,15 +4,11 @@
 <div class="container-xl wide-lg">
     <div class="nk-content-body">
 
-        <div class="nk-block-head">
-            <div class="nk-block-head-sub">
-                <span>Welcome!</span>
-            </div>
+        <div class="nk-block-head pb-4">
             <div class="nk-block-between-md g-4">
                 <div class="nk-block-head-content">
-                    <h2 class="nk-block-title fw-normal">{{ Auth::user()->name }}</h2>
                     <div class="nk-block-des">
-                        <p>At a glance summary of your account. Have fun!</p>
+                        <p>Welcome!</p>
                     </div>
                 </div>
                 @if (Auth::user()->role == '0')
@@ -20,7 +16,17 @@
                         <ul class="nk-block-tools gx-3">
                             <li>
                                 <a href="{{ route('dashboard.deposit') }}" class="btn btn-primary">
-                                    <span>Deposit</span> <em class="icon ni ni-arrow-long-right"></em>
+                                    <span>Add Deposit</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('dashboard.withdrawal') }}" class="btn btn-primary">
+                                    <span>Add Withdrawal</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('dashboard.internaltransfer') }}" class="btn btn-primary">
+                                    <span>Add Internal Transfer</span>
                                 </a>
                             </li>
                         </ul>
@@ -37,18 +43,15 @@
                         <div class="nk-block-head-content">
                             <h5 class="nk-block-title title">Unapprove Status</h5>
                         </div>
-                        <div class="nk-block-head-content">
-                            <a href="/demo5/crypto/wallets.html" class="link link-primary">See All</a>
-                        </div>
                     </div>
                 </div>
                 <div class="row g-2">
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <div class="card bg-light">
                             <div class="nk-wgw sm">
-                                <a class="nk-wgw-inner" href="/demo5/crypto/wallet-bitcoin.html">
+                                <a class="nk-wgw-inner" href="{{ route('dashboard.dialy.request') }}">
                                     <div class="nk-wgw-name">
-                                        <h5 class="nk-wgw-title title">Dialy Challenge</h5>
+                                        <h5 class="nk-wgw-title title">Daily Challenge</h5>
                                     </div>
                                     <div class="nk-wgw-balance">
                                         <div class="amount">
@@ -59,10 +62,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <div class="card bg-light">
                             <div class="nk-wgw sm">
-                                <a class="nk-wgw-inner" href="/demo5/crypto/wallet-bitcoin.html">
+                                <a class="nk-wgw-inner" href="{{ route('dashboard.deposit.request') }}">
                                     <div class="nk-wgw-name">
                                         <h5 class="nk-wgw-title title">Deposit Wallet</h5>
                                     </div>
@@ -75,10 +78,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <div class="card bg-light">
                             <div class="nk-wgw sm">
-                                <a class="nk-wgw-inner" href="/demo5/crypto/wallet-bitcoin.html">
+                                <a class="nk-wgw-inner" href="{{ route('dashboard.withdrawal.request') }}">
                                     <div class="nk-wgw-name">
                                         <h5 class="nk-wgw-title title">Withdrawal Wallet</h5>
                                     </div>
@@ -93,81 +96,192 @@
                     </div>
                 </div>
             </div>
+
+            <div class="my-3">
+                <div class="nk-block-head-xs">
+                    <div class="nk-block-between-md g-2">
+                        <div class="nk-block-head-content">
+                            <h5 class="nk-block-title title">Member</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-sm-3">
+                        <div class="card bg-light">
+                            <div class="nk-wgw sm">
+                                <a class="nk-wgw-inner" href="{{ route('dashboard.users') }}">
+                                    <div class="nk-wgw-name">
+                                        <h5 class="nk-wgw-title title">Total Member</h5>
+                                    </div>
+                                    <div class="nk-wgw-balance">
+                                        <div class="amount">
+                                            2
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="my-3">
+                <div class="nk-block-head-xs">
+                    <div class="nk-block-between-md g-2">
+                        <div class="nk-block-head-content">
+                            <h5 class="nk-block-title title">Income</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-sm-3">
+                        <div class="card bg-light">
+                            <div class="nk-wgw sm">
+                                <a class="nk-wgw-inner" href="#">
+                                    <div class="nk-wgw-name">
+                                        <h5 class="nk-wgw-title title">Daily Income</h5>
+                                    </div>
+                                    <div class="nk-wgw-balance">
+                                        <div class="amount">
+                                            $120
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="card bg-light">
+                            <div class="nk-wgw sm">
+                                <a class="nk-wgw-inner" href="#">
+                                    <div class="nk-wgw-name">
+                                        <h5 class="nk-wgw-title title">Weekly Income</h5>
+                                    </div>
+                                    <div class="nk-wgw-balance">
+                                        <div class="amount">
+                                            $130
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="card bg-light">
+                            <div class="nk-wgw sm">
+                                <a class="nk-wgw-inner" href="#">
+                                    <div class="nk-wgw-name">
+                                        <h5 class="nk-wgw-title title">Monthly Income</h5>
+                                    </div>
+                                    <div class="nk-wgw-balance">
+                                        <div class="amount">
+                                            $250
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="my-3">
+                <div class="nk-block-head-xs">
+                    <div class="nk-block-between-md g-2">
+                        <div class="nk-block-head-content">
+                            <h5 class="nk-block-title title">This Year</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-bordered">
+                    <div class="card-inner">
+                        <div class="nk-wg4">
+                            <div class="nk-wg4-group justify-center gy-3 gx-4">
+                                <div class="nk-wg4-item">
+                                    <div class="sub-text">
+                                        <div class="dot dot-lg sq" data-bg="#5ce0aa"></div>
+                                            <span>Deposit</span>
+                                        </div>
+                                    </div>
+                                    <div class="nk-wg4-item">
+                                        <div class="sub-text">
+                                            <div class="dot dot-lg sq" data-bg="#798bff"></div>
+                                                <span>Internal Transfer</span>
+                                            </div>
+                                        </div>
+                                        <div class="nk-wg4-item">
+                                            <div class="sub-text">
+                                                <div class="dot dot-lg sq" data-bg="#f6ca3e"></div>
+                                                <span>Withdraw</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        <div class="nk-ck3">
+                            <canvas class="chart-account-summary" id="summaryBalance"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
         @endif
 
         @if (Auth::user()->role == '0')
         <div class="nk-block">
 
-            <div class="d-flex flex-row mb-4">
-                <div class="card card-bordered text-light is-dark h-100 w-25">
-                    <div class="card-inner">
-                        <div class="nk-wg7">
-                            <div class="nk-wg7-stats">
-                                <div class="nk-wg7-title">Available balance in USD</div>
-                                <div class="number-lg amount">179,8</div>
-                            </div>
-                            <div class="nk-wg7-foot">
-                                <span class="nk-wg7-note">Last activity at <span>19 Nov, 2019</span></span>
-                            </div>
+            <div class="card card-bordered h-100">
+                <div class="card-inner">
+                    <div class="nk-wg7">
+                        <div class="nk-wg7-stats">
+                            <div class="nk-wg7-title">Available balance in USD</div>
+                            <div class="number-lg amount">$150</div>
+                        </div>
+                        <div class="nk-wg7-foot">
+                            <span class="nk-wg7-note">Last activity at <span>{{ Helper::format_date(date('Y-m-d H:i:s'), 'l, d M Y') }}</span></span>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="ms-4 w-75">
-                    <div class="nk-block-head-xs">
-                        <div class="nk-block-between-md g-2">
-                            <div class="nk-block-head-content">
-                                <h5 class="nk-block-title title">Donation Packages</h5>
-                            </div>
-                            <div class="nk-block-head-content">
-                                <a href="/demo5/crypto/wallets.html" class="link link-primary">See All</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row g-2">
-                        <div class="col-sm-4">
-                            <div class="card bg-light">
-                                <div class="nk-wgw sm">
-                                    <a class="nk-wgw-inner" href="/demo5/crypto/wallet-bitcoin.html">
-                                        <div class="nk-wgw-name">
-                                            <h5 class="nk-wgw-title title">Package Regular</h5>
+            <div class="my-4">
+                <div class="d-flex flex-row align-items-center justify-content-between">
+                    <h5 class="title mb-0">Your Packages</h5>
+                    <a href="{{ route('dashboard.mypackages') }}" class="fw-bold">See All</a>
+                </div>
+                <div class="my-2">
+                    <div class="row">
+                        @php
+                            $data = ['Regular', 'Premium', 'Advance', 'Solitaire'];
+                        @endphp
+                        @for ($i = 0; $i <= 2; $i++)
+                            <div class="col-4">
+                                <div class="card bg-light">
+                                    <div class="nk-wgw sm">
+                                        <div class="nk-wgw-inner">
+                                            <div class="nk-wgw-name">
+                                                <h5 class="nk-wgw-title title">Package {{ $data[$i] }}</h5>
+                                            </div>
+                                            <div class="gauge-container">
+                                                <div class="gauge"></div>
+                                            </div>
+                                            <div class="d-flex flex-row justify-content-center">
+                                                <a class="nk-wgw-balance btn btn-primary me-3" href="javascript:void()" onclick="alerts()">
+                                                    Daily Blessing
+                                                </a>
+                                                <a class="nk-wgw-balance btn btn-primary" href="javascript:void()" data-bs-toggle="modal" data-bs-target="#modalchallenge">
+                                                    Daily Challenge
+                                                </a>
+                                            </div>
                                         </div>
-                                        <a class="nk-wgw-balance btn btn-primary mx-3 mb-2">
-                                            Dialy Challenge
-                                        </a>
-                                    </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="card bg-light">
-                                <div class="nk-wgw sm">
-                                    <a class="nk-wgw-inner" href="/demo5/crypto/wallet-bitcoin.html">
-                                        <div class="nk-wgw-name">
-                                            <h5 class="nk-wgw-title title">Package Regular</h5>
-                                        </div>
-                                        <a class="nk-wgw-balance btn btn-primary mx-3 mb-2">
-                                            Dialy Challenge
-                                        </a>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="card bg-light">
-                                <div class="nk-wgw sm">
-                                    <a class="nk-wgw-inner" href="/demo5/crypto/wallet-bitcoin.html">
-                                        <div class="nk-wgw-name">
-                                            <h5 class="nk-wgw-title title">Package Regular</h5>
-                                        </div>
-                                        <a class="nk-wgw-balance btn btn-primary mx-3 mb-2">
-                                            Dialy Challenge
-                                        </a>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                        @endfor
                     </div>
                 </div>
             </div>
@@ -228,8 +342,9 @@
             </div>
         </div>
 
-        <div class="nk-block nk-block-lg">
+        <div class="nk-block pt-2">
             <h5 class="title">Request Status</h5>
+
             <div class="card card-bordered card-preview">
                 <div class="card-inner">
                     <table class="table datatable">
@@ -270,12 +385,68 @@
         @endif
     </div>
 </div>
+
+<div class="modal fade" id="modalchallenge" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Daily Challenge</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group mb-2">
+                <label class="mb-1">Date</label>
+                <span class="form-control">29 Jan 2023</span>
+            </div>
+            <div class="form-group mb-2">
+                <label class="mb-1">Daily Challenge</label>
+                <select class="form-select">
+                    <option>Memberikan ulasan di web</option>
+                    <option>Memberikan review di web</option>
+                </select>
+            </div>
+            <div class="form-group mb-2">
+                <label class="mb-1">Please upload a picture</label>
+                <input type="file" class="form-control">
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<svg width="0" height="0" version="1.1" class="gradient-mask" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="gradientGauge">
+          <stop class="color-red" offset="0%"/>
+          <stop class="color-yellow" offset="17%"/>
+          <stop class="color-green" offset="40%"/>
+          <stop class="color-yellow" offset="87%"/>
+          <stop class="color-red" offset="100%"/>
+        </linearGradient>
+    </defs>
+  </svg>
 @endsection
 
 @push('script')
+
 <script src="{{ asset('account/assets/js/charts/chart-crypto.js?ver=3.0.2') }}"></script>
 
 <script>
+
+    function alerts() {
+        Swal.fire({
+            title : 'Confirmation',
+            text : 'Are you sure want to request?',
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText : 'Yes'
+        })
+    }
+
     NioApp.DataTable('.datatable', {
         processing: true,
         serverSide: true,
@@ -295,5 +466,110 @@
         ],
         ordering : false
     });
+</script>
+
+<script>
+$(function () {
+
+    class GaugeChart {
+        constructor(element, params) {
+            this._element = element;
+            this._initialValue = params.initialValue;
+            this._higherValue = params.higherValue;
+            this._title = params.title;
+            this._subtitle = params.subtitle;
+        }
+
+        _buildConfig() {
+            let element = this._element;
+
+            return {
+                value: this._initialValue,
+                valueIndicator: {
+                    color: '#FFFFFF'
+                },
+
+                geometry: {
+                    startAngle: 180,
+                    endAngle: 360
+                },
+
+                scale: {
+                    startValue: 0,
+                    endValue: this._higherValue,
+                    customTicks: [0, 25, 50, 75, 100],
+                    tick: {
+                        length: 5
+                    },
+
+                    label: {
+                        font: {
+                            color: '#87959f',
+                            size: 9,
+                            family: '"Open Sans", sans-serif'
+                        }
+                    }
+                },
+
+                title: {
+                    verticalAlignment: 'bottom',
+                    text: this._title,
+                    font: {
+                        family: '"Open Sans", sans-serif',
+                        //   color: '#fff',
+                        size: 0
+                    },
+
+                    subtitle: {
+                        text: this._subtitle,
+                        font: {
+                            family: '"Open Sans", sans-serif',
+                            // color: '#fff',
+                            weight: 500,
+                            size: 22
+                        }
+                    }
+                },
+
+
+
+                onInitialized: function () {
+                    let currentGauge = $(element);
+                    let circle = currentGauge.find('.dxg-spindle-hole').clone();
+                    let border = currentGauge.find('.dxg-spindle-border').clone();
+
+                    currentGauge.find('.dxg-title text').first().attr('y', 48);
+                    currentGauge.find('.dxg-title text').last().attr('y', 28);
+                    currentGauge.find('.dxg-value-indicator').append(border, circle);
+                }
+            };
+        }
+
+        init() {
+            $(this._element).dxCircularGauge(this._buildConfig());
+        }
+    }
+
+
+    $(document).ready(function () {
+
+        $('.gauge').each(function (index, item) {
+            let num = getRandomArbitrary(10, 99);
+            let params = {
+            initialValue: num,
+            higherValue: 100,
+            title: 'Progress' ,
+            subtitle : `${parseInt(num)}%`
+            };
+            let gauge = new GaugeChart(item, params);
+            gauge.init();
+        });
+
+    });
+});
+
+function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+}
 </script>
 @endpush

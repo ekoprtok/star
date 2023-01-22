@@ -6,7 +6,7 @@
        <div class="nk-block-head nk-block-head-sm">
           <div class="nk-block-between">
              <div class="nk-block-head-content">
-                <h3 class="nk-block-title page-title">Transaction History</h3>
+                <h3 class="nk-block-title page-title">Daily Unapprove</h3>
              </div>
           </div>
        </div>
@@ -18,7 +18,9 @@
                             <tr>
                                 <th>Date</th>
                                 <th>User</th>
-                                <th>Product</th>
+                                <th>Type</th>
+                                <th>Dialy</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                     </table>
@@ -35,7 +37,7 @@
         processing: true,
         serverSide: true,
         ajax : {
-            url  : '{{ route('transaction.list') }}',
+            url  : '{{ route('dialy.unapp.list') }}',
             type : 'POST',
             data : {
                 user_id : '{{ Auth::user()->id }}'
@@ -44,7 +46,9 @@
         columns: [
             { data: 'date' },
             { data: 'user' },
-            { data: 'product' }
+            { data: 'type' },
+            { data: 'daily' },
+            { data: 'action' },
         ],
         ordering : false
     });

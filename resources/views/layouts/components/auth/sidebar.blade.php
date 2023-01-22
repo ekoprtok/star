@@ -4,33 +4,22 @@
             <div class="slider-item">
                 <div class="nk-feature nk-feature-center">
                     <div class="nk-feature-img">
-                        <img class="round" src="{{ asset('landing/images/slides/promo-a.png') }}" srcset="{{ asset('landing/images/slides/promo-a2x.png') }} 2x" alt="">
+                        <img class="round" src="{{ asset('account/images/5576581.png') }}">
                     </div>
                     <div class="nk-feature-content py-4 p-sm-5">
-                        <h4>Dashlite</h4>
-                        <p>You can start to create your products easily with its user-friendly design & most completed responsive layout.</p>
+                        <h4>Lorem Ipsum</h4>
+                        <p>Is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
                     </div>
                 </div>
             </div>
             <div class="slider-item">
                 <div class="nk-feature nk-feature-center">
                     <div class="nk-feature-img">
-                        <img class="round" src="{{ asset('landing/images/slides/promo-b.png') }}" srcset="{{ asset('landing/images/slides/promo-b2x.png') }} 2x" alt="">
+                        <img class="round" src="{{ asset('account/images/20944999.png') }}">
                     </div>
                     <div class="nk-feature-content py-4 p-sm-5">
-                        <h4>Dashlite</h4>
-                        <p>You can start to create your products easily with its user-friendly design & most completed responsive layout.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="slider-item">
-                <div class="nk-feature nk-feature-center">
-                    <div class="nk-feature-img">
-                        <img class="round" src="{{ asset('landing/images/slides/promo-c.png') }}" srcset="{{ asset('landing/images/slides/promo-c2x.png')}} 2x" alt="">
-                    </div>
-                    <div class="nk-feature-content py-4 p-sm-5">
-                        <h4>Dashlite</h4>
-                        <p>You can start to create your products easily with its user-friendly design & most completed responsive layout.</p>
+                        <h4>Ipsum Lorem</h4>
+                        <p>Text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
                     </div>
                 </div>
             </div>

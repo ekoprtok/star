@@ -6,17 +6,8 @@
        <div class="nk-block-head nk-block-head-sm">
           <div class="nk-block-between">
              <div class="nk-block-head-content">
-                <h3 class="nk-block-title page-title">Dialy Challenges</h3>
+                <h3 class="nk-block-title page-title">Users</h3>
              </div>
-             <div class="nk-block-head-content">
-                <ul class="nk-block-tools gx-3">
-                    <li>
-                        <a href="{{ route('admin.dialy.form') }}" class="btn btn-primary">
-                            <span>Add Dialy Challenge</span> <em class="icon ni ni-arrow-long-right"></em>
-                        </a>
-                    </li>
-                </ul>
-            </div>
           </div>
        </div>
        <div class="nk-block">
@@ -25,9 +16,9 @@
                     <table class="table datatable">
                         <thead>
                             <tr>
-                                <th>No</th>
-                                <th>Dialy</th>
-                                <th>Action</th>
+                                <th>Email</th>
+                                <th>Referral Code</th>
+                                <th>Registered At</th>
                             </tr>
                         </thead>
                     </table>
@@ -44,16 +35,16 @@
         processing: true,
         serverSide: true,
         ajax : {
-            url  : '{{ route('admin.dialy.list') }}',
+            url  : '{{ route('admin.users.list') }}',
             type : 'POST',
             data : {
                 user_id : '{{ Auth::user()->id }}'
             }
         },
         columns: [
-            { data: 'no' },
-            { data: 'dialy' },
-            { data: 'action' },
+            { data: 'email' },
+            { data: 'referral' },
+            { data: 'registered_at' }
         ],
         ordering : false
     });
