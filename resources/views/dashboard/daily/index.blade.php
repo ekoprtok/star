@@ -28,7 +28,7 @@
                                 <th>No</th>
                                 <th>Daily</th>
                                 <th>Percentage</th>
-                                <th>Action</th>
+                                <th class="text-center">Action</th>
                             </tr>
                         </thead>
                     </table>
@@ -41,32 +41,32 @@
 
 @push('script')
 <script>
-    NioApp.DataTable('.datatable', {
+    NioApp.DataTable(".datatable", {
         processing: true,
         serverSide: true,
         ajax : {
             url  : "{{ route('admin.daily.list') }}",
-            type : 'POST',
+            type : "POST",
             data : {
                 user_id : "{{ Auth::user()->id }}"
             }
         },
         columns: [
-            { data: 'no' },
-            { data: 'name' },
-            { data: 'percentage' },
-            { data: 'action' },
+            { data: "no" },
+            { data: "name" },
+            { data: "percentage" },
+            { data: "action", className : "text-center" },
         ],
         ordering : false
     });
 
     function deleting(id) {
         Swal.fire({
-            title : 'Confirmation',
-            text : 'Are you sure to delete this daily challenge?',
-            showCloseButton: true,
-            showCancelButton: true,
-            confirmButtonText : 'Yes'
+            title             : "Confirmation",
+            text              : "Are you sure to delete this daily challenge?",
+            showCloseButton   : true,
+            showCancelButton  : true,
+            confirmButtonText : "Yes"
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
@@ -76,12 +76,12 @@
                         id : id
                     },
                     dataType : "jSON",
-                    success : function(r) {
-                        NioApp.Toast(r.message, (r.success ? 'success' : 'error'), {
-                            position: 'top-right'
+                    success  : function(r) {
+                        NioApp.Toast(r.message, (r.success ? "success" : "error"), {
+                            position: "top-right"
                         });
 
-                        $('.datatable').DataTable().ajax.reload();
+                        $(".datatable").DataTable().ajax.reload();
                     }
                 })
             }
