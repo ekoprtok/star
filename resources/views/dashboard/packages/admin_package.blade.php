@@ -11,7 +11,7 @@
              <div class="nk-block-head-content">
                 <ul class="nk-block-tools gx-3">
                     <li>
-                        <a href="{{ route('admin.package.add') }}" class="btn btn-primary">
+                        <a href="{{ route('admin.package.form') }}" class="btn btn-primary">
                             <span>Add Donation Package</span> <em class="icon ni ni-arrow-long-right"></em>
                         </a>
                     </li>
@@ -44,24 +44,24 @@
 
 @push('script')
 <script>
-    NioApp.DataTable('.datatable', {
+    NioApp.DataTable(".datatable", {
         processing: true,
         serverSide: true,
         ajax : {
-            url  : '{{ route('admin.package.list') }}',
-            type : 'POST',
+            url  : "{{ route('admin.package.list') }}",
+            type : "POST",
             data : {
-                user_id : '{{ Auth::user()->id }}'
+                user_id : "{{ Auth::user()->id }}"
             }
         },
         columns: [
-            { data: 'level' },
-            { data: 'name' },
-            { data: 'value' },
-            { data: 'donation' },
-            { data: 'fee' },
-            { data: 'dialy' },
-            { data: 'action' },
+            { data: "level", className : "text-center" },
+            { data: "name" },
+            { data: "rvalue", className : "text-end" },
+            { data: "rdonation", className : "text-end" },
+            { data: "rjoin_fee", className : "text-end" },
+            { data: "rdaily_blessing", className : "text-end" },
+            { data: "action", className : "text-center" },
         ],
         ordering : false
     });

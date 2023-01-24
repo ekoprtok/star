@@ -37,9 +37,9 @@
                         </div>
                         <div class="pricing-body">
                             <ul class="pricing-features">
-                                <li><span class="w-50">Donation</span> <span class="ms-auto">${item.donation}</span></li>
-                                <li><span class="w-50">Join Fee</span> <span class="ms-auto">${item.fee}</span></li>
-                                <li class="fw-bold"><span class="w-50">Total</span> <span class="ms-auto">${item.total}</span></li>
+                                <li><span class="w-50">Donation</span> <span class="ms-auto">${item.rvalue}</span></li>
+                                <li><span class="w-50">Join Fee</span> <span class="ms-auto">${item.rjoin_fee}</span></li>
+                                <li class="fw-bold"><span class="w-50">Total</span> <span class="ms-auto">${item.rdonation}</span></li>
                             </ul>
                             <div class="pricing-action">
                                 <a class="btn btn-outline-primary" onclick="alerts()">Buy Now</a>

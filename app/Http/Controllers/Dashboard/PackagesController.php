@@ -15,8 +15,9 @@ class PackagesController extends Controller {
         return view('dashboard.packages.admin_package');
     }
 
-    public function packageAdd() {
-        return view('dashboard.packages.admin_package_add');
+    public function packageForm(Request $request) {
+        $id = $request->id;
+        return view('dashboard.packages.admin_package_form', compact('id'));
     }
 
     public function my() {

@@ -35,11 +35,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/admin-daily-list', [DailyController::class, 'index'])->name('admin.daily.list');
     Route::post('/admin-daily-list-bles', [DailyController::class, 'blessing'])->name('admin.daily.listbles');
     Route::get('/product-list', [PackageController::class, 'index'])->name('product.list');
-    Route::get('/product-list', [PackageController::class, 'index'])->name('product.list');
     Route::post('/logout', [AuthController::class, 'logout']);
 
     // form process
+    // daily challenge
     Route::get('/admin-daily-edit/{id}', [DailyController::class, 'getEdit'])->name('admin.daily.edit');
     Route::post('/admin-daily-process', [DailyController::class, 'formCrud'])->name('admin.daily.process');
     Route::delete('/admin-daily-delete', [DailyController::class, 'dailyDelete'])->name('admin.daily.delete');
+
+    // product
+    Route::post('/admin-package-process', [PackageController::class, 'formCrud'])->name('admin.package.process');
+    Route::get('/admin-package-edit/{id}', [PackageController::class, 'getEdit'])->name('admin.package.edit');
 });

@@ -78,8 +78,8 @@ Route::prefix('admin-package')->middleware(['auth','verified'])->group(function 
     Route::get('/', [PackagesController::class, 'package'])->name('admin.package');
 });
 
-Route::prefix('admin-package-add')->middleware(['auth','verified'])->group(function () {
-    Route::get('/', [PackagesController::class, 'packageAdd'])->name('admin.package.add');
+Route::prefix('admin-package-form')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [PackagesController::class, 'packageForm'])->name('admin.package.form');
 });
 
 Route::prefix('admin-daily')->middleware(['auth','verified'])->group(function () {
