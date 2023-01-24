@@ -20,8 +20,9 @@ class CreatePackagesTable extends Migration
             $table->float('rvalue');
             $table->float('rdonation');
             $table->float('rjoin_fee');
-            $table->float('rdialy_blessing');
-            $table->text('img_url');
+            $table->float('rdaily_blessing');
+            $table->text('img_url')->nullable();
+            $table->string('created_by');
             $table->timestamps();
         });
     }

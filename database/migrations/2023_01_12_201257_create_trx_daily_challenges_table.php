@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTrxDialyChallengesTable extends Migration
+class CreateTrxDailyChallengesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateTrxDialyChallengesTable extends Migration
      */
     public function up()
     {
-        Schema::create('trx_dialy_challenges', function (Blueprint $table) {
+        Schema::create('trx_daily_challenges', function (Blueprint $table) {
             $table->id();
             $table->string('submitted_at');
             $table->string('user_id');
