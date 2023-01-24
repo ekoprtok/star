@@ -16,7 +16,7 @@ class CreateDailyChallengesTable extends Migration
         Schema::create('daily_challenges', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('percentage');
+            $table->float('percentage');
             $table->timestamps();
         });
     }
