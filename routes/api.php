@@ -23,6 +23,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::get('/cron', [CronJobController::class, 'index']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    // list data
     Route::post('/request-list', [HistoryController::class, 'requestList'])->name('request.list');
     Route::post('/deposit-list', [HistoryController::class, 'depositList'])->name('deposit.list');
     Route::post('/withdrawal-list', [HistoryController::class, 'withdrawalList'])->name('withdrawal.list');
@@ -38,7 +39,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     // form process
-    Route::get('/admin-daily-process/{id}', [DailyController::class, 'formCrud'])->name('admin.daily.process');
     Route::get('/admin-daily-edit/{id}', [DailyController::class, 'getEdit'])->name('admin.daily.edit');
     Route::post('/admin-daily-process', [DailyController::class, 'formCrud'])->name('admin.daily.process');
+    Route::delete('/admin-daily-delete', [DailyController::class, 'dailyDelete'])->name('admin.daily.delete');
 });

@@ -27,7 +27,7 @@
 
                         <div class="form-group">
                            <label class="form-label">Percentage</label>
-                           <input type="number" class="form-control" name="percentage" required>
+                           <input type="number" class="form-control" name="percentage" max="100" required>
                            <small class="text-danger percentage_err"></small>
                         </div>
 
@@ -48,21 +48,21 @@
     $("#form").submit(function(e){
         e.preventDefault();
         $.ajax({
-            url      : '{{ route('admin.daily.process') }}',
-            type     : 'POST',
+            url      : "{{ route('admin.daily.process') }}",
+            type     : "POST",
             data     : $('#form').serialize(),
-            dataType : 'jSON',
+            dataType : "jSON",
             error: function (request, status, error) {
                 showResponseHeader(request);
             },
             success  : function (r) {
-                NioApp.Toast(r.message, (r.success ? 'success' : 'error'), {
-                    position: 'top-right'
+                NioApp.Toast(r.message, (r.success ? "success" : "error"), {
+                    position: "top-right"
                 });
 
                 if (r.success) {
                     setTimeout(() => {
-                        location.href = '{{ route('admin.daily') }}';
+                        location.href = "{{ route('admin.daily') }}";
                     }, 1000);
                 }
             }
@@ -71,8 +71,8 @@
 
     @if ($id)
         $.ajax({
-            url      : '{{ route('admin.daily.edit', ['id' => $id]) }}',
-            dataType : 'jSON',
+            url      : "{{ route('admin.daily.edit', ['id' => $id]) }}",
+            dataType : "jSON",
             error: function (request, status, error) {
                 showResponseHeader(request);
             },

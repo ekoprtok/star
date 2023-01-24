@@ -49,10 +49,10 @@ class DailyController extends Controller {
     }
 
     public function formCrud(Request $request) {
-        $id        = Helper::decrypt($request->id);
+        $id        = ($request->id) ? Helper::decrypt($request->id) : '';
         $validated = $request->validate([
             'name'       => 'required|min:8',
-            'percentage' => 'required|regex:/^\d*(\.\d{2})?$/'
+            'percentage' => 'required|between:0.1,100'
         ]);
 
         if ($id) {
@@ -70,6 +70,15 @@ class DailyController extends Controller {
         return response()->json([
             'success' => ($process) ? true : false,
             'message' => 'Daily challenge has been procesed'
+        ]);
+    }
+
+    public function dailyDelete(Request $request) {
+        $id      = Helper::decrypt($request->id);
+        $process = DailyChallenge::where('id', $id)->delete();
+        return response()->json([
+            'success' => ($process) ? true : false,
+            'message' => 'Daily challenge has been deleted'
         ]);
     }
 
@@ -99,9 +108,13 @@ class DailyController extends Controller {
         $value->no        = ($key + 1);
         $value->pecentage = $value->pecentage.'%';
         $value->action    = '
-            <a class="text-danger">delete</a>
+            <a class="text-danger" href="javascript:void(0)" onclick="deleting(\''.Helper::encrypt($value->id).'\')" title="delete">
+                <i class="fs-16px bi bi-trash text-muted"></i>
+            </a>
                 &nbsp;&nbsp;
-            <a class="text-primary" href="'.route('admin.daily.form', ['id' => Helper::encrypt($value->id)]).'">edit</a>
+            <a class="text-primary" href="'.route('admin.daily.form', ['id' => Helper::encrypt($value->id)]).'" title="edit">
+                <i class="fs-16px bi bi-pencil-square text-muted"></i>
+            </a>
         ';
     }
 }

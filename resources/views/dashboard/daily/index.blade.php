@@ -45,10 +45,10 @@
         processing: true,
         serverSide: true,
         ajax : {
-            url  : '{{ route('admin.daily.list') }}',
+            url  : "{{ route('admin.daily.list') }}",
             type : 'POST',
             data : {
-                user_id : '{{ Auth::user()->id }}'
+                user_id : "{{ Auth::user()->id }}"
             }
         },
         columns: [
@@ -59,5 +59,33 @@
         ],
         ordering : false
     });
+
+    function deleting(id) {
+        Swal.fire({
+            title : 'Confirmation',
+            text : 'Are you sure to delete this daily challenge?',
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText : 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url      : "{{ route('admin.daily.delete') }}",
+                    type     : "DELETE",
+                    data     : {
+                        id : id
+                    },
+                    dataType : "jSON",
+                    success : function(r) {
+                        NioApp.Toast(r.message, (r.success ? 'success' : 'error'), {
+                            position: 'top-right'
+                        });
+
+                        $('.datatable').DataTable().ajax.reload();
+                    }
+                })
+            }
+        })
+    }
 </script>
 @endpush
