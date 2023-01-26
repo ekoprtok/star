@@ -16,7 +16,7 @@ class CreatePackageDetailsTable extends Migration
         Schema::create('package_details', function (Blueprint $table) {
             $table->id();
             $table->string('package_id');
-            $table->integer('get');
+            $table->integer('gen');
             $table->float('percentage');
             $table->timestamps();
         });
