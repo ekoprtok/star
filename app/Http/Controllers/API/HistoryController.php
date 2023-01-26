@@ -4,6 +4,9 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\TrxIntTransfer;
+use App\Models\TrxWithdrawal;
+use App\Models\TrxDeposit;
 use Helper;
 
 class HistoryController extends Controller {
@@ -38,35 +41,43 @@ class HistoryController extends Controller {
     }
 
     public function internaltrf(Request $request) {
-        $draw       = $request->get('draw');
-        $search     = $request->get('search')['value'];
-        $offset     = $request->get('start') -1;
-        $limit      = $request->get('length');
+        $draw = $request->get('draw');
+        $search = $request->get('search')['value'];
+        $offset = $request->get('start') - 1;
+        $limit = $request->get('length');
 
-        $dataCount  = 2;
-        $data       = [
-            [
-                'date'      => 'Jan 05 2022 11:22',
-                'from'      => 'User1@test.com',
-                'to'        => 'User2@test.com',
-                'amount'    => '$100',
-                'action'=> '<a class="text-danger">Reject</a>&nbsp;<a class="text-success">Approve</a>'
-            ],
-            [
-                'date'      => 'Jan 05 2022 11:22',
-                'from'      => 'User2@test.com',
-                'to'        => 'User1@test.com',
-                'amount'    => '$120',
-                'action'=> '<a class="text-danger">Reject</a>&nbsp;<a class="text-success">Approve</a>'
-            ],
-        ];
+        $data = TrxIntTransfer::select('C.email as email_from', 'D.email as email_to', 'trx_int_transfers.*')->where(function ($query) use ($search) {
+            $query->where('amount', 'LIKE', '%' . $search . '%');
+        })->leftJoin('user_wallets as A', 'A.user_id', '=', 'trx_int_transfers.user_wallet_id')
+            ->leftJoin('user_wallets as B', 'B.user_id', '=', 'trx_int_transfers.to_wallet_id')
+            ->leftJoin('users as C', 'C.id', '=', 'A.user_id')
+            ->leftJoin('users as D', 'D.id', '=', 'B.user_id')
+            ->offset($offset)
+            ->limit($limit)
+            ->orderByDesc('trx_int_transfers.created_at')
+            ->get();
+
+        if ($data) {
+            foreach ($data as $key => $value) {
+                $this->setAttr($value, $key);
+            }
+        }
+
+        $dataCount = TrxIntTransfer::where(function ($query) use ($search) {
+            $query->where('amount', 'LIKE', '%' . $search . '%');
+        })->leftJoin('user_wallets as A', 'A.user_id', '=', 'trx_int_transfers.user_wallet_id')
+            ->leftJoin('user_wallets as B', 'B.user_id', '=', 'trx_int_transfers.to_wallet_id')
+            ->leftJoin('users as C', 'C.id', '=', 'A.user_id')
+            ->leftJoin('users as D', 'D.id', '=', 'B.user_id')
+            ->orderByDesc('trx_int_transfers.created_at')
+            ->count();
 
         return response()->json([
             'draw'            => $draw,
             'recordsTotal'    => $dataCount,
             'recordsFiltered' => $dataCount,
             'data'            => $data,
-            'success'         => true
+            'success'         => true,
         ]);
     }
 
@@ -104,68 +115,76 @@ class HistoryController extends Controller {
     }
 
     public function depositList(Request $request) {
-        $draw       = $request->get('draw');
-        $search     = $request->get('search')['value'];
-        $offset     = $request->get('start') -1;
-        $limit      = $request->get('length');
+        $draw = $request->get('draw');
+        $search = $request->get('search')['value'];
+        $offset = $request->get('start') - 1;
+        $limit = $request->get('length');
 
-        $dataCount  = 2;
-        $data       = [
-            [
-                'date'  => 'Jan 05 2022 11:22',
-                'user'  => 'Jhon',
-                'amount'=> Helper::format_harga(10000),
-                'file'  => 'download',
-                'status'=> '<span class="badge bg-'.Helper::invoiceStatusClass(0).'">'.Helper::statusApproval(0).'</span>',
-                'action'=> '<a class="text-danger">Reject</a>&nbsp;<a class="text-success">Approve</a>'
-            ],
-            [
-                'date'  => 'Jan 04 2022 11:22',
-                'user'  => 'Dhoe',
-                'amount'=> Helper::format_harga(500),
-                'file'  => 'download',
-                'status'=> '<span class="badge bg-'.Helper::invoiceStatusClass(0).'">'.Helper::statusApproval(0).'</span>',
-                'action'=> '<a class="text-danger">Reject</a>&nbsp;<a class="text-success">Approve</a>'
-            ],
-        ];
+        $data = TrxDeposit::where(function ($query) use ($search) {
+            $query->where('amount', 'LIKE', '%' . $search . '%');
+        })->leftJoin('user_wallets as A', 'A.user_id', '=', 'trx_deposits.user_wallet_id')
+            ->leftJoin('users as B', 'B.id', '=', 'A.user_id')
+            ->offset($offset)
+            ->limit($limit)
+            ->orderByDesc('trx_deposits.created_at')
+            ->get();
+
+        if ($data) {
+            foreach ($data as $key => $value) {
+                $this->setAttr($value, $key);
+            }
+        }
+
+        $dataCount = TrxDeposit::where(function ($query) use ($search) {
+            $query->where('amount', 'LIKE', '%' . $search . '%');
+        })->leftJoin('user_wallets as A', 'A.user_id', '=', 'trx_deposits.user_wallet_id')
+            ->leftJoin('users as B', 'B.id', '=', 'A.user_id')
+            ->orderByDesc('trx_deposits.created_at')
+            ->count();
 
         return response()->json([
             'draw'            => $draw,
             'recordsTotal'    => $dataCount,
             'recordsFiltered' => $dataCount,
             'data'            => $data,
-            'success'         => true
+            'success'         => true,
         ]);
     }
 
     public function withdrawalList(Request $request) {
-        $draw       = $request->get('draw');
-        $search     = $request->get('search')['value'];
-        $offset     = $request->get('start') -1;
-        $limit      = $request->get('length');
+        $draw = $request->get('draw');
+        $search = $request->get('search')['value'];
+        $offset = $request->get('start') - 1;
+        $limit = $request->get('length');
 
-        $dataCount  = 2;
-        $data       = [
-            [
-                'date'  => 'Jan 05 2022 11:22',
-                'user'  => 'Jhon',
-                'amount'=> Helper::format_harga(10000),
-                'action'=> '<a class="text-danger">Reject</a>&nbsp;<a class="text-success">Approve</a>'
-            ],
-            [
-                'date'  => 'Jan 04 2022 11:22',
-                'user'  => 'Deposit',
-                'amount'=> Helper::format_harga(500),
-                'action'=> '<a class="text-danger">Reject</a>&nbsp;<a class="text-success">Approve</a>'
-            ],
-        ];
+        $data = TrxWithdrawal::where(function ($query) use ($search) {
+            $query->where('amount', 'LIKE', '%' . $search . '%');
+        })->leftJoin('user_wallets as A', 'A.user_id', '=', 'trx_withdrawals.user_wallet_id')
+            ->leftJoin('users as B', 'B.id', '=', 'A.user_id')
+            ->offset($offset)
+            ->limit($limit)
+            ->orderByDesc('trx_withdrawals.created_at')
+            ->get();
+
+        if ($data) {
+            foreach ($data as $key => $value) {
+                $this->setAttr($value, $key);
+            }
+        }
+
+        $dataCount = TrxWithdrawal::where(function ($query) use ($search) {
+            $query->where('amount', 'LIKE', '%' . $search . '%');
+        })->leftJoin('user_wallets as A', 'A.user_id', '=', 'trx_withdrawals.user_wallet_id')
+            ->leftJoin('users as B', 'B.id', '=', 'A.user_id')
+            ->orderByDesc('trx_withdrawals.created_at')
+            ->count();
 
         return response()->json([
             'draw'            => $draw,
             'recordsTotal'    => $dataCount,
             'recordsFiltered' => $dataCount,
             'data'            => $data,
-            'success'         => true
+            'success'         => true,
         ]);
     }
 
