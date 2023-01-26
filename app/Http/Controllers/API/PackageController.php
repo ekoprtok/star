@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Package;
+use App\Models\PackageDetail;
 use Helper;
 
 class PackageController extends Controller {
@@ -59,7 +60,36 @@ class PackageController extends Controller {
 
         return response()->json([
             'success' => $process ? true : false,
-            'message' => 'Package has been procesed',
+            'message' => $process ? 'Package has been procesed' : '',
+        ]);
+    }
+
+    public function percentageProcess(Request $request) {
+        $id         = $request->idx ? Helper::decrypt($request->idx) : '';
+        $package_id = $request->package_id ? Helper::decrypt($request->package_id) : '';
+        $validated = $request->validate([
+            'gen'        => 'required',
+            'percentage' => 'required',
+            'package_id' => 'required'
+        ]);
+
+        if ($id) {
+            $process = PackageDetail::where('id', $id)->update([
+                'gen'        => $request->gen,
+                'percentage' => $request->percentage,
+                'package_id' => $package_id,
+            ]);
+        } else {
+            $process = PackageDetail::create([
+                'gen'        => $request->gen,
+                'percentage' => $request->percentage,
+                'package_id' => $package_id,
+            ]);
+        }
+
+        return response()->json([
+            'success' => $process ? true : false,
+            'message' => $process ? 'Package percentage has been procesed' : '',
         ]);
     }
 
@@ -69,6 +99,39 @@ class PackageController extends Controller {
             $data->idx = Helper::encrypt($request->id);
         }
         return $data;
+    }
+
+    public function getPercentage(Request $request) {
+        $draw = $request->get('draw');
+        $search = $request->get('search')['value'];
+        $offset = $request->get('start') - 1;
+        $limit = $request->get('length');
+
+        $data = PackageDetail::where(function ($query) use ($search) {
+            $query->where('percentage', 'LIKE', '%' . $search . '%');
+        })->offset($offset)
+            ->limit($limit)
+            ->orderByDesc('created_at')
+            ->get();
+
+        if ($data) {
+            foreach ($data as $key => $value) {
+                $this->setAttrPercentage($value, $key);
+            }
+        }
+
+        $dataCount = PackageDetail::where(function ($query) use ($search) {
+            $query->where('percentage', 'LIKE', '%' . $search . '%');
+        })->orderByDesc('created_at')
+            ->count();
+
+        return response()->json([
+            'draw'            => $draw,
+            'recordsTotal'    => $dataCount,
+            'recordsFiltered' => $dataCount,
+            'data'            => $data,
+            'success'         => true,
+        ]);
     }
 
     public function packageList(Request $request) {
@@ -104,6 +167,47 @@ class PackageController extends Controller {
         ]);
     }
 
+    public function packageDelete(Request $request) {
+        $process = Package::where('id', Helper::decrypt($request->id))->delete();
+        $process = PackageDetail::where('package_id', Helper::decrypt($request->id))->delete();
+        return response()->json([
+            'success' => $process ? true : false,
+            'message' => $process ? 'Package has been delete' : '',
+        ]);
+    }
+
+    public function percentageDelete(Request $request) {
+        $process = PackageDetail::where('id', Helper::decrypt($request->id))->delete();
+        return response()->json([
+            'success' => $process ? true : false,
+            'message' => $process ? 'Package percentage has been delete' : '',
+        ]);
+    }
+
+    public function percentageEdit(Request $request) {
+        $data = PackageDetail::find(Helper::decrypt($request->id));
+        if ($data) {
+            $data->idx        = Helper::encrypt($data->id);
+            $data->package_id = Helper::encrypt($data->package_id);
+        }
+        return response()->json($data);
+    }
+
+    public function setAttrPercentage($value, $key) {
+        $encrypt_id        = Helper::encrypt($value->id);
+        $value->percentage = $value->percentage.'%';
+        $value->action     =
+            '
+            <a class="text-danger" href="javascript:void(0)" onclick="deleting(\''.$encrypt_id.'\')" title="delete">
+                <i class="fs-16px bi bi-trash text-muted"></i>
+            </a>
+                &nbsp;&nbsp;
+            <a class="text-primary" href="javascript:void(0)" onclick="editing(\''.$encrypt_id.'\')" title="edit">
+                <i class="fs-16px bi bi-pencil-square text-muted"></i>
+            </a>
+        ';
+    }
+
     public function setAttr($value, $key) {
         $value->rvalue          = Helper::format_harga($value->rvalue);
         $value->rdonation       = Helper::format_harga($value->rdonation);
@@ -111,12 +215,16 @@ class PackageController extends Controller {
         $value->rdaily_blessing = Helper::format_harga($value->rdaily_blessing);
         $value->action =
             '
-            <a class="text-danger" href="javascript:void(0)" onclick="deleting(\'' .Helper::encrypt($value->id) .'\')" title="delete">
+            <a class="text-danger" href="javascript:void(0)" onclick="deleting(\''.Helper::encrypt($value->id).'\')" title="delete">
                 <i class="fs-16px bi bi-trash text-muted"></i>
             </a>
                 &nbsp;&nbsp;
-            <a class="text-primary" href="' .route('admin.package.form', ['id' => Helper::encrypt($value->id)]) .'" title="edit">
+            <a class="text-primary" href="'.route('admin.package.form', ['id' => Helper::encrypt($value->id)]).'" title="edit">
                 <i class="fs-16px bi bi-pencil-square text-muted"></i>
+            </a>
+                &nbsp;&nbsp;
+            <a class="btn btn-xs btn-outline-primary" href="'.route('admin.package.percentage.form', ['id' => Helper::encrypt($value->id)]).'" title="add percentage">
+                Add Percentage
             </a>
         ';
     }
