@@ -43,7 +43,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/admin-daily-process', [DailyController::class, 'formCrud'])->name('admin.daily.process');
     Route::delete('/admin-daily-delete', [DailyController::class, 'dailyDelete'])->name('admin.daily.delete');
 
-    // product
+    // package
     Route::post('/admin-package-process', [PackageController::class, 'formCrud'])->name('admin.package.process');
     Route::get('/admin-package-edit/{id}', [PackageController::class, 'getEdit'])->name('admin.package.edit');
+    Route::delete('/admin-package-delete', [PackageController::class, 'packageDelete'])->name('admin.package.delete');
+
+    // package percentage
+    Route::get('/admin-package-percentage/{id}', [PackageController::class, 'getPercentage'])->name('admin.package.percentage.list');
+    Route::post('/admin-package-percentage-process', [PackageController::class, 'percentageProcess'])->name('admin.package.percentage.process');
+    Route::delete('/admin-package-percentage-delete', [PackageController::class, 'percentageDelete'])->name('admin.package.percentage.delete');
+    Route::get('/admin-package-percentage-edit', [PackageController::class, 'percentageEdit'])->name('admin.package.percentage.edit');
 });

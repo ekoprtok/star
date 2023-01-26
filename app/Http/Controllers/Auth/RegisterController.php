@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Models\Member;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -64,11 +65,22 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $user = User::create([
-            'referral_code' => $data['referral'],
+            'referral_code' => rand(0000000000, 9999999999),
             'role'          => ($data['referral']) ? '0' : '8',
             'email'         => $data['email'],
             'password'      => Hash::make($data['password']),
         ]);
+
+        // referal member
+        if ($data['referral']) {
+            $parent = User::where('referral_code', $data['referral'])->first();
+            if ($parent) {
+                Member::create([
+                    'parent_id' => $parent->id,
+                    'user_id'   => $user->id
+                ]);
+            }
+        }
 
         $token = $user->createToken('web_token')->plainTextToken;
 

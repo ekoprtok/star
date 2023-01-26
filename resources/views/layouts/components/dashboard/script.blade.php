@@ -1,16 +1,15 @@
 <script src="https://code.jquery.com/jquery-3.6.1.js"></script>
 <script src="{{ asset('account/assets/js/bundle.js?ver=3.0.2') }}"></script>
 <script src="{{ asset('account/assets/js/scripts.js?ver=3.0.2') }}"></script>
+<script src="https://cdn3.devexpress.com/jslib/17.1.6/js/dx.all.js"></script>
 <script>
+
     $.ajaxSetup({
         headers: {
             'Authorization': 'Bearer {{ Auth::user()->web_token }}'
         }
     });
-</script>
-<script src="https://cdn3.devexpress.com/jslib/17.1.6/js/dx.all.js"></script>
 
-<script>
     $(function() {
 
         class GaugeChart {
@@ -137,7 +136,7 @@
         let keys = Object.keys(response);
         keys.map((item, index) => {
             if (item == 'id') {
-
+                $(`input[name="${item}x"]`).val(response[item+'x']);
             } else {
                 $(`input[name="${item}"]`).val(response[item]);
                 $(`textarea[name="${item}"]`).val(response[item]);

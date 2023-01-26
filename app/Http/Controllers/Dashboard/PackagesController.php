@@ -24,4 +24,9 @@ class PackagesController extends Controller {
         return view('dashboard.packages.my_packages');
     }
 
+    public function percentageForm(Request $request) {
+        $package_id = $request->id;
+        return view('dashboard.packages.percentage_form', compact('package_id'));
+    }
+
 }

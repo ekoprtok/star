@@ -80,6 +80,7 @@ Route::prefix('admin-package')->middleware(['auth','verified'])->group(function 
 
 Route::prefix('admin-package-form')->middleware(['auth','verified'])->group(function () {
     Route::get('/', [PackagesController::class, 'packageForm'])->name('admin.package.form');
+    Route::get('/percentage/{id}', [PackagesController::class, 'percentageForm'])->name('admin.package.percentage.form');
 });
 
 Route::prefix('admin-daily')->middleware(['auth','verified'])->group(function () {
