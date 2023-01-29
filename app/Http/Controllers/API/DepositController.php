@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
-use Helper;
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Deposit;
+use App\Models\TrxDeposit;
 use App\Models\User;
 use App\Models\PaymentMethod;
 
@@ -17,7 +17,7 @@ class DepositController extends Controller {
         $offset     = $request->get('start') -1;
         $limit      = $request->get('length');
 
-        $data       = Deposit::where(function($query) use ($search) {
+        $data       = TrxDeposit::where(function($query) use ($search) {
             $query->where('invoice_number', 'LIKE', '%'.$search.'%')
                   ->orWhere('payment_method', 'LIKE', '%'.$search.'%')
                   ->orWhere('amount', 'LIKE', '%'.$search.'%');
@@ -29,7 +29,7 @@ class DepositController extends Controller {
             }
         }
 
-        $dataCount  = Deposit::where(function($query) use ($search) {
+        $dataCount  = TrxDeposit::where(function($query) use ($search) {
             $query->where('invoice_number', 'LIKE', '%'.$search.'%')
                     ->orWhere('payment_method', 'LIKE', '%'.$search.'%')
                     ->orWhere('amount', 'LIKE', '%'.$search.'%');
@@ -48,7 +48,7 @@ class DepositController extends Controller {
         $filename = time() . '.' . $request->file->extension();
         $request->file->move(public_path('uploads/confirm'), $filename);
 
-        $update = Deposit::where('id', $request->invoice)->update([
+        $update = TrxDeposit::where('id', $request->invoice)->update([
             'status'        => '1',
             'confirm_file'  => $filename
         ]);
@@ -70,7 +70,7 @@ class DepositController extends Controller {
         $data['invoice_number']   = random_int(1000000, 9999999);
         $data['rate']             = 0;
         $data['expired']          = date("Y/m/d H:i:s", strtotime("+30 minutes"));
-        $create = Deposit::create($data);
+        $create = TrxDeposit::create($data);
 
         return response()->json([
             'success' => ($create ? true : false),
@@ -79,7 +79,7 @@ class DepositController extends Controller {
     }
 
     public function detail(Request $request) {
-        $data = Deposit::find($request->id);
+        $data = TrxDeposit::find($request->id);
         if ($data) {
             $this->setAttribute($data);
         }
@@ -93,7 +93,7 @@ class DepositController extends Controller {
         $user                   = User::find($value->created_by);
         $value->invoice_number  = '<a href="javascript:void(0)" onclick="detail(\''.route('deposit.detail', ['id' => $value->id]).'\')" class="fw-bold">#'.$value->invoice_number.'</a>';
         $value->amount          = Helper::format_harga($value->amount);
-        $value->status_f        = '<span class="badge badge-dot bg-'.Helper::invoiceStatusClass($value->status).'">'.Helper::invoiceStatus($value->status).'</span>';
+        $value->status_f        = '<span class="badge badge-dot bg-'.Helper::invoiceStatusClass($value->status).'">'.Helper::invoiceStatusClass($value->status).'</span>';
         $value->created_at_f    = Helper::format_date($value->create_at);
         $value->address         = ($payment) ? $payment->address : '-';
         $value->icon_f          = ($payment) ? '<em class="icon '.$payment->icon.'"></em>' : '-';
