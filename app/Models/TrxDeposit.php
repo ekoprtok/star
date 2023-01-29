@@ -8,4 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class TrxDeposit extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'submitted_at',
+        'user_wallet_id',
+        'amount',
+        'file_path',
+        'status',
+        'responsed_by',
+        'responsed_at',
+    ];
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
+    ];
 }

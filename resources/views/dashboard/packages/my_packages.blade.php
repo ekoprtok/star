@@ -11,36 +11,7 @@
                 </div>
             </div>
             <div class="nk-block">
-                <div class="row g-gs">
-                    @php
-                        $data = ['Regular', 'Premium', 'Advance', 'Solitaire'];
-                    @endphp
-                    @for ($i = 0; $i <= 3; $i++)
-                        <div class="col-lg-4 col-12">
-                            <div class="card bg-light">
-                                <div class="nk-wgw sm">
-                                    <div class="nk-wgw-inner">
-                                        <div class="nk-wgw-name">
-                                            <h5 class="nk-wgw-title title">Package {{ $data[$i] }}</h5>
-                                        </div>
-                                        <div class="gauge-container">
-                                            <div class="gauge"></div>
-                                        </div>
-                                        <div class="d-flex flex-row justify-content-center">
-                                            <a class="nk-wgw-balance btn btn-primary me-3" href="javascript:void()"
-                                                onclick="alerts()">
-                                                Daily Blessing
-                                            </a>
-                                            <a class="nk-wgw-balance btn btn-primary" href="javascript:void()"
-                                                data-bs-toggle="modal" data-bs-target="#modalchallenge">
-                                                Daily Challenge
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endfor
+                <div class="row g-gs card-product">
                 </div>
             </div>
         </div>
@@ -83,27 +54,32 @@
 @push('script')
     <script>
         $.ajax({
-            url: '{{ route('product.list') }}',
+            url  : '{{ route('product.list') }}',
+            data : {
+                id : "{{ Helper::encrypt(Auth::user()->id) }}"
+            },
             success: function(r) {
                 let content = '';
                 r.data.map((item, index) => {
                     content += `
-                    <div class="col-4">
+                    <div class="col-lg-4 col-12">
                         <div class="card bg-light">
                             <div class="nk-wgw sm">
                                 <div class="nk-wgw-inner">
                                     <div class="nk-wgw-name">
-                                        <h5 class="nk-wgw-title title">Package Regular</h5>
+                                        <h5 class="nk-wgw-title title">Package ${item.name}</h5>
                                     </div>
                                     <div class="gauge-container">
                                         <div class="gauge"></div>
                                     </div>
                                     <div class="d-flex flex-row justify-content-center">
-                                        <a class="nk-wgw-balance btn btn-primary me-3" href="javascript:void()" onclick="alerts()">
-                                            Dialy Blasing
+                                        <a class="nk-wgw-balance btn btn-primary me-3" href="javascript:void()"
+                                            onclick="alerts()">
+                                            Daily Blessing
                                         </a>
-                                        <a class="nk-wgw-balance btn btn-primary" href="javascript:void()" onclick="alerts()">
-                                            Dialy Challenge
+                                        <a class="nk-wgw-balance btn btn-primary" href="javascript:void()"
+                                            data-bs-toggle="modal" data-bs-target="#modalchallenge">
+                                            Daily Challenge
                                         </a>
                                     </div>
                                 </div>
@@ -119,7 +95,7 @@
         function alerts() {
             Swal.fire({
                 title: 'Confirmation',
-                text: 'Are you sure to buy this package?',
+                text: 'Are you sure to claim this daily blessing?',
                 showCloseButton: true,
                 showCancelButton: true,
                 confirmButtonText: 'Yes'

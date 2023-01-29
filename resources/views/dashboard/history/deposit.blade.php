@@ -45,14 +45,48 @@
             }
         },
         columns: [
-            { data: 'date' },
-            { data: 'user' },
+            { data: 'submitted_at' },
+            { data: 'email' },
             { data: 'amount' },
-            { data: 'file' },
+            { data: 'file_path' },
             { data: 'status' },
-            { data: 'action' },
+            { data: 'action', className : 'text-center' },
         ],
         ordering : false
     });
+
+    function process(id, status, wallet_id) {
+        Swal.fire({
+            title             : "Confirmation",
+            text              : `Are you sure to ${(status == '1' ? 'approve' : 'rejected')} this deposit?`,
+            showCloseButton   : true,
+            showCancelButton  : true,
+            confirmButtonText : "Yes"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url      : "{{ route('admin.deposit.process') }}",
+                    data     : {
+                        id             : id,
+                        status         : status,
+                        user_wallet_id : wallet_id,
+                        user_id        : "{{ Auth::user()->id }}"
+                    },
+                    type : "POST",
+                    dataType : "jSON",
+                    error: function(request, status, error) {
+                        showResponseHeader(request);
+                    },
+                    success  : function(r) {
+                        NioApp.Toast(r.message, (r.success ? "success" : "error"), {
+                            position: "top-right"
+                        });
+
+                        $(".datatable").DataTable().ajax.reload();
+                    }
+                })
+            }
+        })
+    }
 </script>
 @endpush

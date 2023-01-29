@@ -42,9 +42,9 @@
             }
         },
         columns: [
-            { data: 'date' },
-            { data: 'user' },
-            { data: 'product' }
+            { data: 'submitted_at' },
+            { data: 'email' },
+            { data: 'name' }
         ],
         ordering : false
     });

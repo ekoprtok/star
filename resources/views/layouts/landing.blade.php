@@ -7,6 +7,21 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link rel="stylesheet" href="{{ asset('/landing/assets/css/dashlite.css?ver=3.0.2') }}">
     <link id="skin-default" rel="stylesheet" href="{{ asset('/landing/assets/css/theme.css?ver=3.0.2') }}">
+    <style>
+        .btn-primary, .pricing-s3.pricing-featured .btn {
+            color: #fff;
+            background-color: #C9B56D;
+            border-color: #C9B56D;
+        }
+        .menu-link:hover, .active > .menu-link, .menu-link.active {
+            color: #C9B56D;
+        }
+        .cstom {
+            list-style: disc;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
 <body class="nk-body bg-white npc-landing">
     <div class="nk-app-root">
@@ -17,12 +32,12 @@
 
             <footer class="footer bg-lighter" id="footer">
                 <div class="container">
-                    <div class="row g-3 align-items-center justify-content-md-between py-4 py-md-5">
+                    {{-- <div class="row g-3 align-items-center justify-content-md-between py-4 py-md-5">
                         <div class="col-md-3">
                             <div class="footer-logo">
                                 <a href="{{ route('landing') }}" class="logo-link">
-                                    <img class="logo-light logo-img" src="{{ asset('landing/images/logo.png') }}" srcset="{{ asset('landing/images/logo2x.png') }} 2x" alt="logo">
-                                    <img class="logo-dark logo-img" src="{{ asset('landing/images/logo-dark.png') }}" srcset="{{ asset('landing/images/logo-dark2x.png') }} 2x" alt="logo-dark">
+                                    <img class="logo-light logo-img" src="{{ asset('landing/images/logo.png') }}" alt="logo">
+                                    <img class="logo-dark logo-img" src="{{ asset('landing/images/logo-dark.png') }}" alt="logo-dark">
                                 </a>
                             </div>
                         </div>
@@ -32,7 +47,7 @@
                                 <li><a href="#">Contact</a></li>
                             </ul>
                         </div>
-                    </div>
+                    </div> --}}
                     <hr class="hr border-light mb-0 mt-n1">
                     <div class="row g-3 align-items-center justify-content-md-between py-4">
                         <div class="col-md-8">

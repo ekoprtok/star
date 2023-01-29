@@ -5,7 +5,8 @@
     <div class="nk-block-head-content">
         <h5 class="nk-block-title">Sign-In</h5>
         <div class="nk-block-des">
-            <p>Access the DashLite panel using your email and password.</p>
+            <p>Access the {{ config('app.name', 'Laravel') }} panel using your email and
+                password</p>
         </div>
     </div>
 </div>

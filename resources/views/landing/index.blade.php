@@ -4,45 +4,63 @@
 
     <section class="section section-service pb-0" id="service">
         <div class="container">
-            <div class="row justify-content-center text-center">
+            <div class="d-flex flex-row mb-5 bg-light ps-5">
+                <div class="d-flex flex-column align-items-start justify-content-center w-50 pe-3">
+                    <div>
+                        <h2>Helping Hand Community Club (H2C Club)</h2>
+                    </div>
+                    <p>Spread kindness to the world and bring prosperity to all</p>
+                    <a href="{{ route('dashboard') }}" class="btn btn-xl btn-primary">Join</a>
+                </div>
+                <div>
+                    <img src="{{ asset('landing/images/hand.png') }}" alt="">
+                </div>
+            </div>
+
+            <div class="row justify-content-center text-center mt-5">
                 <div class="col-sm-7 col-md-6 col-9">
                     <div class="section-head">
-                        <h2 class="title">We provide various kind of service for you</h2>
+                        <h2 class="title">What is H2C Club?</h2>
+                        <p>H2C Club is a social community platform, a place where we can help each other, and spread kindness throughout the world so that we can create mutual prosperity.</p>
                     </div>
                 </div>
             </div>
-            <div class="section-content">
+
+
+            <div class="section-content bg-light p-4">
+                <div class="row justify-content-center text-center">
+                    <div class="col-sm-7 col-md-6 col-9">
+                        <div class="section-head">
+                            <h2 class="title">How does H2C Club work?</h2>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row justify-content-center text-center g-gs">
                     <div class="col-9 col-sm-7 col-md-4">
                         <div class="service service-s2">
-                            <div class="service-icon styled-icon styled-icon-s2 bg-primary">
-                                <img src="{{ asset('landing/images/home_icon_1.svg') }}" class="w-50">
-                            </div>
+                            <img src="{{ asset('landing/images/star.png') }}" class="w-50 mb-4">
                             <div class="service-text">
-                                <h4 class="title">Advanced Statistics</h4>
-                                <p>But I must explain to you how all this mistaken idea of pleasure.</p>
+                                <h4 class="title">Membership</h4>
+                                <p>Everyone can join to be part of the H2C Club Donor.</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-9 col-sm-7 col-md-4">
                         <div class="service service-s2">
-                            <div class="service-icon styled-icon styled-icon-s2 bg-pink">
-                                <img src="{{ asset('landing/images/home_icon_2.svg') }}" class="w-50">
-                            </div>
+                            <img src="{{ asset('landing/images/star.png') }}" class="w-50 mb-4">
                             <div class="service-text">
-                                <h4 class="title">Powerful Admin</h4>
-                                <p>Expound the actual teachings of the great explorer of the truth.</p>
+                                <h4 class="title">Daily Blessing</h4>
+                                <p>Every Donor who makes a donation will get a Daily Blessing in the amount according to the donation package they have.</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-9 col-sm-7 col-md-4">
                         <div class="service service-s2">
-                            <div class="service-icon styled-icon styled-icon-s2 bg-success">
-                                <img src="{{ asset('landing/images/home_icon_3.svg') }}" class="w-50">
-                            </div>
+                            <img src="{{ asset('landing/images/star.png') }}" class="w-50 mb-4">
                             <div class="service-text">
-                                <h4 class="title">Security Updates</h4>
-                                <p>Praising pain was born and I will give you a complete account.</p>
+                                <h4 class="title">Prosperity Blessing</h4>
+                                <p>Every Donor who makes a donation will also get a Prosperity Blessing if the Kindness Meter donation has reached 100%.</p>
                             </div>
                         </div>
                     </div>
@@ -52,7 +70,7 @@
     </section>
 
 
-    <section class="section section-feature pb-0" id="feature">
+    {{-- <section class="section section-feature pb-0" id="feature">
         <div class="container">
             <div class="row align-items-center justify-content-lg-between g-gs">
                 <div class="col-lg-5">
@@ -144,21 +162,42 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <section class="section section-cta">
         <div class="container">
             <div class="row justify-content-center text-center">
+                <div class="col-sm-7 col-md-6 col-9">
+                    <div class="section-head">
+                        <h2 class="title">Social Event</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-row align-items-center justify-content-between">
+                <div>
+                    <img class="object-fit-cover" src="{{ asset('landing/images/img01.jpeg') }}" alt="">
+                </div>
+                <div>
+                    <img class="object-fit-cover" src="{{ asset('landing/images/img02.jpeg') }}" alt="">
+                </div>
+                <div>
+                    <img class="object-fit-cover" src="{{ asset('landing/images/img03.jpeg') }}" alt="">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-cta mt-2">
+        <div class="container  bg-light py-4">
+            <div class="row justify-content-center text-center">
                 <div class="col-xl-6 col-lg-7 col-md-8">
                     <div class="text-block is-compact">
-                        <div class="img-block h-150px mb-4">
-                            <img src="{{ asset('landing/images/home_icon_6.svg') }}" class="w-25">
-                        </div>
-                        <h2 class="title">Get Started</h2>
-                        <p class="lead">Over 60 million people have chosen Dashlite to power the place on the web they call “home” — join the family.</p>
+                        <h2 class="title">Get Started with H2C Club</h2>
+                        <p class="lead">Spread kindness to the world and bring prosperity to all</p>
                         <ul class="btns-inline justify-center">
                             <li>
-                                <a href="{{ route('dashboard') }}" class="btn btn-xl btn-primary">Login To Cabinet</a>
+                                <a href="{{ route('dashboard') }}" class="btn btn-xl btn-primary">Join</a>
                             </li>
                         </ul>
                     </div>

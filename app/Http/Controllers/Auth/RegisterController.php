@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use App\Models\Member;
+use App\Models\UserWallet;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -81,6 +82,12 @@ class RegisterController extends Controller
                 ]);
             }
         }
+
+        // wallet
+        UserWallet::create([
+            'rbalance_amount' => 0,
+            'user_id'         => $user->id
+        ]);
 
         $token = $user->createToken('web_token')->plainTextToken;
 

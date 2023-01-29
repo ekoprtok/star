@@ -88,4 +88,12 @@
     .color-green {
         stop-color: #25cd6b;
     }
+
+    .spinner-border-sm {
+        border-width: 0.1em;
+    }
+
+    .fw-500 {
+        font-weight: 500;
+    }
 </style>

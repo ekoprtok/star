@@ -13,40 +13,46 @@
        <div class="nk-block">
         <div class="card card-bordered card-preview">
             <div class="card-inner">
-               <div class="row gy-4">
-                  <div class="col-sm-6">
-                     <div class="form-group">
-                        <label class="form-label">Date</label>
-                        <div class="form-control-wrap">
-                            <span class="form-control">12 January 2022</span>
+                <form method="post" id="form">
+                    @csrf
+                    <div class="row gy-4">
+                        <div class="col-sm-6">
+                           <div class="form-group">
+                              <label class="form-label">Date</label>
+                              <div class="form-control-wrap">
+                                  <span class="form-control">{{ date('d F Y') }}</span>
+                              </div>
+                           </div>
+                           <div class="form-group">
+                               <label class="form-label">Transfer To (email address)</label>
+                               <div class="form-control-wrap">
+                                   <input type="email" class="form-control" name="email">
+                                   <input type="hidden" name="user_id" value={{ Helper::encrypt(Auth::user()->id) }}>
+                                   <span class="text-danger email_err"></span>
+                              </div>
+                           </div>
+                           <div class="form-group">
+                              <label class="form-label">Amount*</label>
+                              <div class="form-control-wrap">
+                                  <input type="number" class="form-control" name="amount">
+                                  <span class="text-danger amount_err"></span>
+                              </div>
+                           </div>
                         </div>
-                     </div>
-                     <div class="form-group">
-                        <label class="form-label">Transfer To (email address)</label>
-                        <div class="form-control-wrap">
-                            <input type="email" class="form-control">
+                        <div class="col-sm-6">
+                           <div class="form-group">
+                              <label class="form-label">Wallet Balance</label>
+                              <div class="form-control-wrap">
+                                  <h3 class="balance">0</h3>
+                              </div>
+                           </div>
                         </div>
-                     </div>
-                     <div class="form-group">
-                        <label class="form-label">Amount*</label>
-                        <div class="form-control-wrap">
-                            <input type="number" class="form-control">
-                        </div>
-                     </div>
-                  </div>
-                  <div class="col-sm-6">
-                     <div class="form-group">
-                        <label class="form-label">Wallet Balance</label>
-                        <div class="form-control-wrap">
-                            <h3>$150</h3>
-                        </div>
-                     </div>
-                  </div>
 
-                  <div class="col-sm-6">
-                    <button class="btn btn-primary">Submit</button>
-                  </div>
-               </div>
+                        <div class="col-sm-6">
+                          <button class="btn btn-primary">Submit</button>
+                        </div>
+                     </div>
+                </form>
             </div>
          </div>
        </div>
@@ -55,5 +61,44 @@
 @endsection
 
 @push('script')
+<script>
+    $("#form").submit(function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: "{{ route('internal.process') }}",
+            type: "POST",
+            data: $('#form').serialize(),
+            dataType: "jSON",
+            error: function(request, status, error) {
+                showResponseHeader(request);
+            },
+            success: function(r) {
+                NioApp.Toast(r.message, (r.success ? "success" : "error"), {
+                    position: "top-right"
+                });
 
+                if (r.success) {
+                    setTimeout(() => {
+                        location.href = "{{ route('dashboard') }}";
+                    }, 1000);
+                }
+            }
+        })
+    });
+
+    // info dashboard
+    $.ajax({
+        url      : "{{ route('admin.dashboard') }}",
+        data     : {
+            id : "{{ Helper::encrypt(Auth::user()->id) }}"
+        },
+        dataType : 'jSON',
+        error: function(request, status, error) {
+            showResponseHeader(request);
+        },
+        success: function(response) {
+            setHtmlProps(response)
+        }
+    })
+</script>
 @endpush

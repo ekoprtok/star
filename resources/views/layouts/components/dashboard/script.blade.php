@@ -94,17 +94,19 @@
 
         $(document).ready(function() {
 
-            $('.gauge').each(function(index, item) {
-                let num = getRandomArbitrary(10, 99);
-                let params = {
-                    initialValue: num,
-                    higherValue: 100,
-                    title: 'Progress',
-                    subtitle: `${parseInt(num)}%`
-                };
-                let gauge = new GaugeChart(item, params);
-                gauge.init();
-            });
+            setTimeout(() => {
+                $('.gauge').each(function(index, item) {
+                    let num = getRandomArbitrary(10, 99);
+                    let params = {
+                        initialValue: num,
+                        higherValue: 100,
+                        title: 'Progress',
+                        subtitle: `${parseInt(num)}%`
+                    };
+                    let gauge = new GaugeChart(item, params);
+                    gauge.init();
+                });
+            }, 1000);
 
         });
     });
@@ -141,6 +143,13 @@
                 $(`input[name="${item}"]`).val(response[item]);
                 $(`textarea[name="${item}"]`).val(response[item]);
             }
+        })
+    }
+
+    function setHtmlProps(response) {
+        let keys = Object.keys(response);
+        keys.map((item, index) => {
+            $(`.${item}`).html(response[item]);
         })
     }
 </script>

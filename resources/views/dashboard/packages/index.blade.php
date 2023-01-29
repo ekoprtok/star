@@ -42,7 +42,7 @@
                                 <li class="fw-bold"><span class="w-50">Total</span> <span class="ms-auto">${item.rdonation}</span></li>
                             </ul>
                             <div class="pricing-action">
-                                <a class="btn btn-outline-primary" onclick="alerts()">Buy Now</a>
+                                <a class="btn btn-outline-primary" onclick="buying('${item.idx}')">Buy Now</a>
                             </div>
                         </div>
                     </div>
@@ -53,13 +53,35 @@
         }
     });
 
-    function alerts() {
+    function buying(id) {
         Swal.fire({
-            title : 'Confirmation',
-            text : 'Are you sure to buy this package?',
-            showCloseButton: true,
-            showCancelButton: true,
-            confirmButtonText : 'Yes'
+            title             : "Confirmation",
+            text              : "Are you sure to buy this package?",
+            showCloseButton   : true,
+            showCancelButton  : true,
+            confirmButtonText : "Yes"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url      : "{{ route('package.buy') }}",
+                    data     : {
+                        id      : id,
+                        user_id : "{{ Auth::user()->id }}"
+                    },
+                    type : "POST",
+                    dataType : "jSON",
+                    error: function(request, status, error) {
+                        showResponseHeader(request);
+                    },
+                    success  : function(r) {
+                        NioApp.Toast(r.message, (r.success ? "success" : "error"), {
+                            position: "top-right"
+                        });
+
+                        $(".datatable").DataTable().ajax.reload();
+                    }
+                })
+            }
         })
     }
 </script>

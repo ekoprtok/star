@@ -34,12 +34,17 @@ Route::get('/news', [LandingController::class, 'news'])->name('landing.news');
 Auth::routes(['verify' => true]);
 
 Route::prefix('dashboard')->middleware(['auth','verified'])->group(function () {
+    Route::get('/landing', [LandingController::class, 'index'])->name('landing.backup');
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/about', [LandingController::class, 'about'])->name('landing.about');
 });
 
 Route::prefix('packages')->middleware(['auth','verified'])->group(function () {
     Route::get('/', [PackagesController::class, 'index'])->name('dashboard.packages');
-    Route::get('/my-packages', [PackagesController::class, 'my'])->name('dashboard.mypackages');
+});
+
+Route::prefix('my-packages')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [PackagesController::class, 'my'])->name('dashboard.mypackages');
 });
 
 Route::prefix('deposit')->middleware(['auth','verified'])->group(function () {

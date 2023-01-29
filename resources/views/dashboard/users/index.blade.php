@@ -18,6 +18,7 @@
                             <tr>
                                 <th>Email</th>
                                 <th>Referral Code</th>
+                                <th>Status</th>
                                 <th>Registered At</th>
                             </tr>
                         </thead>
@@ -43,8 +44,9 @@
         },
         columns: [
             { data: 'email' },
-            { data: 'referral' },
-            { data: 'registered_at' }
+            { data: 'referral_code_f' },
+            { data: 'status_f' },
+            { data: 'created_at_f' }
         ],
         ordering : false
     });

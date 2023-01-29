@@ -4,8 +4,8 @@
             <div class="header-wrap">
                 <div class="header-logo">
                     <a href="{{ route('landing') }}" class="logo-link">
-                        <img class="logo-light logo-img" src="{{ asset('landing/images/logo.png') }}" srcset="./images/logo2x.png 2x" alt="logo">
-                        <img class="logo-dark logo-img" src="{{ asset('landing/images/logo-dark.png') }}" srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                        <img class="logo-light logo-img" src="{{ asset('landing/images/new_logo.png') }}" alt="logo">
+                        <img class="logo-dark logo-img" src="{{ asset('landing/images/new_logo.png') }}" alt="logo-dark">
                     </a>
                 </div>
                 <div class="header-toggle">
@@ -16,14 +16,12 @@
                 </div>
                 <nav class="header-menu" data-content="mainNav">
                     <ul class="menu-list ms-lg-auto">
-                        <li class="menu-item"><a href="{{ route('landing') }}" class="menu-link nav-link">Home</a></li>
-                        <li class="menu-item"><a href="{{ route('landing.news') }}" class="menu-link nav-link">News</a></li>
-                        <li class="menu-item"><a href="{{ route('landing.help') }}" class="menu-link nav-link">Help</a></li>
-                        <li class="menu-item"><a href="{{ route('landing.contact') }}" class="menu-link nav-link">Contact Us</a></li>
+                        <li class="menu-item"><a href="{{ route('landing.backup') }}" class="menu-link nav-link">Home</a></li>
+                        <li class="menu-item"><a href="{{ route('landing.about') }}" class="menu-link nav-link">About Us</a></li>
                     </ul>
                     <ul class="menu-btns">
                         <li>
-                            <a href="{{ route('dashboard') }}" class="btn btn-primary btn-lg">Login</a>
+                            <a href="{{ route('dashboard') }}" class="btn btn-primary btn-lg">Join</a>
                         </li>
                     </ul>
                 </nav>

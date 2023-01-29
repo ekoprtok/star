@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Package;
 use App\Models\PackageDetail;
+use App\Models\TrxPackage;
+use App\Models\UserPackage;
 use Helper;
 
 class PackageController extends Controller {
 
-    public function index() {
-        $data = Package::all();
+    public function index(Request $request) {
+        $id   = ($request->id) ? Helper::decrypt($request->id) : '';
+        $data = ($id) ? UserPackage::where('user_id', $id)->leftJoin('packages', 'packages.id', '=', 'user_packages.package_id')->get() : Package::all();
         if ($data) {
             foreach ($data as $key => $value) {
                 $this->setAttr($value, $key);
@@ -19,6 +22,34 @@ class PackageController extends Controller {
         }
         return response()->json([
             'data' => $data
+        ]);
+    }
+
+    public function packageBuy(Request $request) {
+        $id         = Helper::decrypt($request->id);
+        $user_id    = $request->user_id;
+        $trxPackage = TrxPackage::where(['user_id' => $user_id, 'package_id' => $id])->count();
+        if ($trxPackage) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You have buy the same package before'
+            ]);
+        }
+
+        $process = TrxPackage::create([
+            'submitted_at' => date('Y-m-d H:i:s'),
+            'user_id'      => $user_id,
+            'package_id'   => $id
+        ]);
+
+        $process = UserPackage::create([
+            'user_id'      => $user_id,
+            'package_id'   => $id
+        ]);
+
+        return response()->json([
+            'success' => $process ? true : false,
+            'message' => $process ? 'Package is already yours' : 'there was a problem buying the package, please try again in a moment',
         ]);
     }
 
@@ -209,6 +240,7 @@ class PackageController extends Controller {
     }
 
     public function setAttr($value, $key) {
+        $value->idx             = Helper::encrypt($value->id);
         $value->rvalue          = Helper::format_harga($value->rvalue);
         $value->rdonation       = Helper::format_harga($value->rdonation);
         $value->rjoin_fee       = Helper::format_harga($value->rjoin_fee);

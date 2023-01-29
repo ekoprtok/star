@@ -54,8 +54,10 @@
                                                 <h5 class="nk-wgw-title title">Daily Challenge</h5>
                                             </div>
                                             <div class="nk-wgw-balance">
-                                                <div class="amount">
-                                                    10
+                                                <div class="daily_challenge fw-500 fs-5">
+                                                    <div class="spinner-border spinner-border-sm" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </a>
@@ -70,8 +72,10 @@
                                                 <h5 class="nk-wgw-title title">Deposit Wallet</h5>
                                             </div>
                                             <div class="nk-wgw-balance">
-                                                <div class="amount">
-                                                    4
+                                                <div class="deposit fw-500 fs-5">
+                                                    <div class="spinner-border spinner-border-sm" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </a>
@@ -86,8 +90,10 @@
                                                 <h5 class="nk-wgw-title title">Withdrawal Wallet</h5>
                                             </div>
                                             <div class="nk-wgw-balance">
-                                                <div class="amount">
-                                                    1
+                                                <div class="withdraw fw-500 fs-5">
+                                                    <div class="spinner-border spinner-border-sm" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </a>
@@ -114,8 +120,10 @@
                                                 <h5 class="nk-wgw-title title">Total Member</h5>
                                             </div>
                                             <div class="nk-wgw-balance">
-                                                <div class="amount">
-                                                    2
+                                                <div class="member fw-500 fs-5">
+                                                    <div class="spinner-border spinner-border-sm" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </a>
@@ -142,8 +150,10 @@
                                                 <h5 class="nk-wgw-title title">Daily Income</h5>
                                             </div>
                                             <div class="nk-wgw-balance">
-                                                <div class="amount">
-                                                    $120
+                                                <div class="daily_income fw-500 fs-5">
+                                                    <div class="spinner-border spinner-border-sm" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </a>
@@ -159,8 +169,10 @@
                                                 <h5 class="nk-wgw-title title">Weekly Income</h5>
                                             </div>
                                             <div class="nk-wgw-balance">
-                                                <div class="amount">
-                                                    $130
+                                                <div class="weekly_income fw-500 fs-5">
+                                                    <div class="spinner-border spinner-border-sm" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </a>
@@ -176,8 +188,10 @@
                                                 <h5 class="nk-wgw-title title">Monthly Income</h5>
                                             </div>
                                             <div class="nk-wgw-balance">
-                                                <div class="amount">
-                                                    $250
+                                                <div class="monthly_income fw-500 fs-5">
+                                                    <div class="spinner-border spinner-border-sm" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </a>
@@ -239,7 +253,11 @@
                             <div class="nk-wg7">
                                 <div class="nk-wg7-stats">
                                     <div class="nk-wg7-title">Available balance in USD</div>
-                                    <div class="number-lg amount">$150</div>
+                                    <div class="number-lg balance">
+                                        <div class="spinner-border spinner-border-sm" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="nk-wg7-foot">
                                     <span class="nk-wg7-note">Last activity at
@@ -252,39 +270,11 @@
                     <div class="my-4">
                         <div class="d-flex flex-row align-items-center justify-content-between">
                             <h5 class="title mb-0">Your Packages</h5>
-                            <a href="{{ route('dashboard.mypackages') }}" class="fw-bold">See All</a>
+                            <a href="{{ route('dashboard.mypackages') }}" class="fw-bold btn-see-all-pkg">See All</a>
                         </div>
                         <div class="my-2">
-                            <div class="row">
-                                @php
-                                    $data = ['Regular', 'Premium', 'Advance', 'Solitaire'];
-                                @endphp
-                                @for ($i = 0; $i <= 2; $i++)
-                                    <div class="col-4">
-                                        <div class="card bg-light">
-                                            <div class="nk-wgw sm">
-                                                <div class="nk-wgw-inner">
-                                                    <div class="nk-wgw-name">
-                                                        <h5 class="nk-wgw-title title">Package {{ $data[$i] }}</h5>
-                                                    </div>
-                                                    <div class="gauge-container">
-                                                        <div class="gauge"></div>
-                                                    </div>
-                                                    <div class="d-flex flex-row justify-content-center">
-                                                        <a class="nk-wgw-balance btn btn-primary me-3"
-                                                            href="javascript:void()" onclick="alerts()">
-                                                            Daily Blessing
-                                                        </a>
-                                                        <a class="nk-wgw-balance btn btn-primary" href="javascript:void()"
-                                                            data-bs-toggle="modal" data-bs-target="#modalchallenge">
-                                                            Daily Challenge
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endfor
+                            <div class="row card-product">
+
                             </div>
                         </div>
                     </div>
@@ -311,7 +301,7 @@
                                             <em class="icon ni ni-link-alt"></em>
                                         </div>
                                         <input type="text" class="form-control copy-text" id="refUrl"
-                                            value="{{ route('dashboard') }}?ref=4945KD48">
+                                            value="{{ route('dashboard') }}?ref={{ Auth::user()->referral_code }}">
                                     </div>
                                 </div>
                             </div>
@@ -434,6 +424,55 @@
     <script src="{{ asset('account/assets/js/charts/chart-crypto.js?ver=3.0.2') }}"></script>
 
     <script>
+
+        $.ajax({
+            url  : '{{ route('product.list') }}',
+            data : {
+                id : "{{ Helper::encrypt(Auth::user()->id) }}"
+            },
+            success: function(r) {
+                let content = '';
+                if (r.data.length > 0) {
+                    r.data.map((item, index) => {
+                        if (index <= 2) {
+                            content += `
+                                <div class="col-lg-4 col-12">
+                                    <div class="card bg-light">
+                                        <div class="nk-wgw sm">
+                                            <div class="nk-wgw-inner">
+                                                <div class="nk-wgw-name">
+                                                    <h5 class="nk-wgw-title title">Package ${item.name}</h5>
+                                                </div>
+                                                <div class="gauge-container">
+                                                    <div class="gauge"></div>
+                                                </div>
+                                                <div class="d-flex flex-row justify-content-center">
+                                                    <a class="nk-wgw-balance btn btn-primary me-3" href="javascript:void()"
+                                                        onclick="alerts()">
+                                                        Daily Blessing
+                                                    </a>
+                                                    <a class="nk-wgw-balance btn btn-primary" href="javascript:void()"
+                                                        data-bs-toggle="modal" data-bs-target="#modalchallenge">
+                                                        Daily Challenge
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+                    $('.btn-see-all-pkg').show();
+                }else {
+                    content += `<div class="col-lg-4 col-12">You dont have any package, lets go buy a package <a href="{{ route('dashboard.packages') }}">here</a>, be sure your balance is enought.</div>`;
+                    $('.btn-see-all-pkg').hide();
+                }
+
+                $('.card-product').html(content);
+            }
+        });
+
         function alerts() {
             Swal.fire({
                 title: 'Confirmation',
@@ -472,5 +511,20 @@
             ],
             ordering: false
         });
+
+        // info dashboard
+        $.ajax({
+            url      : "{{ route('admin.dashboard') }}",
+            data     : {
+                id : "{{ Helper::encrypt(Auth::user()->id) }}"
+            },
+            dataType : 'jSON',
+            error: function(request, status, error) {
+                showResponseHeader(request);
+            },
+            success: function(response) {
+                setHtmlProps(response)
+            }
+        })
     </script>
 @endpush
