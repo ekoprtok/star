@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Package;
-use Helper;
+use App\Helpers\Helper;
 
 class PackageController extends Controller {
 

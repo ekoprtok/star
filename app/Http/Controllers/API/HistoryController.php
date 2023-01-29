@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Helper;
+use App\Helpers\Helper;
 
 class HistoryController extends Controller {
 
