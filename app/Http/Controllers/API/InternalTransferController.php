@@ -25,7 +25,7 @@ class InternalTransferController extends Controller {
         if ($wallet->rbalance_amount < $request->amount) {
             return response()->json([
                 'success' => false,
-                'message' => 'Your balance is not enought'
+                'message' => 'Your balance is not enough'
             ]);
         }
 
@@ -62,18 +62,47 @@ class InternalTransferController extends Controller {
             'status'       => $request->status
         ]);
 
+        $oldWallet      = UserWallet::where('user_id', $request->to_id)->first();
+        $oldWalletFrom  = UserWallet::where('user_id', $request->from_id)->first();
+        $userTo         = User::find($oldWallet->user_id);
+        $userFrom       = User::find($oldWalletFrom->user_id);
+        $amount         = Helper::format_harga($internal->amount);
+
         if ($request->status == '1') {
-            $oldWallet  = UserWallet::find($request->to_id);
+            // to, add balance
             $newBalance = ($oldWallet) ? ($oldWallet->rbalance_amount + $internal->amount) : $request->amount;
-            UserWallet::where('id', $request->to_id)->update([
+            UserWallet::where('user_id', $request->to_id)->update([
                 'rbalance_amount' => (float)$newBalance
             ]);
 
-            // from
-            $oldWalletFrom  = UserWallet::find($request->from_id);
+            // from, reduce balance
             $newBalanceFrom = ($oldWalletFrom) ? ($oldWalletFrom->rbalance_amount - $internal->amount) : $request->amount;
-            UserWallet::where('id', $request->from_id)->update([
-                'rbalance_amount' => (float)$newBalance
+            UserWallet::where('user_id', $request->from_id)->update([
+                'rbalance_amount' => (float)$newBalanceFrom
+            ]);
+
+            // notif to user to
+            Helper::sendNotif([
+                'type'          => "internal_transfer",
+                'message'       => "You get a transfer from an {$userFrom->email} of {$amount}",
+                'from_user_id'  => "2",
+                'to_user_id'    => $request->to_id
+            ]);
+
+            // notif to user from
+            Helper::sendNotif([
+                'type'          => "internal_transfer",
+                'message'       => "Your transfer of {$amount} to {$userTo->email} was successfully sent",
+                'from_user_id'  => "2",
+                'to_user_id'    => $request->from_id
+            ]);
+        }else {
+            // notif to user from
+            Helper::sendNotif([
+                'type'          => "internal_transfer",
+                'message'       => "Your transfer of {$amount} to {$userTo->email} was rejected",
+                'from_user_id'  => "2",
+                'to_user_id'    => $request->from_id
             ]);
         }
 

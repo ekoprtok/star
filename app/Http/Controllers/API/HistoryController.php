@@ -74,12 +74,13 @@ class HistoryController extends Controller {
                     <a href="javascript::void(0)" onclick="process(\''.$value->id.'\', \'1\', \''.$value->from_id.'\', \''.$value->to_id.'\')">Approve</a>
                     &nbsp;
                     &nbsp;
-                    <a href="javascript::void(0)" class="text-danger" onclick="process(\''.$value->id.'\', \'1\', \''.$value->from_id.'\', \''.$value->to_id.'\')">Rejected</a>
+                    <a href="javascript::void(0)" class="text-danger" onclick="process(\''.$value->id.'\', \'2\', \''.$value->from_id.'\', \''.$value->to_id.'\')">Rejected</a>
                     ';
                 }else {
                     $value->action = '-';
                 }
-                $value->status    = '<span class="badge bg-'.Helper::invoiceStatusClass($value->status).'">'.Helper::statusApproval($value->status).'</span>';
+                $value->amount  = Helper::format_harga($value->amount);
+                $value->status  = '<span class="badge bg-'.Helper::invoiceStatusClass($value->status).'">'.Helper::statusApproval($value->status).'</span>';
             }
         }
 
@@ -156,12 +157,13 @@ class HistoryController extends Controller {
                     <a href="javascript::void(0)" onclick="process(\''.$value->id.'\', \'1\', \''.$value->user_wallet_id.'\')">Approve</a>
                     &nbsp;
                     &nbsp;
-                    <a href="javascript::void(0)" class="text-danger" onclick="process(\''.$value->id.'\', \'1\', \''.$value->user_wallet_id.'\')">Rejected</a>
+                    <a href="javascript::void(0)" class="text-danger" onclick="process(\''.$value->id.'\', \'2\', \''.$value->user_wallet_id.'\')">Rejected</a>
                     ';
                 }else {
                     $value->action = '-';
                 }
-                $value->status    = '<span class="badge bg-'.Helper::invoiceStatusClass($value->status).'">'.Helper::statusApproval($value->status).'</span>';
+                $value->amount  = Helper::format_harga($value->amount);
+                $value->status  = '<span class="badge bg-'.Helper::invoiceStatusClass($value->status).'">'.Helper::statusApproval($value->status).'</span>';
             }
         }
 
@@ -200,15 +202,16 @@ class HistoryController extends Controller {
                 foreach ($data as $key => $value) {
                     if ($value->status == '0') {
                         $value->action    = '
-                        <a href="javascript::void(0);" onclick="process(\''.$value->id.'\', \'1\', \''.$value->user_wallet_id.'\')">Approve</a>
-                        &nbsp;
-                        &nbsp;
-                        <a href="javascript::void(0);" class="text-danger" onclick="process(\''.$value->id.'\', \'1\', \''.$value->user_wallet_id.'\')">Rejected</a>
+                            <a href="javascript::void(0);" onclick="process(\''.$value->id.'\', \'1\', \''.$value->user_wallet_id.'\')">Approve</a>
+                            &nbsp;
+                            &nbsp;
+                            <a href="javascript::void(0);" class="text-danger" onclick="process(\''.$value->id.'\', \'2\', \''.$value->user_wallet_id.'\')">Rejected</a>
                         ';
                     }else {
                         $value->action = '-';
                     }
-                    $value->status    = '<span class="badge bg-'.Helper::invoiceStatusClass($value->status).'">'.Helper::statusApproval($value->status).'</span>';
+                    $value->amount_f  = Helper::format_harga($value->amount);
+                    $value->status_f  = '<span class="badge bg-'.Helper::invoiceStatusClass($value->status).'">'.Helper::statusApproval($value->status).'</span>';
                 }
             }
         }

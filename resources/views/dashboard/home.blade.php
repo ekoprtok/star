@@ -100,6 +100,24 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-sm-3">
+                                <div class="card bg-light">
+                                    <div class="nk-wgw sm">
+                                        <a class="nk-wgw-inner" href="{{ route('dashboard.internaltrf') }}">
+                                            <div class="nk-wgw-name">
+                                                <h5 class="nk-wgw-title title">Internal Transfer</h5>
+                                            </div>
+                                            <div class="nk-wgw-balance">
+                                                <div class="internal_transfer fw-500 fs-5">
+                                                    <div class="spinner-border spinner-border-sm" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -432,40 +450,42 @@
             },
             success: function(r) {
                 let content = '';
-                if (r.data.length > 0) {
-                    r.data.map((item, index) => {
-                        if (index <= 2) {
-                            content += `
-                                <div class="col-lg-4 col-12">
-                                    <div class="card bg-light">
-                                        <div class="nk-wgw sm">
-                                            <div class="nk-wgw-inner">
-                                                <div class="nk-wgw-name">
-                                                    <h5 class="nk-wgw-title title">Package ${item.name}</h5>
-                                                </div>
-                                                <div class="gauge-container">
-                                                    <div class="gauge"></div>
-                                                </div>
-                                                <div class="d-flex flex-row justify-content-center">
-                                                    <a class="nk-wgw-balance btn btn-primary me-3" href="javascript:void()"
-                                                        onclick="alerts()">
-                                                        Daily Blessing
-                                                    </a>
-                                                    <a class="nk-wgw-balance btn btn-primary" href="javascript:void()"
-                                                        data-bs-toggle="modal" data-bs-target="#modalchallenge">
-                                                        Daily Challenge
-                                                    </a>
-                                                </div>
+
+                    for (let inx  = 0; inx <= (r.master.length -1); inx++) {
+                        let item  = r.master[inx];
+                        let value = r.data.find(it => it.package_id == item.id);
+                        content += `
+                            <div class="col-lg-3 col-12">
+                                <div class="card bg-light">
+                                    <div class="${(value ? '' : 'not-own')}"></div>
+                                    <div class="nk-wgw sm">
+                                        <div class="nk-wgw-inner">
+                                            <div class="nk-wgw-name">
+                                                <h5 class="nk-wgw-title title">Package ${item.name}</h5>
+                                            </div>
+                                            <div class="gauge-container">
+                                                <div class="gauge" ${value ? '' : 'data-value="0"'}></div>
+                                            </div>
+                                            <div class="d-flex flex-row justify-content-center">
+                                                <a class="btn btn-primary ${value ? '' : 'disabled'} btn-xs me-3" href="javascript:void()"
+                                                    onclick="alerts()">
+                                                    Daily Blessing
+                                                </a>
+                                                <a class="btn btn-xs ${value ? '' : 'disabled'} btn-primary" href="javascript:void()"
+                                                    data-bs-toggle="modal" data-bs-target="#modalchallenge">
+                                                    Daily Challenge
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            `;
-                        }
-                    });
+                            </div>
+                        `;
+                    }
+                if (r.data.length > 0) {
                     $('.btn-see-all-pkg').show();
                 }else {
-                    content += `<div class="col-lg-4 col-12">You dont have any package, lets go buy a package <a href="{{ route('dashboard.packages') }}">here</a>, be sure your balance is enought.</div>`;
+                    // content += `<div class="col-lg-4 col-12">You dont have any package, lets go buy a package <a href="{{ route('dashboard.packages') }}">here</a>, be sure your balance is enought.</div>`;
                     $('.btn-see-all-pkg').hide();
                 }
 
@@ -490,41 +510,27 @@
                 url: '{{ route('request.list') }}',
                 type: 'POST',
                 data: {
-                    user_id: '{{ Auth::user()->id }}'
+                    user_id: '{{ Helper::encrypt(Auth::user()->id) }}'
                 }
             },
             columns: [{
-                    data: 'date'
+                    data: 'submitted_at'
                 },
                 {
                     data: 'type'
                 },
                 {
-                    data: 'desc'
+                    data: 'description'
                 },
                 {
                     data: 'file'
                 },
                 {
-                    data: 'status'
+                    data: 'status',
+                    className : 'text-center'
                 }
             ],
             ordering: false
         });
-
-        // info dashboard
-        $.ajax({
-            url      : "{{ route('admin.dashboard') }}",
-            data     : {
-                id : "{{ Helper::encrypt(Auth::user()->id) }}"
-            },
-            dataType : 'jSON',
-            error: function(request, status, error) {
-                showResponseHeader(request);
-            },
-            success: function(response) {
-                setHtmlProps(response)
-            }
-        })
     </script>
 @endpush

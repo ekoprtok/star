@@ -8,6 +8,7 @@ use App\Models\Package;
 use App\Models\PackageDetail;
 use App\Models\TrxPackage;
 use App\Models\UserPackage;
+use App\Models\UserWallet;
 use Helper;
 
 class PackageController extends Controller {
@@ -21,14 +22,28 @@ class PackageController extends Controller {
             }
         }
         return response()->json([
-            'data' => $data
+            'data'      => $data,
+            'master'    => Package::all()
         ]);
     }
 
     public function packageBuy(Request $request) {
-        $id         = Helper::decrypt($request->id);
-        $user_id    = $request->user_id;
-        $trxPackage = TrxPackage::where(['user_id' => $user_id, 'package_id' => $id])->count();
+        $id             = Helper::decrypt($request->id);
+        $user_id        = $request->user_id;
+        $trxPackage     = TrxPackage::where(['user_id' => $user_id, 'package_id' => $id])->count();
+        $checkPackage   = Package::find($id);
+        $checkWallet    = UserWallet::where('user_id', $user_id)->first();
+
+        // check balance user
+        $price          = $checkPackage->rdonation + $checkPackage->rjoin_fee;
+        if ($checkWallet->rbalance_amount < $price) {
+            return response()->json([
+                'success' => false,
+                'message' => "Sorry, your balance isn't enough"
+            ]);
+        }
+
+        // check if user have same package
         if ($trxPackage) {
             return response()->json([
                 'success' => false,
@@ -36,15 +51,23 @@ class PackageController extends Controller {
             ]);
         }
 
+        // create history buy
         $process = TrxPackage::create([
             'submitted_at' => date('Y-m-d H:i:s'),
             'user_id'      => $user_id,
             'package_id'   => $id
         ]);
 
+        // create user package
         $process = UserPackage::create([
             'user_id'      => $user_id,
             'package_id'   => $id
+        ]);
+
+        // update balance
+        $newBalance = $checkWallet->rbalance_amount - $price;
+        $process    = UserWallet::where('user_id', $user_id)->update([
+            'rbalance_amount' => (float)$newBalance
         ]);
 
         return response()->json([

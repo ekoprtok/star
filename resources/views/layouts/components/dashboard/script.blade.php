@@ -14,11 +14,11 @@
 
         class GaugeChart {
             constructor(element, params) {
-                this._element = element;
-                this._initialValue = params.initialValue;
-                this._higherValue = params.higherValue;
-                this._title = params.title;
-                this._subtitle = params.subtitle;
+                this._element       = element;
+                this._initialValue  = params.initialValue;
+                this._higherValue   = params.higherValue;
+                this._title         = params.title;
+                this._subtitle      = params.subtitle;
             }
 
             _buildConfig() {
@@ -75,13 +75,13 @@
 
 
                     onInitialized: function() {
-                        let currentGauge = $(element);
-                        let circle = currentGauge.find('.dxg-spindle-hole').clone();
-                        let border = currentGauge.find('.dxg-spindle-border').clone();
+                        // let currentGauge = $(element);
+                        // let circle = currentGauge.find('.dxg-spindle-hole').clone();
+                        // let border = currentGauge.find('.dxg-spindle-border').clone();
 
-                        currentGauge.find('.dxg-title text').first().attr('y', 48);
-                        currentGauge.find('.dxg-title text').last().attr('y', 28);
-                        currentGauge.find('.dxg-value-indicator').append(border, circle);
+                        // currentGauge.find('.dxg-title text').first().attr('y', 48);
+                        // currentGauge.find('.dxg-title text').last().attr('y', 28);
+                        // currentGauge.find('.dxg-value-indicator').append(border, circle);
                     }
                 };
             }
@@ -96,7 +96,8 @@
 
             setTimeout(() => {
                 $('.gauge').each(function(index, item) {
-                    let num = getRandomArbitrary(10, 99);
+                    let dataPr = $(this).data('value');
+                    let num    = (dataPr >= 0) ? dataPr : getRandomArbitrary(10, 99);
                     let params = {
                         initialValue: num,
                         higherValue: 100,
@@ -114,6 +115,21 @@
     function getRandomArbitrary(min, max) {
         return Math.random() * (max - min) + min;
     }
+
+    // info dashboard
+    $.ajax({
+        url      : "{{ route('admin.dashboard') }}",
+        data     : {
+            id : "{{ Helper::encrypt(Auth::user()->id) }}"
+        },
+        dataType : 'jSON',
+        error: function(request, status, error) {
+            showResponseHeader(request);
+        },
+        success: function(response) {
+            setHtmlProps(response)
+        }
+    })
 </script>
 
 <script>
@@ -150,6 +166,25 @@
         let keys = Object.keys(response);
         keys.map((item, index) => {
             $(`.${item}`).html(response[item]);
+            if (item == 'notification_count') {
+                if (response[item] > 0) {
+                    $('.icon-notif').addClass('icon-status icon-status-info');
+                    let notifContent = '';
+                    response.notification.map((item, index) => {
+                        notifContent += `
+                            <div class="nk-notification-item dropdown-inner">
+                                <div class="nk-notification-content">
+                                    <div class="nk-notification-text">${item.message}</div>
+                                    <div class="nk-notification-time">${item.created_at_f}</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    $('.notif-container').html(notifContent);
+                }else {
+                    $('.icon-notif').removeClass('icon-status icon-status-info');
+                }
+            }
         })
     }
 </script>

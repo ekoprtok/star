@@ -41,18 +41,36 @@ class WithdrawController extends Controller {
     }
 
     public function adminProcess(Request $request) {
-        $depo    = TrxWithdrawal::find($request->id);
-        $process = TrxWithdrawal::where('id', $request->id)->update([
+        $withdraw = TrxWithdrawal::find($request->id);
+        $process  = TrxWithdrawal::where('id', $request->id)->update([
             'responsed_by' => $request->user_id,
             'responsed_at' => date('Y-m-d H:i:s'),
             'status'       => $request->status
         ]);
 
+        $amount     = Helper::format_harga($withdraw->amount);
+        $oldWallet  = UserWallet::find($request->user_wallet_id);
+        // approve reduce balance user
         if ($request->status == '1') {
-            $oldWallet  = UserWallet::find($request->user_wallet_id);
-            $newBalance = ($oldWallet) ? ($oldWallet->rbalance_amount - $depo->amount) : $request->amount;
+            $newBalance = ($oldWallet) ? ($oldWallet->rbalance_amount - $withdraw->amount) : $request->amount;
             UserWallet::where('id', $request->user_wallet_id)->update([
                 'rbalance_amount' => (float)$newBalance
+            ]);
+
+            // notif to user
+            Helper::sendNotif([
+                'type'          => "withdraw",
+                'message'       => "Your withdrawal of {$amount} was successfully sent",
+                'from_user_id'  => "2",
+                'to_user_id'    => $oldWallet->user_id
+            ]);
+        }else {
+            // notif to user
+            Helper::sendNotif([
+                'type'          => "withdraw",
+                'message'       => "Your withdrawal of {$amount} was rejected",
+                'from_user_id'  => "2",
+                'to_user_id'    => $oldWallet->user_id
             ]);
         }
 

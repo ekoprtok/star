@@ -27,7 +27,7 @@ Route::get('/cron', [CronJobController::class, 'index']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     // list data
-    Route::post('/request-list', [HistoryController::class, 'requestList'])->name('request.list');
+    Route::post('/request-list', [DashboardController::class, 'requestList'])->name('request.list');
     Route::post('/deposit-list', [HistoryController::class, 'depositList'])->name('deposit.list');
     Route::post('/withdrawal-list', [HistoryController::class, 'withdrawalList'])->name('withdrawal.list');
     Route::post('/transaction-list', [HistoryController::class, 'trxHistory'])->name('transaction.list');

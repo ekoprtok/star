@@ -96,4 +96,45 @@
     .fw-500 {
         font-weight: 500;
     }
+    .logo-img {
+        max-height : 50px;
+    }
+    .btn-primary, .btn, .btn:focus {
+        color: #fff;
+        background-color: #C9B56D;
+        border-color: #C9B56D;
+    }
+    .btn:hover {
+        color: #fff;
+        background-color: #aa995d;
+        border-color: #aa995d;
+    }
+    .menu-link:hover, .active > .menu-link, .menu-link.active {
+        color: #C9B56D;
+    }
+    .btn-primary:disabled, .btn-primary.disabled {
+        color: #fff;
+        background-color: #cab979;
+        border-color: #cab979;
+    }
+    .nk-menu-link:hover, .active > .nk-menu-link {
+        color: #C9B56D;
+    }
+    .nk-menu-link:hover .nk-menu-icon, .nk-menu-item.active > .nk-menu-link .nk-menu-icon, .nk-menu-item.current-menu > .nk-menu-link .nk-menu-icon {
+        color: #C9B56D;
+    }
+    a {
+        color: #C9B56D;
+        text-decoration: none;
+    }
+    .not-own {
+        position:absolute;
+        height: 100%;
+        width: 100%;
+        background-color: rgb(239 239 239 / 50%);
+        z-index: 99;filter: blur(1px);
+    }
+    .icon-notif {
+        display: inline-flex;
+    }
 </style>

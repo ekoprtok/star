@@ -53,11 +53,28 @@ class DepositController extends Controller {
             'status'       => $request->status
         ]);
 
+        $amount     = Helper::format_harga($depo->amount);
+        $oldWallet  = UserWallet::find($request->user_wallet_id);
         if ($request->status == '1') {
-            $oldWallet  = UserWallet::find($request->user_wallet_id);
             $newBalance = ($oldWallet) ? ($oldWallet->rbalance_amount + $depo->amount) : $request->amount;
             UserWallet::where('id', $request->user_wallet_id)->update([
                 'rbalance_amount' => (float)$newBalance
+            ]);
+
+            // notif to user
+            Helper::sendNotif([
+                'type'          => "deposit",
+                'message'       => "Your deposit of {$amount} was successfully",
+                'from_user_id'  => "2",
+                'to_user_id'    => $oldWallet->user_id
+            ]);
+        }else {
+            // notif to user
+            Helper::sendNotif([
+                'type'          => "deposit",
+                'message'       => "Your deposit of {$amount} was rejected",
+                'from_user_id'  => "2",
+                'to_user_id'    => $oldWallet->user_id
             ]);
         }
 

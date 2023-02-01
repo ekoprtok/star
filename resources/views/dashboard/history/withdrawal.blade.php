@@ -46,8 +46,8 @@
         columns: [
             { data: 'submitted_at' },
             { data: 'email' },
-            { data: 'amount' },
-            { data: 'status' },
+            { data: 'amount_f' },
+            { data: 'status_f' },
             { data: 'action', className : 'text-center' },
         ],
         ordering : false
