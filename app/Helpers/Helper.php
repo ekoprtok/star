@@ -5,6 +5,7 @@ namespace App\Helpers;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\Account;
+use App\Models\Notification;
 
 use Tarikh\PhpMeta\MetaTraderClient;
 
@@ -16,6 +17,23 @@ class Helper {
 
     public static function decrypt($string) {
         return Crypt::decryptString($string);
+    }
+
+    public static function sendNotif($data) {
+        /*
+            Notification type
+            - deposit
+            - withdraw
+            - internal_transfer
+        */
+
+        return Notification::create([
+            'type'          => isset($data['type']) ? $data['type'] : '',
+            'message'       => isset($data['message']) ? $data['message'] : '',
+            'from_user_id'  => isset($data['from_user_id']) ? $data['from_user_id'] : '',
+            'to_user_id'    => isset($data['to_user_id']) ? $data['to_user_id'] : '',
+            'is_read'       => isset($data['is_read']) ? $data['is_read'] : '0',
+        ]);
     }
 
     public static function format_harga($angka, $prefix = '$'){
