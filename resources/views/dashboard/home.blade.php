@@ -442,11 +442,11 @@
     <script src="{{ asset('account/assets/js/charts/chart-crypto.js?ver=3.0.2') }}"></script>
 
     <script>
-
+        var user_id = "{{ Auth::user()->id }}";
         $.ajax({
             url  : '{{ route('product.list') }}',
             data : {
-                id : "{{ Helper::encrypt(Auth::user()->id) }}"
+                id : user_id
             },
             success: function(r) {
                 let content = '';
@@ -467,11 +467,11 @@
                                                 <div class="gauge" ${value ? '' : 'data-value="0"'}></div>
                                             </div>
                                             <div class="d-flex flex-row justify-content-center">
-                                                <a class="btn btn-primary ${value ? '' : 'disabled'} btn-xs me-3" href="javascript:void()"
-                                                    onclick="alerts()">
+                                                <a class="btn btn-primary ${value ? '' : 'disabled'} btn-xs me-3" href="javascript:void(0);"
+                                                    onclick="blessing('${item.id}', '${user_id}')">
                                                     Daily Blessing
                                                 </a>
-                                                <a class="btn btn-xs ${value ? '' : 'disabled'} btn-primary" href="javascript:void()"
+                                                <a class="btn btn-xs ${value ? '' : 'disabled'} btn-primary" href="javascript:void(0);"
                                                     data-bs-toggle="modal" data-bs-target="#modalchallenge">
                                                     Daily Challenge
                                                 </a>
@@ -493,13 +493,38 @@
             }
         });
 
-        function alerts() {
+        function blessing(id, user) {
             Swal.fire({
-                title: 'Confirmation',
-                text: 'Are you sure want to request?',
-                showCloseButton: true,
-                showCancelButton: true,
-                confirmButtonText: 'Yes'
+
+            })
+            Swal.fire({
+                title              : "Confirmation",
+                text               : "Are you sure want to request?",
+                showCloseButton    : true,
+                showCancelButton   : true,
+                confirmButtonText  : "Yes"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url      : "{{ route('daily.blessing.process') }}",
+                        data     : {
+                            id      : id,
+                            user_id : user
+                        },
+                        type     : "POST",
+                        dataType : "jSON",
+                        error: function(request, status, error) {
+                            showResponseHeader(request);
+                        },
+                        success  : function(r) {
+                            NioApp.Toast(r.message, (r.success ? "success" : "error"), {
+                                position: "top-right"
+                            });
+
+                            $(".datatable").DataTable().ajax.reload();
+                        }
+                    })
+                }
             })
         }
 
@@ -510,7 +535,7 @@
                 url: '{{ route('request.list') }}',
                 type: 'POST',
                 data: {
-                    user_id: '{{ Helper::encrypt(Auth::user()->id) }}'
+                    user_id: user_id
                 }
             },
             columns: [{

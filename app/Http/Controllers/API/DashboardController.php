@@ -17,7 +17,7 @@ use Helper;
 class DashboardController extends Controller {
 
     public function index(Request $request) {
-        $id         = ($request->id) ? Helper::decrypt($request->id) : '';
+        $id         = $request->id;
         $userWallet = UserWallet::where('user_id', $id)->first();
         $balance    = ($userWallet) ? Helper::format_harga($userWallet->rbalance_amount) : Helper::format_harga(0);
         $notif_data = Notification::where(['to_user_id' => $id, 'is_read' => '0'])->limit(5)->get();
@@ -47,7 +47,7 @@ class DashboardController extends Controller {
         $offset      = $request->get('start') -1;
         $limit       = $request->get('length');
 
-        $user_id     = ($request->user_id) ? Helper::decrypt($request->user_id) : '';
+        $user_id     = $request->user_id;
         $user        = User::find($user_id);
         $userWallet  = UserWallet::where('user_id', $user->id)->first();
         $deposit     = TrxDeposit::where('user_wallet_id', $userWallet->id)->selectRaw('submitted_at, amount as description, status, "Deposit" as type, file_path as file');

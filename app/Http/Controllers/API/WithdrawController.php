@@ -17,7 +17,7 @@ class WithdrawController extends Controller {
             'user_id'      => 'required',
         ]);
 
-        $user_id = Helper::decrypt($request->user_id);
+        $user_id = $request->user_id;
         $wallet  = UserWallet::where('user_id', $user_id)->first();
         if ($wallet->rbalance_amount < $request->amount) {
             return response()->json([

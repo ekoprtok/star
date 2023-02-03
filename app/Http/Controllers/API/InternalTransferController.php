@@ -18,7 +18,7 @@ class InternalTransferController extends Controller {
             'user_id'      => 'required',
         ]);
 
-        $user_id = Helper::decrypt($request->user_id);
+        $user_id = $request->user_id;
         $wallet  = UserWallet::where('user_id', $user_id)->first();
 
         $wallet  = UserWallet::where('user_id', $user_id)->first();

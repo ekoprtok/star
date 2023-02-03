@@ -14,7 +14,7 @@ use Helper;
 class PackageController extends Controller {
 
     public function index(Request $request) {
-        $id   = ($request->id) ? Helper::decrypt($request->id) : '';
+        $id   = $request->id;
         $data = ($id) ? UserPackage::where('user_id', $id)->leftJoin('packages', 'packages.id', '=', 'user_packages.package_id')->get() : Package::all();
         if ($data) {
             foreach ($data as $key => $value) {
@@ -28,7 +28,7 @@ class PackageController extends Controller {
     }
 
     public function packageBuy(Request $request) {
-        $id             = Helper::decrypt($request->id);
+        $id             = $request->id;
         $user_id        = $request->user_id;
         $trxPackage     = TrxPackage::where(['user_id' => $user_id, 'package_id' => $id])->count();
         $checkPackage   = Package::find($id);
@@ -61,6 +61,7 @@ class PackageController extends Controller {
         // create user package
         $process = UserPackage::create([
             'user_id'      => $user_id,
+            'rvalue'       => $checkPackage->rvalue,
             'package_id'   => $id
         ]);
 
@@ -77,7 +78,7 @@ class PackageController extends Controller {
     }
 
     public function formCrud(Request $request) {
-        $id = $request->id ? Helper::decrypt($request->id) : '';
+        $id = $request->id;
         $validated = $request->validate([
             'name'            => 'required|min:4',
             'rvalue'          => 'required',
@@ -119,9 +120,9 @@ class PackageController extends Controller {
     }
 
     public function percentageProcess(Request $request) {
-        $id         = $request->idx ? Helper::decrypt($request->idx) : '';
-        $package_id = $request->package_id ? Helper::decrypt($request->package_id) : '';
-        $validated = $request->validate([
+        $id         = $request->id;
+        $package_id = $request->package_id;
+        $validated  = $request->validate([
             'gen'        => 'required',
             'percentage' => 'required',
             'package_id' => 'required'
@@ -148,18 +149,18 @@ class PackageController extends Controller {
     }
 
     public function getEdit(Request $request) {
-        $data = Package::find(Helper::decrypt($request->id));
+        $data = Package::find($request->id);
         if ($data) {
-            $data->idx = Helper::encrypt($request->id);
+
         }
         return $data;
     }
 
     public function getPercentage(Request $request) {
-        $draw = $request->get('draw');
+        $draw   = $request->get('draw');
         $search = $request->get('search')['value'];
         $offset = $request->get('start') - 1;
-        $limit = $request->get('length');
+        $limit  = $request->get('length');
 
         $data = PackageDetail::where(function ($query) use ($search) {
             $query->where('percentage', 'LIKE', '%' . $search . '%');
@@ -189,10 +190,10 @@ class PackageController extends Controller {
     }
 
     public function packageList(Request $request) {
-        $draw = $request->get('draw');
+        $draw   = $request->get('draw');
         $search = $request->get('search')['value'];
         $offset = $request->get('start') - 1;
-        $limit = $request->get('length');
+        $limit  = $request->get('length');
 
         $data = Package::where(function ($query) use ($search) {
             $query->where('name', 'LIKE', '%' . $search . '%');
@@ -222,8 +223,8 @@ class PackageController extends Controller {
     }
 
     public function packageDelete(Request $request) {
-        $process = Package::where('id', Helper::decrypt($request->id))->delete();
-        $process = PackageDetail::where('package_id', Helper::decrypt($request->id))->delete();
+        $process = Package::where('id', $request->id)->delete();
+        $process = PackageDetail::where('package_id', $request->id)->delete();
         return response()->json([
             'success' => $process ? true : false,
             'message' => $process ? 'Package has been delete' : '',
@@ -231,7 +232,7 @@ class PackageController extends Controller {
     }
 
     public function percentageDelete(Request $request) {
-        $process = PackageDetail::where('id', Helper::decrypt($request->id))->delete();
+        $process = PackageDetail::where('id', $request->id)->delete();
         return response()->json([
             'success' => $process ? true : false,
             'message' => $process ? 'Package percentage has been delete' : '',
@@ -239,24 +240,22 @@ class PackageController extends Controller {
     }
 
     public function percentageEdit(Request $request) {
-        $data = PackageDetail::find(Helper::decrypt($request->id));
+        $data = PackageDetail::find($request->id);
         if ($data) {
-            $data->idx        = Helper::encrypt($data->id);
-            $data->package_id = Helper::encrypt($data->package_id);
+
         }
         return response()->json($data);
     }
 
     public function setAttrPercentage($value, $key) {
-        $encrypt_id        = Helper::encrypt($value->id);
         $value->percentage = $value->percentage.'%';
         $value->action     =
             '
-            <a class="text-danger" href="javascript:void(0)" onclick="deleting(\''.$encrypt_id.'\')" title="delete">
+            <a class="text-danger" href="javascript:void(0)" onclick="deleting(\''.$value->id.'\')" title="delete">
                 <i class="fs-16px bi bi-trash text-muted"></i>
             </a>
                 &nbsp;&nbsp;
-            <a class="text-primary" href="javascript:void(0)" onclick="editing(\''.$encrypt_id.'\')" title="edit">
+            <a class="text-primary" href="javascript:void(0)" onclick="editing(\''.$value->id.'\')" title="edit">
                 <i class="fs-16px bi bi-pencil-square text-muted"></i>
             </a>
         ';

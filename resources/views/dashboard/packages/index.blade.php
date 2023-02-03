@@ -42,7 +42,7 @@
                                 <li class="fw-bold"><span class="w-50">Total</span> <span class="ms-auto">${item.rdonation}</span></li>
                             </ul>
                             <div class="pricing-action">
-                                <a class="btn btn-outline-primary" onclick="buying('${item.idx}')">Buy Now</a>
+                                <a class="btn btn-outline-primary" onclick="buying('${item.id}')">Buy Now</a>
                             </div>
                         </div>
                     </div>

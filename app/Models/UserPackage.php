@@ -4,13 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\UuidTrait;
 
 class UserPackage extends Model
 {
-    use HasFactory;
+    use HasFactory, UuidTrait;
 
     protected $fillable = [
         'user_id',
+        'rvalue',
         'package_id',
     ];
 

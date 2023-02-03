@@ -14,7 +14,7 @@ class CreateTrxWithdrawalsTable extends Migration
     public function up()
     {
         Schema::create('trx_withdrawals', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('submitted_at');
             $table->string('user_wallet_id');
             $table->string('amount');

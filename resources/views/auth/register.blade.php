@@ -13,6 +13,16 @@
     @csrf
 
     <div class="form-group">
+        <label class="form-label" for="username">{{ __('Username') }}</label>
+        <div class="form-control-wrap">
+            <input id="username" type="text" placeholder="Enter your username" class="form-control form-control-lg @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username">
+        </div>
+        @error('username')
+            <small class="text-danger" role="alert">{{ $message }}</small>
+        @enderror
+    </div>
+
+    <div class="form-group">
         <label class="form-label" for="email">{{ __('Email Address') }}</label>
         <div class="form-control-wrap">
             <input id="email" type="email" placeholder="Enter your email address" class="form-control form-control-lg @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">

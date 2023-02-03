@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\Account;
 use App\Models\Notification;
+use App\Models\UserWalletHistory;
 
 use Tarikh\PhpMeta\MetaTraderClient;
 
@@ -17,6 +18,10 @@ class Helper {
 
     public static function decrypt($string) {
         return Crypt::decryptString($string);
+    }
+
+    public static function createdWalettHistory($data) {
+        return UserWalletHistory::create($data);
     }
 
     public static function sendNotif($data) {

@@ -78,4 +78,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // internal transfer
     Route::post('/internal-process', [InternalTransferController::class, 'process'])->name('internal.process');
     Route::post('/internal-admin-process', [InternalTransferController::class, 'adminProcess'])->name('admin.internal.process');
+
+    // daily blessing
+    Route::post('/internal-admin-process', [DailyController::class, 'dailyBlessing'])->name('daily.blessing.process');
 });

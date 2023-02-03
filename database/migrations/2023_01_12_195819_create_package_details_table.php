@@ -14,7 +14,7 @@ class CreatePackageDetailsTable extends Migration
     public function up()
     {
         Schema::create('package_details', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('package_id');
             $table->integer('gen');
             $table->float('percentage');

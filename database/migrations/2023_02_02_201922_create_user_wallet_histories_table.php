@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTrxDepositsTable extends Migration
+class CreateUserWalletHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class CreateTrxDepositsTable extends Migration
      */
     public function up()
     {
-        Schema::create('trx_deposits', function (Blueprint $table) {
+        Schema::create('user_wallet_histories', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('submitted_at');
+            $table->string('trx_at');
+            $table->string('trx_id');
+            $table->integer('type'); // 1 deposit, 2 wd, 3 trf, 4 donation, 5 dialy
+            $table->string('user_id');
             $table->string('user_wallet_id');
             $table->float('amount');
-            $table->string('file_path');
-            $table->enum('status', ['0', '1', '2'])->default('0');
-            $table->string('responsed_by')->nullable();
-            $table->string('responsed_at')->nullable();
+            $table->enum('status', ['in', 'out'])->default('in');
             $table->timestamps();
         });
     }
@@ -33,6 +33,6 @@ class CreateTrxDepositsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('trx_deposits');
+        Schema::dropIfExists('user_wallet_histories');
     }
 }

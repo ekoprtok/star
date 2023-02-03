@@ -29,7 +29,7 @@ class DepositController extends Controller {
             'user_id'      => 'required',
         ]);
 
-        $user_id = Helper::decrypt($request->user_id);
+        $user_id = $request->user_id;
         $wallet  = UserWallet::where('user_id', $user_id)->first();
         $create  = TrxDeposit::create([
             'submitted_at'      => date('Y-m-d H:i:s'),

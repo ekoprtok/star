@@ -14,7 +14,7 @@ class CreateGensetsTable extends Migration
     public function up()
     {
         Schema::create('gensets', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->float('donation_rate');
             $table->float('withdrawal_min');
             $table->float('withdrawal_rate');

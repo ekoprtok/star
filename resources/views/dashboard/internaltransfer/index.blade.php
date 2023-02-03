@@ -27,14 +27,14 @@
                                <label class="form-label">Transfer To (email address)</label>
                                <div class="form-control-wrap">
                                    <input type="email" class="form-control" name="email">
-                                   <input type="hidden" name="user_id" value={{ Helper::encrypt(Auth::user()->id) }}>
+                                   <input type="hidden" name="user_id" value={{ Auth::user()->id }}>
                                    <span class="text-danger email_err"></span>
                               </div>
                            </div>
                            <div class="form-group">
                               <label class="form-label">Amount*</label>
                               <div class="form-control-wrap">
-                                  <input type="number" class="form-control" name="amount">
+                                  <input type="number" step=".01" min="0" class="form-control" name="amount">
                                   <span class="text-danger amount_err"></span>
                               </div>
                            </div>

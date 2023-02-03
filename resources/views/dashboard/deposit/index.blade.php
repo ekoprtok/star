@@ -22,13 +22,13 @@
                             <div class="form-control-wrap">
                                 <span class="form-control">{{ date('d F Y') }}</span>
                                 <input type="hidden" name="file_path">
-                                <input type="hidden" name="user_id" value={{ Helper::encrypt(Auth::user()->id) }}>
+                                <input type="hidden" name="user_id" value={{ Auth::user()->id }}>
                             </div>
                             </div>
                             <div class="form-group">
                             <label class="form-label">Amount*</label>
                             <div class="form-control-wrap">
-                                <input type="number" class="form-control" name="amount">
+                                <input type="number" step=".01" min="0" class="form-control" name="amount">
                                 <span class="text-danger amount_err"></span>
                             </div>
                             </div>

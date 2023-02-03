@@ -14,7 +14,7 @@ class CreateTrxIntTransfersTable extends Migration
     public function up()
     {
         Schema::create('trx_int_transfers', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('submitted_at');
             $table->string('user_wallet_id');
             $table->string('amount');

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMembersTable extends Migration
+class CreateTrxDailyBlessingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateMembersTable extends Migration
      */
     public function up()
     {
-        Schema::create('members', function (Blueprint $table) {
+        Schema::create('trx_daily_blessings', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('parent_id');
+            $table->string('submitted_at');
             $table->string('user_id');
+            $table->string('package_id');
+            $table->float('amount');
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ class CreateMembersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('members');
+        Schema::dropIfExists('trx_daily_blessings');
     }
 }

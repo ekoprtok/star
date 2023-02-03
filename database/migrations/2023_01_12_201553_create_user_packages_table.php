@@ -14,9 +14,11 @@ class CreateUserPackagesTable extends Migration
     public function up()
     {
         Schema::create('user_packages', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('user_id');
             $table->string('package_id');
+            $table->string('rvalue');
+            $table->enum('status', ['0', '1'])->default('1');
             $table->timestamps();
         });
     }

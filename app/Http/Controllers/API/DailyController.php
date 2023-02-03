@@ -5,6 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\DailyChallenge;
+use App\Models\TrxDailyBlessing;
+use App\Models\Package;
+use App\Models\UserWallet;
 use Helper;
 
 class DailyController extends Controller {
@@ -43,15 +46,15 @@ class DailyController extends Controller {
     }
 
     public function getEdit(Request $request) {
-        $data = DailyChallenge::find(Helper::decrypt($request->id));
+        $data = DailyChallenge::find($request->id);
         if ($data) {
-            $data->idx = Helper::encrypt($request->id);
+
         }
         return $data;
     }
 
     public function formCrud(Request $request) {
-        $id = $request->id ? Helper::decrypt($request->id) : '';
+        $id        = $request->id;
         $validated = $request->validate([
             'name'       => 'required|min:8',
             'percentage' => 'required|between:0.1,100',
@@ -71,16 +74,16 @@ class DailyController extends Controller {
 
         return response()->json([
             'success' => $process ? true : false,
-            'message' => 'Daily challenge has been procesed',
+            'message' => ($process) ? 'Daily challenge has been procesed' : 'Error processing data, please try again.',
         ]);
     }
 
     public function dailyDelete(Request $request) {
-        $id = Helper::decrypt($request->id);
+        $id = $request->id;
         $process = DailyChallenge::where('id', $id)->delete();
         return response()->json([
             'success' => $process ? true : false,
-            'message' => 'Daily challenge has been deleted',
+            'message' => ($process) ? 'Daily challenge has been deleted' : 'Error processing data, please try again.',
         ]);
     }
 
@@ -97,5 +100,53 @@ class DailyController extends Controller {
                 <i class="fs-16px bi bi-pencil-square text-muted"></i>
             </a>
         ';
+    }
+
+    public function dailyBlessing(Request $request) {
+        $package_id      = $request->id;
+        $user_id         = $request->user_id;
+        $package         = Package::find($package_id);
+
+        $checkExistClaim = TrxDailyBlessing::where([
+          'package_id'      => $package_id,
+          'user_id'         => $user_id
+        ])->whereDate('submitted_at', '=', date('Y-m-d'))->count();
+
+        if ($checkExistClaim > 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You have claimed daily blessing today',
+            ]);
+        }
+
+        // add trx daily blessing
+        $amount     = $package->rdaily_blessing;
+        $processTrx = TrxDailyBlessing::create([
+            'submitted_at' => date('Y-m-d H:i:s'),
+            'user_id'      => $user_id,
+            'package_id'   => $package_id,
+            'amount'       => $amount
+        ]);
+
+        // add user wallet
+        $userWallet = UserWallet::where('user_id', $user_id)->first();
+        $newBalance = $userWallet->rbalance_amount + $amount;
+
+        $process    = UserWallet::where('id', $userWallet->id)->update(['rbalance_amount' => $newBalance]);
+        // history
+        $process    = Helper::createdWalettHistory([
+            'trx_at'            => date('Y-m-d H:i:s'),
+            'trx_id'            => $processTrx->id,
+            'type'              => '5',
+            'user_id'           => $user_id,
+            'user_wallet_id'    => $userWallet->id,
+            'amount'            => $amount,
+            'status'            => 'in'
+        ]);
+
+        return response()->json([
+            'success' => ($process) ? true : false,
+            'message' => ($process) ? 'Claim daily blessing successfully' : 'Error processing data, please try again.',
+        ]);
     }
 }

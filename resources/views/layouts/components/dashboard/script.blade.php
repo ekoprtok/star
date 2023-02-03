@@ -120,7 +120,7 @@
     $.ajax({
         url      : "{{ route('admin.dashboard') }}",
         data     : {
-            id : "{{ Helper::encrypt(Auth::user()->id) }}"
+            id : "{{ Auth::user()->id }}"
         },
         dataType : 'jSON',
         error: function(request, status, error) {

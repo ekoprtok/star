@@ -30,7 +30,7 @@
                                     <div class="form-group">
                                         <label class="form-label">Package Value</label>
                                         <div class="form-control-wrap">
-                                            <input type="number" class="form-control" name="rvalue">
+                                            <input type="number" step=".01" min="0" class="form-control" name="rvalue">
                                             <small class="text-danger rvalue_err"></small>
                                         </div>
                                     </div>
@@ -38,7 +38,7 @@
                                     <div class="form-group">
                                         <label class="form-label">Join Fee</label>
                                         <div class="form-control-wrap">
-                                            <input type="number" class="form-control" name="rjoin_fee">
+                                            <input type="number" step=".01" min="0" class="form-control" name="rjoin_fee">
                                             <small class="text-danger rjoin_fee_err"></small>
                                         </div>
                                     </div>
@@ -47,21 +47,21 @@
                                     <div class="form-group">
                                         <label class="form-label">Level</label>
                                         <div class="form-control-wrap">
-                                            <input type="number" class="form-control" name="level">
+                                            <input type="number" step=".01" min="0" class="form-control" name="level">
                                             <small class="text-danger level_err"></small>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">Donation</label>
                                         <div class="form-control-wrap">
-                                            <input type="number" class="form-control" name="rdonation">
+                                            <input type="number" step=".01" min="0" class="form-control" name="rdonation">
                                             <small class="text-danger rdonation_err"></small>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">Dialy Blassing</label>
                                         <div class="form-control-wrap">
-                                            <input type="number" class="form-control" name="rdaily_blessing">
+                                            <input type="number" step=".01" min="0" class="form-control" name="rdaily_blessing">
                                             <small class="text-danger rdaily_blessing_err"></small>
                                         </div>
                                     </div>

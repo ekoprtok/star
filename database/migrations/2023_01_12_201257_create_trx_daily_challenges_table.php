@@ -14,7 +14,7 @@ class CreateTrxDailyChallengesTable extends Migration
     public function up()
     {
         Schema::create('trx_daily_challenges', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('submitted_at');
             $table->string('user_id');
             $table->string('package_id');
