@@ -17,11 +17,13 @@ class CreateUsersTable extends Migration
             $table->uuid('id')->primary();
             $table->string('email')->unique();
             $table->string('username')->unique();
+            $table->string('rank_id')->default('0');
             $table->string('referral_code')->nullable();
             $table->enum('role', ['0', '8', '9'])->default('0');
             $table->enum('status', ['0', '1'])->default('0');
             $table->string('password');
             $table->string('web_token')->nullable();
+            $table->string('ref_temp')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

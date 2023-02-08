@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<div class="container-xl wide-lg">
+<div class="container-xl">
     <div class="nk-content-body">
        <div class="nk-block-head nk-block-head-sm">
           <div class="nk-block-between">
@@ -38,6 +38,13 @@
                                 <div class="form-control-wrap">
                                     <h3 class="balance">0</h3>
                                 </div>
+                                <small>each withdrawal will be deducted by a fee of $<small class="withdrawal_fee"></small></small>
+                                <br>
+                                <br>
+                                <label class="form-label">Estimated Value Received</label>
+                                <div class="form-control-wrap">
+                                    <h4 class="balance_estimated">0</h4>
+                                </div>
                             </div>
                         </div>
 
@@ -55,6 +62,13 @@
 
 @push('script')
 <script>
+    $('input[name="amount"]').keyup(function() {
+        const fee     = $('.withdrawal_fee').html();
+        let value     = $(this).val();
+        let estimated = parseFloat(value) - parseFloat(fee);
+        $('.balance_estimated').html(estimated || 0);
+    })
+
     $("#form").submit(function(e) {
         e.preventDefault();
         $.ajax({

@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('content')
-    <div class="container-xl wide-lg">
+    <div class="container-xl">
         <div class="nk-content-body">
 
             <div class="nk-block-head pb-4">
@@ -14,6 +14,11 @@
                     @if (Auth::user()->role == '0')
                         <div class="nk-block-head-content">
                             <ul class="nk-block-tools gx-3">
+                                <li>
+                                    <a href="{{ route('dashboard.social.event') }}" class="btn btn-primary">
+                                        <span>Add Social Event</span>
+                                    </a>
+                                </li>
                                 <li>
                                     <a href="{{ route('dashboard.deposit') }}" class="btn btn-primary">
                                         <span>Add Deposit</span>
@@ -109,6 +114,24 @@
                                             </div>
                                             <div class="nk-wgw-balance">
                                                 <div class="internal_transfer fw-500 fs-5">
+                                                    <div class="spinner-border spinner-border-sm" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="card bg-light">
+                                    <div class="nk-wgw sm">
+                                        <a class="nk-wgw-inner" href="{{ route('dashboard.package.redeem') }}">
+                                            <div class="nk-wgw-name">
+                                                <h5 class="nk-wgw-title title">Package Redeem</h5>
+                                            </div>
+                                            <div class="nk-wgw-balance">
+                                                <div class="redeem fw-500 fs-5">
                                                     <div class="spinner-border spinner-border-sm" role="status">
                                                         <span class="visually-hidden">Loading...</span>
                                                     </div>
@@ -408,32 +431,64 @@
     <div class="modal fade" id="modalchallenge" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Daily Challenge</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group mb-2">
-                        <label class="mb-1">Date</label>
-                        <span class="form-control">29 Jan 2023</span>
+                <form method="post" id="form" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Daily Challenge</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="form-group mb-2">
-                        <label class="mb-1">Daily Challenge</label>
-                        <select class="form-select">
-                            <option>Memberikan ulasan di web</option>
-                            <option>Memberikan review di web</option>
-                        </select>
+                    <div class="modal-body">
+                        <div class="form-group mb-2">
+                            <label class="mb-1">Date</label>
+                            <span class="form-control">{{ date('d F Y') }}</span>
+                            <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                            <input type="hidden" name="package_id">
+                        </div>
+                        <div class="form-group mb-2">
+                            <label class="mb-1">Daily Challenge</label>
+                            <select class="form-select master_daily_challenge" name="dialy_challenge_id" required>
+
+                            </select>
+                        </div>
+                        <div class="typeInput" hidden>
+                            <div class="form-group mb-2 file" hidden>
+                                <label class="mb-1">Please upload a picture</label>
+                                <input type="file" name="file_path" class="form-control">
+                                <span class="small text-danger file_path_err"></span>
+                            </div>
+                            <div class="form-group mb-2 write" hidden>
+                                <label class="mb-1">Please Write Your Review</label>
+                                <textarea name="text_review" class="form-control"></textarea>
+                                <span class="small text-danger text_review_err"></span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group mb-2">
-                        <label class="mb-1">Please upload a picture</label>
-                        <input type="file" class="form-control">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Submit</button>
-                </div>
+                </form>
             </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalRedeem" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center fs-5">
+                <span>If you redeem now, you will get <span class="package_redeem_rate"></span>%<br>from your donation</span>
+                <br>
+                <span><span class="percentage">0</span>% x <span class="rdonation">0</span> x <span class="package_redeem_rate">0</span>% = <span class="estimated">0</span></span>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary requestRedeem">Request</button>
+            </div>
+          </div>
         </div>
     </div>
 @endsection
@@ -442,7 +497,24 @@
     <script src="{{ asset('account/assets/js/charts/chart-crypto.js?ver=3.0.2') }}"></script>
 
     <script>
-        var user_id = "{{ Auth::user()->id }}";
+        var user_id       = "{{ Auth::user()->id }}";
+        var userPackageId = '';
+        getMasterDailyChallenge();
+
+        $('.master_daily_challenge').change(function () {
+            let dialy_challenge_id = $(this).val();
+            let isType             = $('.master_daily_challenge option:selected').attr('input-type');
+            $('.write').attr('hidden', (isType == '1' ? false : true));
+            $('textarea[name="text_review"]').attr('required', (isType == '1' ? true : false));
+
+            $('.file').attr('hidden', (isType == '1' ? true : false));
+            $('input[name="file_path"]').attr('required', (isType == '1' ? false : true));
+            $('.typeInput').attr('hidden', false);
+
+            $('input[name="file_path"]').val('');
+            $('.file_path_err,.text_review_err').html('');
+        });
+
         $.ajax({
             url  : '{{ route('product.list') }}',
             data : {
@@ -450,10 +522,27 @@
             },
             success: function(r) {
                 let content = '';
+                    for (let inx      = 0; inx <= (r.master.length -1); inx++) {
+                        let item      = r.master[inx];
+                        let value     = r.data.find(it => it.package_id == item.id);
+                        let menu      = '';
+                        if (value && (value?.package_type != '0')) {
+                            menu += `
+                                <li>
+                                    <a class="dropdown-item ${value && (value?.package_type != '0') ? '' : 'disabled'}" href="javascript:void(0);" onclick="blessing('${item.id}', '${user_id}')">Daily Blessing</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item ${value && (value?.package_type != '0') ? '' : 'disabled'}" href="javascript:void(0);" onclick="challenge('${item.id}')">Daily Challenge</a>
+                                </li>
+                            `;
+                        }
 
-                    for (let inx  = 0; inx <= (r.master.length -1); inx++) {
-                        let item  = r.master[inx];
-                        let value = r.data.find(it => it.package_id == item.id);
+                        if (value && (value?.package_type == '0' && value?.percentage > 0)) {
+                            menu += `
+                                <li><a class="dropdown-item" href="javascript:void(0)" onclick="redeemGift('${value?.id}')">Redeem</a></li>
+                            `;
+                        }
+
                         content += `
                             <div class="col-lg-3 col-12">
                                 <div class="card bg-light">
@@ -464,17 +553,17 @@
                                                 <h5 class="nk-wgw-title title">Package ${item.name}</h5>
                                             </div>
                                             <div class="gauge-container">
-                                                <div class="gauge" ${value ? '' : 'data-value="0"'}></div>
+                                                <div class="gauge" ${value ? 'data-value="'+value.percentage+'"' : 'data-value="0"'}></div>
                                             </div>
-                                            <div class="d-flex flex-row justify-content-center">
-                                                <a class="btn btn-primary ${value ? '' : 'disabled'} btn-xs me-3" href="javascript:void(0);"
-                                                    onclick="blessing('${item.id}', '${user_id}')">
-                                                    Daily Blessing
-                                                </a>
-                                                <a class="btn btn-xs ${value ? '' : 'disabled'} btn-primary" href="javascript:void(0);"
-                                                    data-bs-toggle="modal" data-bs-target="#modalchallenge">
-                                                    Daily Challenge
-                                                </a>
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <div class="dropdown">
+                                                    <button class="${(value && value.status == '0' ? 'disabled' : '')} px-5 btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        Menu
+                                                    </button>
+                                                    <ul class="dropdown-menu menu-custom" aria-labelledby="dropdownMenuButton1">
+                                                        ${menu}
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -493,10 +582,47 @@
             }
         });
 
-        function blessing(id, user) {
-            Swal.fire({
-
+        function redeemGift(id) {
+            userPackageId = id;
+            $.ajax({
+                url  : '{{ route('product.redeem.info') }}',
+                data : {
+                    id     : id,
+                    userId : user_id
+                },
+                dataType : 'jSON',
+                success : function(r) {
+                    let keys = Object.keys(r);
+                    keys.map((item, index) => {
+                        $(`.${item}`).html(r[item]);
+                    })
+                    $('#modalRedeem').modal('show');
+                }
             })
+        }
+
+        $('.requestRedeem').click(function () {
+            $.ajax({
+                url  : '{{ route('product.redeem.process') }}',
+                type : 'POST',
+                data : {
+                    id     : userPackageId,
+                    userId : user_id
+                },
+                dataType : 'jSON',
+                error: function(request, status, error) {
+                    showResponseHeader(request);
+                },
+                success : function(r) {
+                    NioApp.Toast(r.message, (r.success ? "success" : "error"), {
+                        position: "top-right"
+                    });
+                    $('#modalRedeem').modal('hide');
+                }
+            })
+        });
+
+        function blessing(id, user) {
             Swal.fire({
                 title              : "Confirmation",
                 text               : "Are you sure want to request?",
@@ -528,6 +654,21 @@
             })
         }
 
+        function challenge(id) {
+            $('input[name="package_id"]').val(id);
+            $('#modalchallenge').modal('show');
+        }
+
+        $("#modalchallenge").on("hidden.bs.modal", function () {
+            $('input[name="package_id"]').val('');
+            $('input[name="file_path"]').val('');
+            $('textarea[name="text_review"]').val('');
+            $('select[name="dialy_challenge_id"]').val('');
+            $('select[name="dialy_challenge_id"]').val('');
+            $('.typeInput').attr('hidden', true);
+            $('.file_path_err,.text_review_err').html('');
+        });
+
         NioApp.DataTable('.datatable', {
             processing: true,
             serverSide: true,
@@ -556,6 +697,34 @@
                 }
             ],
             ordering: false
+        });
+
+        $("#form").submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url         : "{{ route('daily.challange.process') }}",
+                type        : "POST",
+                data        : formData,
+                dataType    : "jSON",
+                contentType : false,
+                cache       : false,
+                processData : false,
+                error       : function(request, status, error) {
+                    showResponseHeader(request);
+                },
+                success     : function(r) {
+                    NioApp.Toast(r.message, (r.success ? "success" : "error"), {
+                        position: "top-right"
+                    });
+
+                    if (r.success) {
+                        setTimeout(() => {
+                            location.href = "{{ route('dashboard') }}";
+                        }, 1000);
+                    }
+                }
+            })
         });
     </script>
 @endpush

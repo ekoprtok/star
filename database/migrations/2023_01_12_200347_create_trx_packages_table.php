@@ -21,6 +21,7 @@ class CreateTrxPackagesTable extends Migration
             $table->text('file_path')->nullable();;
             $table->string('responsed_by')->nullable();
             $table->string('responsed_at')->nullable();
+            $table->enum('package_type', ['0', '1'])->default('1');
             $table->timestamps();
         });
     }

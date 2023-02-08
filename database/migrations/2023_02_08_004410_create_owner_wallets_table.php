@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGensetsTable extends Migration
+class CreateOwnerWalletsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateGensetsTable extends Migration
      */
     public function up()
     {
-        Schema::create('gensets', function (Blueprint $table) {
+        Schema::create('owner_wallets', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->float('donation_rate');
-            $table->float('withdrawal_min');
-            $table->float('withdrawal_rate');
+            $table->string('user_id');
+            $table->float('rbalance_amount');
+            $table->float('rbalance_amount_real');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateGensetsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('gensets');
+        Schema::dropIfExists('owner_wallets');
     }
 }

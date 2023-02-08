@@ -2,8 +2,8 @@
     <div class="nk-sidebar-element nk-sidebar-head">
         <div class="nk-sidebar-brand">
             <a href="{{ route('dashboard') }}" class="logo-link nk-sidebar-logo">
-                <img class="logo-light logo-img" src="{{ asset('account/images/logo.png') }}" srcset="{{ asset('account/images/logo2x.png') }} 2x" alt="logo">
-                <img class="logo-dark logo-img" src="{{ asset('account/images/logo-dark.png') }}" srcset="{{ asset('account/images/logo-dark2x.png') }} 2x" alt="logo-dark">
+                <img class="logo-light logo-img" src="{{ asset('landing/new_image/new_logo.png') }}" alt="logo">
+                <img class="logo-dark logo-img" src="{{ asset('landing/new_image/new_logo.png') }}" alt="logo-dark">
             </a>
         </div>
         <div class="nk-menu-trigger me-n2">
@@ -68,9 +68,37 @@
                             </a>
                         </li>
                         <li class="nk-menu-item">
+                            <a href="{{ route('dashboard.users') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-wallet-saving"></em></span>
+                                <span class="nk-menu-text">Users</span>
+                            </a>
+                        </li>
+
+                        <li class="nk-menu-heading">
+                            <h6 class="overline-title">Need Approval</h6>
+                        </li>
+                        <li class="nk-menu-item">
                             <a href="{{ route('dashboard.dialy.request') }}" class="nk-menu-link">
                                 <span class="nk-menu-icon"><em class="icon ni ni-check-fill-c"></em></span>
-                                <span class="nk-menu-text">Daily Request</span>
+                                <span class="nk-menu-text">Daily Challenges</span>
+                            </a>
+                        </li>
+                        <li class="nk-menu-item">
+                            <a href="{{ route('dashboard.dialy.blessing') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-check-fill-c"></em></span>
+                                <span class="nk-menu-text">Daily Blessing</span>
+                            </a>
+                        </li>
+                        <li class="nk-menu-item">
+                            <a href="{{ route('dashboard.package.redeem') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-check-fill-c"></em></span>
+                                <span class="nk-menu-text">Package Redeem</span>
+                            </a>
+                        </li>
+                        <li class="nk-menu-item">
+                            <a href="{{ route('dashboard.social.event.request') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-check-fill-c"></em></span>
+                                <span class="nk-menu-text">Social Event</span>
                             </a>
                         </li>
                         <li class="nk-menu-item">
@@ -91,18 +119,16 @@
                                 <span class="nk-menu-text">Internal Transfer History</span>
                             </a>
                         </li>
-                        <li class="nk-menu-item">
-                            <a href="{{ route('dashboard.users') }}" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-wallet-saving"></em></span>
-                                <span class="nk-menu-text">Users</span>
-                            </a>
+
+                        <li class="nk-menu-heading">
+                            <h6 class="overline-title">Settings</h6>
                         </li>
                         <li class="nk-menu-item has-sub">
                             <a href="#" class="nk-menu-link nk-menu-toggle">
                                 <span class="nk-menu-icon">
                                     <em class="icon ni ni-setting"></em>
                                 </span>
-                                <span class="nk-menu-text">Settings</span>
+                                <span class="nk-menu-text">Master Data</span>
                             </a>
                             <ul class="nk-menu-sub" style="display: none;">
                                 <li class="nk-menu-item">
@@ -115,6 +141,13 @@
                                 <li class="nk-menu-item">
                                     <a href="{{ route('admin.daily') }}" class="nk-menu-link">
                                         <span class="nk-menu-text">Daily Challenges</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nk-menu-sub" style="display: none;">
+                                <li class="nk-menu-item">
+                                    <a href="{{ route('admin.rank') }}" class="nk-menu-link">
+                                        <span class="nk-menu-text">Rank</span>
                                     </a>
                                 </li>
                             </ul>

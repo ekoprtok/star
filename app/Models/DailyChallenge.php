@@ -12,7 +12,8 @@ class DailyChallenge extends Model
 
     protected $fillable = [
         'name',
-        'percentage',
+        'point',
+        'isText',
         'created_by',
     ];
 

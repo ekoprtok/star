@@ -19,17 +19,34 @@ class WithdrawController extends Controller {
 
         $user_id = $request->user_id;
         $wallet  = UserWallet::where('user_id', $user_id)->first();
-        if ($wallet->rbalance_amount < $request->amount) {
+        $fee     = Helper::config('withdrawal_fee');
+        $amount  = $request->amount - $fee;
+
+        if ($amount <= 0) {
             return response()->json([
                 'success' => false,
-                'message' => 'Your balance is not enought'
+                'message' => 'Withdrawal request amount must greater than 0'
+            ]);
+        }
+
+        if ($wallet->rbalance_amount <= 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Your balance is not enough'
+            ]);
+        }
+
+        if ($wallet->rbalance_amount < $amount) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Your balance is not enough'
             ]);
         }
 
         $create  = TrxWithdrawal::create([
             'submitted_at'      => date('Y-m-d H:i:s'),
             'user_wallet_id'    => $wallet->id,
-            'amount'            => $request->amount,
+            'amount'            => $amount,
             'status'            => '0'
         ]);
 
@@ -52,9 +69,13 @@ class WithdrawController extends Controller {
         $oldWallet  = UserWallet::find($request->user_wallet_id);
         // approve reduce balance user
         if ($request->status == '1') {
-            $newBalance = ($oldWallet) ? ($oldWallet->rbalance_amount - $withdraw->amount) : $request->amount;
-            UserWallet::where('id', $request->user_wallet_id)->update([
-                'rbalance_amount' => (float)$newBalance
+            // wallet user
+            $process = Helper::createdWalletHistory([
+                'trx_id'  => $request->id,
+                'type'    => '2',
+                'user_id' => $oldWallet->user_id,
+                'amount'  => $withdraw->amount,
+                'status'  => 'out'
             ]);
 
             // notif to user
@@ -63,6 +84,16 @@ class WithdrawController extends Controller {
                 'message'       => "Your withdrawal of {$amount} was successfully sent",
                 'from_user_id'  => "2",
                 'to_user_id'    => $oldWallet->user_id
+            ]);
+
+            // wallet owner
+            $process = Helper::createdOwnerWalletHistory([
+                'user_id'   => $oldWallet->user_id,
+                'amount'    => $withdraw->amount,
+                'type'      => '2',
+                'status'    => 'out',
+                'trx_id'    => $request->id,
+                'insertTo'  => 'real'
             ]);
         }else {
             // notif to user

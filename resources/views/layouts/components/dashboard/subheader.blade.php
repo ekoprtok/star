@@ -10,8 +10,8 @@
                 </div>
                 <div class="nk-header-brand d-xl-none">
                     <a href="{{ route('dashboard') }}" class="logo-link">
-                        <img class="logo-light logo-img" src="{{ asset('account/images/logo.png') }}" srcset="{{ asset('account/images/logo2x.png') }} 2x" alt="logo">
-                        <img class="logo-dark logo-img" src="{{ asset('account/images/logo-dark.png') }}" srcset="{{ asset('account/images/logo-dark2x.png') }} 2x" alt="logo-dark">
+                        <img class="logo-light logo-img" src="{{ asset('/landing/new_image/new_logo.png') }}" alt="logo">
+                        <img class="logo-dark logo-img" src="{{ asset('/landing/new_image/new_logo.png') }}" alt="logo-dark">
                         <span class="nio-version">{{ config('app.name', 'Laravel') }}</span>
                     </a>
                 </div>
@@ -74,7 +74,7 @@
                                 <div class="dropdown-inner">
                                     <ul class="link-list">
                                         <li>
-                                            <a href="{{ route('dashboard') }}">
+                                            <a href="{{ route('dashboard.change.password') }}">
                                                 <em class="icon ni ni-lock-alt"></em>
                                                 <span>Change Password</span>
                                             </a>
@@ -112,15 +112,11 @@
                             <div class="dropdown-menu dropdown-menu-xl dropdown-menu-end dropdown-menu-s1">
                                 <div class="dropdown-head">
                                     <span class="sub-title nk-dropdown-title">Notifications</span>
-                                    <a href="#">Mark All as Read</a>
                                 </div>
                                 <div class="dropdown-body">
                                     <div class="nk-notification notif-container">
                                         <div class="text-center py-2 text-muted">You haven't any notification</div>
                                     </div>
-                                </div>
-                                <div class="dropdown-foot center">
-                                    <a href="#">View All</a>
                                 </div>
                             </div>
                         </li>

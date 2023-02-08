@@ -55,8 +55,8 @@ class InternalTransferController extends Controller {
     }
 
     public function adminProcess(Request $request) {
-        $internal = TrxIntTransfer::find($request->id);
-        $process  = TrxIntTransfer::where('id', $request->id)->update([
+        $internal    = TrxIntTransfer::find($request->id);
+        $processTrx  = TrxIntTransfer::where('id', $request->id)->update([
             'responsed_by' => $request->user_id,
             'responsed_at' => date('Y-m-d H:i:s'),
             'status'       => $request->status
@@ -70,15 +70,23 @@ class InternalTransferController extends Controller {
 
         if ($request->status == '1') {
             // to, add balance
-            $newBalance = ($oldWallet) ? ($oldWallet->rbalance_amount + $internal->amount) : $request->amount;
-            UserWallet::where('user_id', $request->to_id)->update([
-                'rbalance_amount' => (float)$newBalance
+            // wallet user
+            $process = Helper::createdWalletHistory([
+                'trx_id'  => $request->id,
+                'type'    => '3',
+                'user_id' => $oldWallet->user_id,
+                'amount'  => $internal->amount,
+                'status'  => 'in'
             ]);
 
             // from, reduce balance
-            $newBalanceFrom = ($oldWalletFrom) ? ($oldWalletFrom->rbalance_amount - $internal->amount) : $request->amount;
-            UserWallet::where('user_id', $request->from_id)->update([
-                'rbalance_amount' => (float)$newBalanceFrom
+            // wallet user from
+            $process = Helper::createdWalletHistory([
+                'trx_id'  => $request->id,
+                'type'    => '3',
+                'user_id' => $oldWalletFrom->user_id,
+                'amount'  => $internal->amount,
+                'status'  => 'out'
             ]);
 
             // notif to user to

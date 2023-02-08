@@ -9,13 +9,16 @@ use App\Models\PackageDetail;
 use App\Models\TrxPackage;
 use App\Models\UserPackage;
 use App\Models\UserWallet;
+use App\Models\HisKindMeter;
+use App\Models\TrxPackageRedeem;
+use App\Models\User;
 use Helper;
 
 class PackageController extends Controller {
 
     public function index(Request $request) {
         $id   = $request->id;
-        $data = ($id) ? UserPackage::where('user_id', $id)->leftJoin('packages', 'packages.id', '=', 'user_packages.package_id')->get() : Package::all();
+        $data = ($id) ? UserPackage::select('user_packages.*','packages.name')->where('user_id', $id)->leftJoin('packages', 'packages.id', '=', 'user_packages.package_id')->get() : Package::all();
         if ($data) {
             foreach ($data as $key => $value) {
                 $this->setAttr($value, $key);
@@ -25,6 +28,124 @@ class PackageController extends Controller {
             'data'      => $data,
             'master'    => Package::all()
         ]);
+    }
+
+    public function redeemProcess(Request $request) {
+        $data = UserPackage::select('user_packages.*','packages.name', 'packages.rdonation')->where('user_packages.id', $request->id)->leftJoin('packages', 'packages.id', '=', 'user_packages.package_id')->first();
+        if ($data) {
+            $this->setPercentageInfo($data);
+        }
+
+        $checkTrx = TrxPackageRedeem::where([
+            'user_id'    => $request->userId,
+            'package_id' => $data->package_id
+        ])->where('status', '!=', '2')->first();
+
+        if ($checkTrx) {
+            return response()->json([
+                'success' => false,
+                'message' => "You have redeem this package"
+            ]);
+        }
+
+        $process = TrxPackageRedeem::create([
+            'submitted_at'      => date('Y-m-d H:i:s'),
+            'user_id'           => $request->userId,
+            'package_id'        => $data->package_id,
+            'package_type'      => '0',
+            'kindeness_percen'  => $data->percentage,
+            'rdonation'         => $data->rdonation_real,
+            'redeem_rate'       => $data->package_redeem_rate,
+            'ramount'           => $data->estimated_real,
+            'status'            => '0',
+        ]);
+
+        return response()->json([
+            'success' => ($process) ? true : false,
+            'message' => ($process) ? 'Redeem gift has been successfully requested' : 'Error processing data, please try again.'
+        ]);
+    }
+
+    public function redeemInfo(Request $request) {
+        $data = UserPackage::select('user_packages.*','packages.name', 'packages.rdonation')->where('user_packages.id', $request->id)->leftJoin('packages', 'packages.id', '=', 'user_packages.package_id')->first();
+        if ($data) {
+            $this->setPercentageInfo($data);
+        }
+        return response()->json($data);
+    }
+
+    public function adminProcessRedeem(Request $request) {
+        $dataTrxPackageRedeem = TrxPackageRedeem::whereId($request->id)->first();
+        $amountFormat         = Helper::format_harga($dataTrxPackageRedeem->ramount);
+        $walletUser           = UserWallet::where('user_id', $request->user_id)->first();
+        $updateTrx            = TrxPackageRedeem::whereId($request->id)->update([
+            'status'       => $request->status,
+            'responsed_by' => $request->user_id,
+            'responsed_at' => date('Y-m-d H:i:s')
+        ]);
+
+        if ($request->status == '1') {
+            // update kind meter
+            $updateKindMeter = HisKindMeter::where([
+                'user_id'     => $dataTrxPackageRedeem->user_id,
+                'package_id'  => $dataTrxPackageRedeem->package_id
+            ])->update(['status' => '1']);
+
+            // wallet user
+            $process = Helper::createdWalletHistory([
+                'trx_id'  => $dataTrxPackageRedeem->id,
+                'type'    => '9',
+                'user_id' => $dataTrxPackageRedeem->user_id,
+                'amount'  => $dataTrxPackageRedeem->ramount,
+                'status'  => 'in'
+            ]);
+
+            // notif
+            $process = Helper::sendNotif([
+                'type'          => "package_redeem",
+                'message'       => "Your request claim redeem of {$amountFormat} has been rejected",
+                'from_user_id'  => "2",
+                'to_user_id'    => $dataTrxPackageRedeem->user_id
+            ]);
+
+            // wallet owner
+            $process = Helper::createdOwnerWalletHistory([
+                'user_id'   => $dataTrxPackageRedeem->user_id,
+                'amount'    => $dataTrxPackageRedeem->ramount,
+                'type'      => '5',
+                'status'    => 'out',
+                'trx_id'    => $dataTrxPackageRedeem->id,
+                'insertTo'  => 'sys'
+            ]);
+        }else {
+            // notif
+            $process = Helper::sendNotif([
+                'type'          => "package_redeem",
+                'message'       => "Your request claim redeem of {$amountFormat} has been approved",
+                'from_user_id'  => "2",
+                'to_user_id'    => $dataTrxPackageRedeem->user_id
+            ]);
+        }
+
+        return response()->json([
+            'success' => ($process) ? true : false,
+            'message' => ($process) ? 'Redeem gift has been successfully process' : 'Error processing data, please try again.'
+        ]);
+    }
+
+    public function setPercentageInfo($data) {
+        $percentage = HisKindMeter::where([
+            'user_id'       => $data->user_id,
+            'package_id'    => $data->package_id,
+            'status'        => '0'
+        ])->sum('percentage');
+        $data->percentage          = ($percentage) ? ($percentage > 100 ? 100 : $percentage) : 0;
+        $data->package_redeem_rate = Helper::config('package_redeem_rate');
+        $data->estimated           = round((((float)$data->percentage/100) * (float)$data->rdonation) * ((float)$data->package_redeem_rate/100), 2);
+        $data->estimated_real      = $data->estimated;
+        $data->estimated           = Helper::format_harga($data->estimated);
+        $data->rdonation_real      = $data->rdonation;
+        $data->rdonation           = Helper::format_harga($data->rdonation);
     }
 
     public function packageBuy(Request $request) {
@@ -52,7 +173,7 @@ class PackageController extends Controller {
         }
 
         // create history buy
-        $process = TrxPackage::create([
+        $processTrx = TrxPackage::create([
             'submitted_at' => date('Y-m-d H:i:s'),
             'user_id'      => $user_id,
             'package_id'   => $id
@@ -65,15 +186,89 @@ class PackageController extends Controller {
             'package_id'   => $id
         ]);
 
-        // update balance
-        $newBalance = $checkWallet->rbalance_amount - $price;
-        $process    = UserWallet::where('user_id', $user_id)->update([
-            'rbalance_amount' => (float)$newBalance
+        // wallet user
+        $process = Helper::createdWalletHistory([
+            'trx_id'  => $processTrx->id,
+            'type'    => '4',
+            'user_id' => $checkWallet->user_id,
+            'amount'  => $price,
+            'status'  => 'out'
+        ]);
+
+        // wallet owner
+        $process = Helper::createdOwnerWalletHistory([
+            'user_id'   => $checkWallet->user_id,
+            'amount'    => $price,
+            'type'      => '1',
+            'status'    => 'in',
+            'trx_id'    => $processTrx->id,
+            'insertTo'  => 'sys'
         ]);
 
         return response()->json([
             'success' => $process ? true : false,
             'message' => $process ? 'Package is already yours' : 'there was a problem buying the package, please try again in a moment',
+        ]);
+    }
+
+    public function formGift(Request $request) {
+        $validated = $request->validate([
+            'package_id'     => 'required',
+            'user'           => 'required'
+        ]);
+
+        $checkUser = User::where(function ($query) use ($request) {
+            $query->where('username', $request->user)->orWhere('email', $request->user);
+        })->where('role', '0')->first();
+
+        $checkPackage = Package::find($request->package_id);
+
+        if (!$checkUser) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not registered',
+            ]);
+        }
+
+        if (!$checkPackage) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Package not found',
+            ]);
+        }
+
+        // check if user have same package
+        $checkTrx = TrxPackage::where([
+            'user_id'    => $checkUser->id,
+            'package_id' => $checkPackage->id,
+        ])->count();
+
+        if ($checkTrx > 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User already have this package',
+            ]);
+        }
+
+        // add trx package
+        $process = TrxPackage::create([
+            'submitted_at' => date('Y-m-d H:i:s'),
+            'user_id'      => $checkUser->id,
+            'package_id'   => $checkPackage->id,
+            'package_type' => '0'
+        ]);
+
+        // add package user
+        $process = UserPackage::create([
+            'user_id'      => $checkUser->id,
+            'rvalue'       => $checkPackage->rvalue,
+            'package_id'   => $checkPackage->id,
+            'package_type' => '0'
+        ]);
+
+        return response()->json([
+            'success' => $process ? true : false,
+            'message' => $process ? 'Package successfully sent' : 'Error processing data, please try again.',
         ]);
     }
 
@@ -115,7 +310,7 @@ class PackageController extends Controller {
 
         return response()->json([
             'success' => $process ? true : false,
-            'message' => $process ? 'Package has been procesed' : '',
+            'message' => $process ? 'Package has been procesed' : 'Error processing data, please try again.',
         ]);
     }
 
@@ -144,7 +339,7 @@ class PackageController extends Controller {
 
         return response()->json([
             'success' => $process ? true : false,
-            'message' => $process ? 'Package percentage has been procesed' : '',
+            'message' => $process ? 'Package percentage has been procesed' : 'Error processing data, please try again.',
         ]);
     }
 
@@ -223,11 +418,20 @@ class PackageController extends Controller {
     }
 
     public function packageDelete(Request $request) {
-        $process = Package::where('id', $request->id)->delete();
-        $process = PackageDetail::where('package_id', $request->id)->delete();
+        $checkPackage   = TrxPackage::where('package_id', $request->id)->count();
+
+        if ($checkPackage > 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Package already used in Transaction',
+            ]);
+        }
+
+        $process        = Package::where('id', $request->id)->delete();
+        $process        = PackageDetail::where('package_id', $request->id)->delete();
         return response()->json([
             'success' => $process ? true : false,
-            'message' => $process ? 'Package has been delete' : '',
+            'message' => $process ? 'Package has been delete' : 'Error processing data, please try again.',
         ]);
     }
 
@@ -235,7 +439,7 @@ class PackageController extends Controller {
         $process = PackageDetail::where('id', $request->id)->delete();
         return response()->json([
             'success' => $process ? true : false,
-            'message' => $process ? 'Package percentage has been delete' : '',
+            'message' => $process ? 'Package percentage has been delete' : 'Error processing data, please try again.',
         ]);
     }
 
@@ -262,24 +466,35 @@ class PackageController extends Controller {
     }
 
     public function setAttr($value, $key) {
-        $value->idx             = Helper::encrypt($value->id);
+        $percentage             = HisKindMeter::where([
+            'user_id'       => $value->user_id,
+            'package_id'    => $value->package_id,
+            'status'        => '0'
+        ])->sum('percentage');
+
         $value->rvalue          = Helper::format_harga($value->rvalue);
         $value->rdonation       = Helper::format_harga($value->rdonation);
         $value->rjoin_fee       = Helper::format_harga($value->rjoin_fee);
         $value->rdaily_blessing = Helper::format_harga($value->rdaily_blessing);
-        $value->action =
-            '
-            <a class="text-danger" href="javascript:void(0)" onclick="deleting(\''.Helper::encrypt($value->id).'\')" title="delete">
-                <i class="fs-16px bi bi-trash text-muted"></i>
-            </a>
-                &nbsp;&nbsp;
-            <a class="text-primary" href="'.route('admin.package.form', ['id' => Helper::encrypt($value->id)]).'" title="edit">
-                <i class="fs-16px bi bi-pencil-square text-muted"></i>
-            </a>
-                &nbsp;&nbsp;
-            <a class="btn btn-xs btn-outline-primary" href="'.route('admin.package.percentage.form', ['id' => Helper::encrypt($value->id)]).'" title="add percentage">
-                Add Percentage
+        $value->percentage      = ($percentage) ? $percentage : 0;
+        $value->gift            = '
+            <a class="btn btn-xs btn-outline-primary" onclick="sendGift(\''.$value->id.'\', \''.$value->name.'\')" href="javascript:void(0)" title="Send Package">
+                Send
             </a>
         ';
+        $value->action          =
+            '
+                <a class="text-danger" href="javascript:void(0)" onclick="deleting(\''.$value->id.'\')" title="delete">
+                    <i class="fs-16px bi bi-trash text-muted"></i>
+                </a>
+                    &nbsp;&nbsp;
+                <a class="text-primary" href="'.route('admin.package.form', ['id' => $value->id]).'" title="edit">
+                    <i class="fs-16px bi bi-pencil-square text-muted"></i>
+                </a>
+                    &nbsp;&nbsp;
+                <a class="btn btn-xs btn-outline-primary" href="'.route('admin.package.percentage.form', ['id' => $value->id]).'" title="add percentage">
+                    Add Percentage
+                </a>
+            ';
     }
 }

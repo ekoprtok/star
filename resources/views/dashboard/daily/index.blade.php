@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<div class="container-xl wide-lg">
+<div class="container-xl">
     <div class="nk-content-body">
        <div class="nk-block-head nk-block-head-sm">
           <div class="nk-block-between">
@@ -27,7 +27,8 @@
                             <tr>
                                 <th>No</th>
                                 <th>Daily</th>
-                                <th>Percentage</th>
+                                <th>Point</th>
+                                <th>Type Input</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -54,7 +55,8 @@
         columns: [
             { data: "no" },
             { data: "name" },
-            { data: "percentage" },
+            { data: "point" },
+            { data: "isText" },
             { data: "action", className : "text-center" },
         ],
         ordering : false

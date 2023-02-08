@@ -102,7 +102,7 @@
                         initialValue: num,
                         higherValue: 100,
                         title: 'Progress',
-                        subtitle: `${parseInt(num)}%`
+                        subtitle: `${parseFloat(num)}%`
                     };
                     let gauge = new GaugeChart(item, params);
                     gauge.init();
@@ -153,12 +153,9 @@
     function setEditProps(response) {
         let keys = Object.keys(response);
         keys.map((item, index) => {
-            if (item == 'id') {
-                $(`input[name="${item}x"]`).val(response[item+'x']);
-            } else {
-                $(`input[name="${item}"]`).val(response[item]);
-                $(`textarea[name="${item}"]`).val(response[item]);
-            }
+            $(`input[name="${item}"]`).val(response[item]);
+            $(`textarea[name="${item}"]`).val(response[item]);
+            $(`select[name="${item}"]`).val(response[item]);
         })
     }
 
@@ -184,6 +181,27 @@
                 }else {
                     $('.icon-notif').removeClass('icon-status icon-status-info');
                 }
+            }
+
+            if (item == 'config') {
+                let configKeys = Object.keys(response[item]);
+                configKeys.map((itemConfig, indexConfig) => {
+                    $(`.${itemConfig}`).html(response[item][itemConfig]);
+                })
+            }
+        })
+    }
+
+    function getMasterDailyChallenge() {
+        $.ajax({
+            url      : '{{ route('daily.list') }}',
+            dataType : 'jSON',
+            success  : function (r) {
+                let option = '<option value="">Select Type</option>';
+                r.data.map((item, index) => {
+                    option += `<option value="${item.id}" input-type="${item.isText}">${item.name}</option>`;
+                })
+                $('.master_daily_challenge').html(option);
             }
         })
     }

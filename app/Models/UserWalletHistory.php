@@ -17,6 +17,7 @@ class UserWalletHistory extends Model
         'user_id',
         'user_wallet_id',
         'amount',
+        'status'
     ];
 
     protected $casts = [

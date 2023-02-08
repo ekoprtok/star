@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<div class="container-xl wide-lg">
+<div class="container-xl">
     <div class="nk-content-body">
        <div class="nk-block-head nk-block-head-sm">
           <div class="nk-block-between">
@@ -26,10 +26,19 @@
                         </div>
 
                         <div class="form-group">
-                           <label class="form-label">Percentage</label>
-                           <input type="number" class="form-control" name="percentage" max="100" required>
-                           <small class="text-danger percentage_err"></small>
+                           <label class="form-label">Point</label>
+                           <input type="number" step=".01" min="0" class="form-control" name="point" max="100" required>
+                           <small class="text-danger point_err"></small>
                         </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Input Type</label>
+                            <select name="isText" id="isText" class="form-select">
+                                <option value="1">Text</option>
+                                <option value="0">File</option>
+                            </select>
+                            <small class="text-danger isText_err"></small>
+                         </div>
 
                         <button class="btn btn-primary">Submit</button>
                      </div>

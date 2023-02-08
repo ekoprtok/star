@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<div class="container-xl wide-lg">
+<div class="container-xl">
     <div class="nk-content-body">
        <div class="nk-block-head nk-block-head-sm">
           <div class="nk-block-between">
@@ -37,9 +37,9 @@
                         </div>
                         <div class="pricing-body">
                             <ul class="pricing-features">
-                                <li><span class="w-50">Donation</span> <span class="ms-auto">${item.rvalue}</span></li>
+                                <li><span class="w-50">Donation</span> <span class="ms-auto">${item.rdonation}</span></li>
                                 <li><span class="w-50">Join Fee</span> <span class="ms-auto">${item.rjoin_fee}</span></li>
-                                <li class="fw-bold"><span class="w-50">Total</span> <span class="ms-auto">${item.rdonation}</span></li>
+                                <li class="fw-bold"><span class="w-50">Total</span> <span class="ms-auto">${item.rvalue}</span></li>
                             </ul>
                             <div class="pricing-action">
                                 <a class="btn btn-outline-primary" onclick="buying('${item.id}')">Buy Now</a>

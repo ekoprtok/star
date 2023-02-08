@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<div class="container-xl wide-lg">
+<div class="container-xl">
     <div class="nk-content-body">
        <div class="nk-block-head nk-block-head-sm">
           <div class="nk-block-between">
@@ -22,7 +22,7 @@
                             <div class="form-control-wrap">
                                 <span class="form-control">{{ date('d F Y') }}</span>
                                 <input type="hidden" name="file_path">
-                                <input type="hidden" name="user_id" value={{ Auth::user()->id }}>
+                                <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                             </div>
                             </div>
                             <div class="form-group">

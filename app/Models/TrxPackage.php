@@ -15,6 +15,7 @@ class TrxPackage extends Model
         'user_id',
         'package_id',
         'file_path',
+        'package_type',
         'responsed_by',
         'responsed_at',
     ];

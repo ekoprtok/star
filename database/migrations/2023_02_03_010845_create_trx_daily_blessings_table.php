@@ -18,7 +18,7 @@ class CreateTrxDailyBlessingsTable extends Migration
             $table->string('submitted_at');
             $table->string('user_id');
             $table->string('package_id');
-            $table->float('amount');
+            $table->float('amount', 14, 2);
             $table->timestamps();
         });
     }

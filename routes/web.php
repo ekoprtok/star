@@ -9,8 +9,11 @@ use App\Http\Controllers\Dashboard\WithdrawalController;
 use App\Http\Controllers\Dashboard\InternalTransferController;
 use App\Http\Controllers\Dashboard\HistoryController;
 use App\Http\Controllers\Dashboard\DailyChallengeController;
+use App\Http\Controllers\Dashboard\ProfileController;
+use App\Http\Controllers\Dashboard\RankController;
+use App\Http\Controllers\Dashboard\SocialEventController;
+use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,24 +26,28 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 |
 */
 
-Route::get('/', function () {
-    return redirect(route('login'));
-})->name('landing');
+// Route::get('/', function () {
+//     return redirect(route('login'));
+// })->name('landing');
 
+Route::get('/', [LandingController::class, 'index'])->name('landing');
 Route::get('/help', [LandingController::class, 'help'])->name('landing.help');
 Route::get('/contact', [LandingController::class, 'contact'])->name('landing.contact');
 Route::get('/news', [LandingController::class, 'news'])->name('landing.news');
+Route::get('/about', [LandingController::class, 'about'])->name('landing.about');
 
 Auth::routes(['verify' => true]);
 
 Route::prefix('dashboard')->middleware(['auth','verified'])->group(function () {
-    Route::get('/landing', [LandingController::class, 'index'])->name('landing.backup');
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/about', [LandingController::class, 'about'])->name('landing.about');
 });
 
 Route::prefix('packages')->middleware(['auth','verified'])->group(function () {
     Route::get('/', [PackagesController::class, 'index'])->name('dashboard.packages');
+});
+
+Route::prefix('change-password')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [ProfileController::class, 'changePassword'])->name('dashboard.change.password');
 });
 
 Route::prefix('my-packages')->middleware(['auth','verified'])->group(function () {
@@ -75,16 +82,29 @@ Route::prefix('withdrawal-request')->middleware(['auth','verified'])->group(func
     Route::get('/', [HistoryController::class, 'withdrawal'])->name('dashboard.withdrawal.request');
 });
 
+Route::prefix('social-event-request')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [HistoryController::class, 'socialEvent'])->name('dashboard.social.event.request');
+});
+
 Route::prefix('dialy-request')->middleware(['auth','verified'])->group(function () {
     Route::get('/', [HistoryController::class, 'dialyUnapp'])->name('dashboard.dialy.request');
 });
 
-Route::prefix('admin-package')->middleware(['auth','verified'])->group(function () {
-    Route::get('/', [PackagesController::class, 'package'])->name('admin.package');
+Route::prefix('dialy-blessing')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [HistoryController::class, 'dialyBlessing'])->name('dashboard.dialy.blessing');
 });
 
-Route::prefix('admin-package-form')->middleware(['auth','verified'])->group(function () {
-    Route::get('/', [PackagesController::class, 'packageForm'])->name('admin.package.form');
+Route::prefix('redeem-list')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [HistoryController::class, 'redeemList'])->name('dashboard.package.redeem');
+});
+
+Route::prefix('social-event')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [SocialEventController::class, 'index'])->name('dashboard.social.event');
+});
+
+Route::prefix('admin-package')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [PackagesController::class, 'package'])->name('admin.package');
+    Route::get('/form', [PackagesController::class, 'packageForm'])->name('admin.package.form');
     Route::get('/percentage/{id}', [PackagesController::class, 'percentageForm'])->name('admin.package.percentage.form');
 });
 
@@ -102,10 +122,10 @@ Route::prefix('admin-users')->middleware(['auth','verified'])->group(function ()
     Route::get('/', [DashboardController::class, 'users'])->name('dashboard.users');
 });
 
-// Route::prefix('deposit')->middleware('auth')->group(function () {
-//     Route::get('/', [DepositController::class, 'index'])->name('dashboard.deposit');
-//     Route::get('/form', [DepositController::class, 'form'])->name('dashboard.deposit.form');
-// });
+Route::prefix('admin-rank')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [RankController::class, 'index'])->name('admin.rank');
+    Route::get('/form', [RankController::class, 'form'])->name('admin.rank.form');
+});
 
 Route::get('/activity', [ActivityController::class, 'index'])->name('dashboard.activity');
 
@@ -114,10 +134,9 @@ Route::get('/email/verify', function () {
     return view('auth.verify');
 })->middleware('auth')->name('verification.notice');
 
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-    return redirect('/dashboard');
-})->middleware(['auth', 'signed'])->name('verification.verify');
+Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
+    ->middleware(['signed', 'throttle:6,1'])
+    ->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();

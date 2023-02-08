@@ -16,7 +16,7 @@ class CreateUserWalletsTable extends Migration
         Schema::create('user_wallets', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('user_id');
-            $table->float('rbalance_amount');
+            $table->float('rbalance_amount', 14, 2);
             $table->timestamps();
         });
     }

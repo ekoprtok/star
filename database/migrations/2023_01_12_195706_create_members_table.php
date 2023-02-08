@@ -15,7 +15,7 @@ class CreateMembersTable extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('parent_id');
+            $table->string('parent_id')->nullable();
             $table->string('user_id');
             $table->timestamps();
         });

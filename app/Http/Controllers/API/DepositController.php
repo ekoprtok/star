@@ -29,6 +29,13 @@ class DepositController extends Controller {
             'user_id'      => 'required',
         ]);
 
+        if ($request->amount <= 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Deposit request amount must greater than 0'
+            ]);
+        }
+
         $user_id = $request->user_id;
         $wallet  = UserWallet::where('user_id', $user_id)->first();
         $create  = TrxDeposit::create([
@@ -41,7 +48,7 @@ class DepositController extends Controller {
 
         return response()->json([
             'success' => ($create ? true : false),
-            'message' => ($create ? 'Your deposit has been successfully created.' : 'Error processing data, please try again.')
+            'message' => ($create ? 'Your deposit has been successfully created' : 'Error processing data, please try again.')
         ]);
     }
 
@@ -56,9 +63,14 @@ class DepositController extends Controller {
         $amount     = Helper::format_harga($depo->amount);
         $oldWallet  = UserWallet::find($request->user_wallet_id);
         if ($request->status == '1') {
-            $newBalance = ($oldWallet) ? ($oldWallet->rbalance_amount + $depo->amount) : $request->amount;
-            UserWallet::where('id', $request->user_wallet_id)->update([
-                'rbalance_amount' => (float)$newBalance
+
+            // wallet user
+            $process    = Helper::createdWalletHistory([
+                'trx_id'  => $request->id,
+                'type'    => '1',
+                'user_id' => $oldWallet->user_id,
+                'amount'  => $depo->amount,
+                'status'  => 'in'
             ]);
 
             // notif to user
@@ -67,6 +79,16 @@ class DepositController extends Controller {
                 'message'       => "Your deposit of {$amount} was successfully",
                 'from_user_id'  => "2",
                 'to_user_id'    => $oldWallet->user_id
+            ]);
+
+            // wallet owner
+            $process = Helper::createdOwnerWalletHistory([
+                'user_id'   => $oldWallet->user_id,
+                'amount'    => $depo->amount,
+                'type'      => '1',
+                'status'    => 'in',
+                'trx_id'    => $request->id,
+                'insertTo'  => 'real'
             ]);
         }else {
             // notif to user

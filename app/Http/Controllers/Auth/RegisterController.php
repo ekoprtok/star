@@ -5,11 +5,10 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
-use App\Models\Member;
-use App\Models\UserWallet;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Helper;
 
 class RegisterController extends Controller
 {
@@ -67,33 +66,13 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $user = User::create([
-            'referral_code' => rand(0000000000, 9999999999),
-            'role'          => ($data['referral']) ? '0' : '8',
+            'referral_code' => Helper::referralCode(),
+            'role'          => '0',
             'email'         => $data['email'],
             'password'      => Hash::make($data['password']),
-            'username'      => $data['username']
+            'username'      => $data['username'],
+            'ref_temp'      => ($data['referral']) ? $data['referral'] : null
         ]);
-
-        // referal member
-        if ($data['referral']) {
-            $parent = User::where('referral_code', $data['referral'])->first();
-            if ($parent) {
-                Member::create([
-                    'parent_id' => $parent->id,
-                    'user_id'   => $user->id
-                ]);
-            }
-        }
-
-        // wallet
-        UserWallet::create([
-            'rbalance_amount' => 0,
-            'user_id'         => $user->id
-        ]);
-
-        $token = $user->createToken('web_token')->plainTextToken;
-
-        User::where(['id' => $user->id])->update(['web_token' => $token]);
 
         return $user;
     }

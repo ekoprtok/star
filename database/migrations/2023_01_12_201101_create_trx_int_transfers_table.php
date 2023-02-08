@@ -17,7 +17,7 @@ class CreateTrxIntTransfersTable extends Migration
             $table->uuid('id')->primary();
             $table->string('submitted_at');
             $table->string('user_wallet_id');
-            $table->string('amount');
+            $table->float('amount', 14, 2);
             $table->string('to_wallet_id');
             $table->string('file_path');
             $table->enum('status', ['0', '1', '2'])->default('0');

@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<div class="container-xl wide-lg">
+<div class="container-xl">
     <div class="nk-content-body">
        <div class="nk-block-head nk-block-head-sm">
           <div class="nk-block-between">
@@ -19,6 +19,7 @@
                                 <th>Date</th>
                                 <th>User</th>
                                 <th>Product</th>
+                                <th>Type</th>
                             </tr>
                         </thead>
                     </table>
@@ -44,7 +45,8 @@
         columns: [
             { data: 'submitted_at' },
             { data: 'email' },
-            { data: 'name' }
+            { data: 'name' },
+            { data: 'package_type' },
         ],
         ordering : false
     });

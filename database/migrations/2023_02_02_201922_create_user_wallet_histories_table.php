@@ -10,6 +10,16 @@ class CreateUserWalletHistoriesTable extends Migration
      * Run the migrations.
      *
      * @return void
+     * 1 Deposit Wallet
+     * 2 Withdrawal Wallet
+     * 3 Transfer Internal Wallet
+     * 4 Donation Packages
+     * 5 Daily Blessing
+     * 6 Reward (naik Rank)
+     * 7 Social Event (naik Rank)
+     * 8 Different Rate
+     * 9 Package Redeem
+     * 10 Kindness Meter 100%
      */
     public function up()
     {
@@ -17,10 +27,10 @@ class CreateUserWalletHistoriesTable extends Migration
             $table->uuid('id')->primary();
             $table->string('trx_at');
             $table->string('trx_id');
-            $table->integer('type'); // 1 deposit, 2 wd, 3 trf, 4 donation, 5 dialy
+            $table->integer('type');
             $table->string('user_id');
             $table->string('user_wallet_id');
-            $table->float('amount');
+            $table->float('amount', 14, 2);
             $table->enum('status', ['in', 'out'])->default('in');
             $table->timestamps();
         });

@@ -9,10 +9,60 @@ use App\Models\TrxWithdrawal;
 use App\Models\TrxDeposit;
 use App\Models\User;
 use App\Models\TrxDailyChallenge;
+use App\Models\TrxDailyBlessing;
 use App\Models\TrxPackage;
+use App\Models\TrxPackageRedeem;
+use App\Models\TrxSocialEvent;
 use Helper;
 
 class HistoryController extends Controller {
+
+    public function redeemList(Request $request) {
+        $draw   = $request->get('draw');
+        $search = $request->get('search')['value'];
+        $offset = $request->get('start') - 1;
+        $limit  = $request->get('length');
+
+        $data   = TrxPackageRedeem::select('trx_package_redeems.*', 'A.email', 'B.name')->where(function ($query) use ($search) {
+            $query->where('name', 'LIKE', '%' . $search . '%');
+        })->leftJoin('users as A', 'A.id', '=', 'trx_package_redeems.user_id')
+            ->leftJoin('packages as B', 'B.id', '=', 'trx_package_redeems.package_id')
+            ->offset($offset)
+            ->limit($limit)
+            ->orderByDesc('trx_package_redeems.created_at')
+            ->get();
+
+        if ($data) {
+            foreach ($data as $key => $value) {
+                if ($value->status == '0') {
+                    $value->action    = '
+                        <a href="javascript::void(0)" onclick="process(\''.$value->id.'\', \''.$value->user_id.'\', \'1\')">Approve</a>
+                            &nbsp;
+                            &nbsp;
+                        <a href="javascript::void(0)" class="text-danger" onclick="process(\''.$value->id.'\', \''.$value->user_id.'\', \'2\')">Reject</a>
+                    ';
+                }else {
+                    $value->action = '-';
+                }
+                $value->ramount = Helper::format_harga($value->ramount);
+                $value->status  = '<span class="badge bg-'.Helper::invoiceStatusClass($value->status).'">'.Helper::statusApproval($value->status).'</span>';
+            }
+        }
+
+        $dataCount = TrxPackageRedeem::where(function ($query) use ($search) {
+            $query->where('name', 'LIKE', '%' . $search . '%');
+        })->leftJoin('users as A', 'A.id', '=', 'trx_package_redeems.user_id')
+            ->leftJoin('packages as B', 'B.id', '=', 'trx_package_redeems.package_id')
+            ->count();
+
+        return response()->json([
+            'draw'            => $draw,
+            'recordsTotal'    => $dataCount,
+            'recordsFiltered' => $dataCount,
+            'data'            => $data,
+            'success'         => true,
+        ]);
+    }
 
     public function trxhistory(Request $request) {
         $draw   = $request->get('draw');
@@ -31,7 +81,7 @@ class HistoryController extends Controller {
 
         if ($data) {
             foreach ($data as $key => $value) {
-
+                $value->package_type = Helper::packageType($value->package_type);
             }
         }
 
@@ -74,7 +124,7 @@ class HistoryController extends Controller {
                     <a href="javascript::void(0)" onclick="process(\''.$value->id.'\', \'1\', \''.$value->from_id.'\', \''.$value->to_id.'\')">Approve</a>
                     &nbsp;
                     &nbsp;
-                    <a href="javascript::void(0)" class="text-danger" onclick="process(\''.$value->id.'\', \'2\', \''.$value->from_id.'\', \''.$value->to_id.'\')">Rejected</a>
+                    <a href="javascript::void(0)" class="text-danger" onclick="process(\''.$value->id.'\', \'2\', \''.$value->from_id.'\', \''.$value->to_id.'\')">Reject</a>
                     ';
                 }else {
                     $value->action = '-';
@@ -101,36 +151,39 @@ class HistoryController extends Controller {
         ]);
     }
 
-    public function requestList(Request $request) {
-        $draw       = $request->get('draw');
-        $search     = $request->get('search')['value'];
-        $offset     = $request->get('start') -1;
-        $limit      = $request->get('length');
+    public function blessing(Request $request) {
+        $draw   = $request->get('draw');
+        $search = $request->get('search')['value'];
+        $offset = $request->get('start') - 1;
+        $limit  = $request->get('length');
 
-        $dataCount  = 2;
-        $data       = [
-            [
-                'date'  => 'Jan 05 2022 11:22',
-                'type'  => 'Packages',
-                'desc'  => 'Package Regular',
-                'file'  => 'download',
-                'status'=> '<span class="badge bg-'.Helper::invoiceStatusClass(0).'">'.Helper::statusApproval(0).'</span>'
-            ],
-            [
-                'date'  => 'Jan 04 2022 11:22',
-                'type'  => 'Deposit',
-                'desc'  => '$500',
-                'file'  => 'download',
-                'status'=> '<span class="badge bg-'.Helper::invoiceStatusClass(0).'">'.Helper::statusApproval(0).'</span>'
-            ],
-        ];
+        $data   = TrxDailyBlessing::select('trx_daily_blessings.*', 'A.email', 'B.name')->where(function ($query) use ($search) {
+            $query->where('A.email', 'LIKE', '%' . $search . '%');
+        })->leftJoin('users as A', 'A.id', '=', 'trx_daily_blessings.user_id')
+            ->leftJoin('packages as B', 'B.id', '=', 'trx_daily_blessings.package_id')
+            ->offset($offset)
+            ->limit($limit)
+            ->orderByDesc('trx_daily_blessings.created_at')
+            ->get();
+
+        if ($data) {
+            foreach ($data as $key => $value) {
+                $value->amount = Helper::format_harga($value->amount);
+            }
+        }
+
+        $dataCount = TrxDailyBlessing::where(function ($query) use ($search) {
+            $query->where('A.email', 'LIKE', '%' . $search . '%');
+        })->leftJoin('users as A', 'A.id', '=', 'trx_daily_blessings.user_id')
+            ->leftJoin('packages as B', 'B.id', '=', 'trx_daily_blessings.package_id')
+            ->count();
 
         return response()->json([
             'draw'            => $draw,
             'recordsTotal'    => $dataCount,
             'recordsFiltered' => $dataCount,
             'data'            => $data,
-            'success'         => true
+            'success'         => true,
         ]);
     }
 
@@ -157,7 +210,7 @@ class HistoryController extends Controller {
                     <a href="javascript::void(0)" onclick="process(\''.$value->id.'\', \'1\', \''.$value->user_wallet_id.'\')">Approve</a>
                     &nbsp;
                     &nbsp;
-                    <a href="javascript::void(0)" class="text-danger" onclick="process(\''.$value->id.'\', \'2\', \''.$value->user_wallet_id.'\')">Rejected</a>
+                    <a href="javascript::void(0)" class="text-danger" onclick="process(\''.$value->id.'\', \'2\', \''.$value->user_wallet_id.'\')">Reject</a>
                     ';
                 }else {
                     $value->action = '-';
@@ -171,6 +224,52 @@ class HistoryController extends Controller {
             $query->where('amount', 'LIKE', '%' . $search . '%');
         })->leftJoin('user_wallets as A', 'A.user_id', '=', 'trx_deposits.user_wallet_id')
             ->leftJoin('users as B', 'B.id', '=', 'A.user_id')
+            ->count();
+
+        return response()->json([
+            'draw'            => $draw,
+            'recordsTotal'    => $dataCount,
+            'recordsFiltered' => $dataCount,
+            'data'            => $data,
+            'success'         => true,
+        ]);
+    }
+
+    public function socialEventList(Request $request) {
+        $draw   = $request->get('draw');
+        $search = $request->get('search')['value'];
+        $offset = $request->get('start') - 1;
+        $limit  = $request->get('length');
+
+        $data   = TrxSocialEvent::select('trx_social_events.*', 'B.email')->where(function ($query) use ($search) {
+            $query->where('B.email', 'LIKE', '%' . $search . '%');
+        })->leftJoin('users as B', 'B.id', '=', 'trx_social_events.user_id')
+            ->offset($offset)
+            ->limit($limit)
+            ->orderByDesc('trx_social_events.created_at')
+            ->get();
+
+        if ($data) {
+            foreach ($data as $key => $value) {
+                $value->file_path = '<a href="'.asset('uploads/socialEvent/'.$value->file_path).'" target="_blank">'.$value->file_path.'</a>';
+                if ($value->status == '0') {
+                    $value->action    = '
+                    <a href="javascript::void(0)" onclick="process(\''.$value->id.'\', \'1\')">Approve</a>
+                    &nbsp;
+                    &nbsp;
+                    <a href="javascript::void(0)" class="text-danger" onclick="process(\''.$value->id.'\', \'2\')">Reject</a>
+                    ';
+                }else {
+                    $value->action = '-';
+                }
+                $value->description = '<a href="javascript:void(0);" title="'.$value->description.'">Hover to see</span>';
+                $value->status      = '<span class="badge bg-'.Helper::invoiceStatusClass($value->status).'">'.Helper::statusApproval($value->status).'</span>';
+            }
+        }
+
+        $dataCount = TrxSocialEvent::where(function ($query) use ($search) {
+            $query->where('B.email', 'LIKE', '%' . $search . '%');
+        })->leftJoin('users as B', 'B.id', '=', 'trx_social_events.user_id')
             ->count();
 
         return response()->json([
@@ -205,7 +304,7 @@ class HistoryController extends Controller {
                             <a href="javascript::void(0);" onclick="process(\''.$value->id.'\', \'1\', \''.$value->user_wallet_id.'\')">Approve</a>
                             &nbsp;
                             &nbsp;
-                            <a href="javascript::void(0);" class="text-danger" onclick="process(\''.$value->id.'\', \'2\', \''.$value->user_wallet_id.'\')">Rejected</a>
+                            <a href="javascript::void(0);" class="text-danger" onclick="process(\''.$value->id.'\', \'2\', \''.$value->user_wallet_id.'\')">Reject</a>
                         ';
                     }else {
                         $value->action = '-';
@@ -237,10 +336,11 @@ class HistoryController extends Controller {
         $offset = $request->get('start') - 1;
         $limit  = $request->get('length');
 
-        $data   = TrxDailyChallenge::where(function ($query) use ($search) {
-            $query->where('name', 'LIKE', '%' . $search . '%');
+        $data   = TrxDailyChallenge::select('trx_daily_challenges.*', 'A.email', 'B.name', 'C.name as challenge', 'C.isText')->where(function ($query) use ($search) {
+            $query->where('A.email', 'LIKE', '%' . $search . '%');
         })->leftJoin('users as A', 'A.id', '=', 'trx_daily_challenges.user_id')
             ->leftJoin('packages as B', 'B.id', '=', 'trx_daily_challenges.package_id')
+            ->leftJoin('daily_challenges as C', 'C.id', '=', 'trx_daily_challenges.dialy_challenge_id')
             ->offset($offset)
             ->limit($limit)
             ->orderByDesc('trx_daily_challenges.created_at')
@@ -248,7 +348,20 @@ class HistoryController extends Controller {
 
         if ($data) {
             foreach ($data as $key => $value) {
+                $value->proof = ($value->isText == '0') ? '<a href="'.asset('uploads/dailyChallenge/'.$value->file_path).'" target="_blank">'.$value->file_path.'</a>' : $value->file_path;
+                if ($value->status == '0') {
+                    $value->action    = '
+                        <a href="javascript::void(0);" onclick="process(\''.$value->id.'\', \'1\')">Approve</a>
+                        &nbsp;
+                        &nbsp;
+                        <a href="javascript::void(0);" class="text-danger" onclick="process(\''.$value->id.'\', \'2\')">Reject</a>
+                    ';
+                }else {
+                    $value->action = '-';
+                }
 
+                $value->isText = ($value->isText == '0') ? 'Social Event' : 'Testimoni';
+                $value->status = '<span class="badge bg-'.Helper::invoiceStatusClass($value->status).'">'.Helper::statusApproval($value->status).'</span>';
             }
         }
 

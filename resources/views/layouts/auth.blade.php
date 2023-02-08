@@ -4,28 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'H2C') }}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('/landing/new_image/fav.png') }}">
     <link rel="stylesheet" href="{{ asset('landing/assets/css/dashlite.css?ver=3.0.2') }}">
     <link id="skin-default" rel="stylesheet" href="{{ asset('landing/assets/css/theme.css?ver=3.0.2') }}">
     @stack('style')
-    <style>
-        .btn-primary, .pricing-s3.pricing-featured .btn {
-            color: #fff;
-            background-color: #C9B56D;
-            border-color: #C9B56D;
-        }
-        .menu-link:hover, .active > .menu-link, .menu-link.active {
-            color: #C9B56D;
-        }
-        .cstom {
-            list-style: disc;
-            margin: 0;
-            padding: 0;
-        }
-        .logo-img {
-            max-height: 50px;
-        }
-    </style>
+    @include('layouts.components.dashboard.style')
 </head>
 <body class="nk-body bg-white npc-general pg-auth">
     <div class="nk-app-root">
@@ -40,8 +24,8 @@
                             <div class="nk-block nk-block-middle nk-auth-body">
                                 <div class="brand-logo pb-5">
                                     <a href="{{ route('landing') }}" class="logo-link">
-                                        <img class="logo-light logo-img" src="{{ asset('landing/images/new_logo.png') }}" alt="logo">
-                                        <img class="logo-dark logo-img" src="{{ asset('landing/images/new_logo.png') }}" alt="logo-dark">
+                                        <img class="logo-light logo-img" src="{{ asset('landing/new_image/new_logo.png') }}" alt="logo">
+                                        <img class="logo-dark logo-img" src="{{ asset('landing/new_image/new_logo.png') }}" alt="logo-dark">
                                     </a>
                                 </div>
                                 @yield('content')

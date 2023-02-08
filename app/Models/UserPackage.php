@@ -13,6 +13,7 @@ class UserPackage extends Model
     protected $fillable = [
         'user_id',
         'rvalue',
+        'package_type',
         'package_id',
     ];
 

@@ -27,4 +27,16 @@ class HistoryController extends Controller {
         return view('dashboard.history.dialyUnapp');
     }
 
+    public function dialyBlessing() {
+        return view('dashboard.history.dialyBlessing');
+    }
+
+    public function redeemList() {
+        return view('dashboard.history.redeem');
+    }
+
+    public function socialEvent() {
+        return view('dashboard.history.socialEvent');
+    }
+
 }

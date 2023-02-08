@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{{ asset('account/assets/css/dashlite.css?ver=3.0.2') }}">
     <link id="skin-default" rel="stylesheet" href="{{ asset('account/assets/css/theme.css?ver=3.0.2') }}">
     <link rel="stylesheet" href="{{ asset('account/assets/css/libs/bootstrap-icons.css?ver=3.1.2') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('/landing/new_image/fav.png') }}">
     @stack('style')
     @include('layouts.components.dashboard.style')
 </head>

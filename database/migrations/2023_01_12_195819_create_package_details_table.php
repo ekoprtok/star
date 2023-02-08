@@ -17,7 +17,7 @@ class CreatePackageDetailsTable extends Migration
             $table->uuid('id')->primary();
             $table->string('package_id');
             $table->integer('gen');
-            $table->float('percentage');
+            $table->float('percentage', 14, 2);
             $table->timestamps();
         });
     }
