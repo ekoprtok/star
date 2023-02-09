@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Package;
-use App\Models\PackageDetail;
 use App\Models\TrxPackage;
 use App\Models\UserPackage;
 use App\Models\UserWallet;
@@ -24,9 +23,18 @@ class PackageController extends Controller {
                 $this->setAttr($value, $key);
             }
         }
+
+        $master = Package::all();
+        if ($master) {
+            foreach ($master as $key => $value) {
+                $value->color  = Helper::colorPackage($value->name);
+                $value->amount = Helper::format_harga($value->rdaily_blessing);
+            }
+        }
+
         return response()->json([
             'data'      => $data,
-            'master'    => Package::all()
+            'master'    => $master
         ]);
     }
 
@@ -39,7 +47,7 @@ class PackageController extends Controller {
         $checkTrx = TrxPackageRedeem::where([
             'user_id'    => $request->userId,
             'package_id' => $data->package_id
-        ])->where('status', '!=', '2')->first();
+        ])->where('status', '0')->first();
 
         if ($checkTrx) {
             return response()->json([
@@ -151,12 +159,12 @@ class PackageController extends Controller {
     public function packageBuy(Request $request) {
         $id             = $request->id;
         $user_id        = $request->user_id;
-        $trxPackage     = TrxPackage::where(['user_id' => $user_id, 'package_id' => $id])->count();
+        $trxPackage     = UserPackage::where(['user_id' => $user_id, 'package_id' => $id, 'status' => '1'])->count();
         $checkPackage   = Package::find($id);
         $checkWallet    = UserWallet::where('user_id', $user_id)->first();
 
         // check balance user
-        $price          = $checkPackage->rdonation + $checkPackage->rjoin_fee;
+        $price          = Helper::ratePackage($checkPackage->rdonation, $checkPackage->rjoin_fee);
         if ($checkWallet->rbalance_amount < $price) {
             return response()->json([
                 'success' => false,
@@ -180,7 +188,7 @@ class PackageController extends Controller {
         ]);
 
         // create user package
-        $process = UserPackage::create([
+        $processPac = UserPackage::create([
             'user_id'      => $user_id,
             'rvalue'       => $checkPackage->rvalue,
             'package_id'   => $id
@@ -204,6 +212,12 @@ class PackageController extends Controller {
             'trx_id'    => $processTrx->id,
             'insertTo'  => 'sys'
         ]);
+
+        // set deep user
+        $process = Helper::functionUserDeep($checkWallet->user_id);
+
+        // kindnes from downline
+        $process = Helper::kindnesMeterDownline($processPac->id);
 
         return response()->json([
             'success' => $process ? true : false,
@@ -238,9 +252,10 @@ class PackageController extends Controller {
         }
 
         // check if user have same package
-        $checkTrx = TrxPackage::where([
+        $checkTrx = Package::where([
             'user_id'    => $checkUser->id,
             'package_id' => $checkPackage->id,
+            'status'     => '1'
         ])->count();
 
         if ($checkTrx > 0) {
@@ -266,6 +281,9 @@ class PackageController extends Controller {
             'package_type' => '0'
         ]);
 
+        // set deep user
+        $process = Helper::functionUserDeep($checkUser->id);
+
         return response()->json([
             'success' => $process ? true : false,
             'message' => $process ? 'Package successfully sent' : 'Error processing data, please try again.',
@@ -275,7 +293,7 @@ class PackageController extends Controller {
     public function formCrud(Request $request) {
         $id = $request->id;
         $validated = $request->validate([
-            'name'            => 'required|min:4',
+            'name'            => 'required|min:4|max:255',
             'rvalue'          => 'required',
             'level'           => 'required',
             'rdonation'       => 'required',
@@ -283,6 +301,14 @@ class PackageController extends Controller {
             'rdaily_blessing' => 'required',
             'created_by'      => 'required',
         ]);
+
+        $dataPackage = Package::where('level', $request->level)->count();
+        if ($dataPackage > 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Level has been used',
+            ]);
+        }
 
         if ($id) {
             $process = Package::where('id', $id)->update([
@@ -314,74 +340,12 @@ class PackageController extends Controller {
         ]);
     }
 
-    public function percentageProcess(Request $request) {
-        $id         = $request->id;
-        $package_id = $request->package_id;
-        $validated  = $request->validate([
-            'gen'        => 'required',
-            'percentage' => 'required',
-            'package_id' => 'required'
-        ]);
-
-        if ($id) {
-            $process = PackageDetail::where('id', $id)->update([
-                'gen'        => $request->gen,
-                'percentage' => $request->percentage,
-                'package_id' => $package_id,
-            ]);
-        } else {
-            $process = PackageDetail::create([
-                'gen'        => $request->gen,
-                'percentage' => $request->percentage,
-                'package_id' => $package_id,
-            ]);
-        }
-
-        return response()->json([
-            'success' => $process ? true : false,
-            'message' => $process ? 'Package percentage has been procesed' : 'Error processing data, please try again.',
-        ]);
-    }
-
     public function getEdit(Request $request) {
         $data = Package::find($request->id);
         if ($data) {
 
         }
         return $data;
-    }
-
-    public function getPercentage(Request $request) {
-        $draw   = $request->get('draw');
-        $search = $request->get('search')['value'];
-        $offset = $request->get('start') - 1;
-        $limit  = $request->get('length');
-
-        $data = PackageDetail::where(function ($query) use ($search) {
-            $query->where('percentage', 'LIKE', '%' . $search . '%');
-        })->offset($offset)
-            ->limit($limit)
-            ->orderByDesc('created_at')
-            ->get();
-
-        if ($data) {
-            foreach ($data as $key => $value) {
-                $this->setAttrPercentage($value, $key);
-            }
-        }
-
-        $dataCount = PackageDetail::where(function ($query) use ($search) {
-            $query->where('percentage', 'LIKE', '%' . $search . '%');
-        })->orderByDesc('created_at')
-            ->count();
-
-        return response()->json([
-            'draw'            => $draw,
-            'recordsTotal'    => $dataCount,
-            'recordsFiltered' => $dataCount,
-            'data'            => $data,
-            'success'         => true,
-        ]);
     }
 
     public function packageList(Request $request) {
@@ -427,28 +391,11 @@ class PackageController extends Controller {
             ]);
         }
 
-        $process        = Package::where('id', $request->id)->delete();
-        $process        = PackageDetail::where('package_id', $request->id)->delete();
+        $process = Package::where('id', $request->id)->delete();
         return response()->json([
             'success' => $process ? true : false,
             'message' => $process ? 'Package has been delete' : 'Error processing data, please try again.',
         ]);
-    }
-
-    public function percentageDelete(Request $request) {
-        $process = PackageDetail::where('id', $request->id)->delete();
-        return response()->json([
-            'success' => $process ? true : false,
-            'message' => $process ? 'Package percentage has been delete' : 'Error processing data, please try again.',
-        ]);
-    }
-
-    public function percentageEdit(Request $request) {
-        $data = PackageDetail::find($request->id);
-        if ($data) {
-
-        }
-        return response()->json($data);
     }
 
     public function setAttrPercentage($value, $key) {
@@ -472,7 +419,8 @@ class PackageController extends Controller {
             'status'        => '0'
         ])->sum('percentage');
 
-        $value->rvalue          = Helper::format_harga($value->rvalue);
+        $totalPrice             = Helper::ratePackage($value->rdonation, $value->rjoin_fee);
+        $value->rvalue          = Helper::format_harga($totalPrice);
         $value->rdonation       = Helper::format_harga($value->rdonation);
         $value->rjoin_fee       = Helper::format_harga($value->rjoin_fee);
         $value->rdaily_blessing = Helper::format_harga($value->rdaily_blessing);
@@ -490,10 +438,6 @@ class PackageController extends Controller {
                     &nbsp;&nbsp;
                 <a class="text-primary" href="'.route('admin.package.form', ['id' => $value->id]).'" title="edit">
                     <i class="fs-16px bi bi-pencil-square text-muted"></i>
-                </a>
-                    &nbsp;&nbsp;
-                <a class="btn btn-xs btn-outline-primary" href="'.route('admin.package.percentage.form', ['id' => $value->id]).'" title="add percentage">
-                    Add Percentage
                 </a>
             ';
     }

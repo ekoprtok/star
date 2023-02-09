@@ -33,6 +33,67 @@ class Helper {
         return Crypt::decryptString($string);
     }
 
+    public static function kindnesMeterDownline($userPackageId) {
+        $userPackage = UserPackage::where(['id' => $userPackageId])->get();
+        foreach ($userPackage as $key => $value) {
+            //loop find parent
+            $dataTrx    = TrxPackage::where(['user_id' => $value->user_id, 'package_id' => $value->package_id])->first();
+            $parents    = [];
+            $sparentid  = '';
+            $suserid    = $value->user_id;
+            do {
+                $data = Member::where(['user_id' => $suserid])->first();
+                if ($data && $data->parent_id != null) {
+                    $parents[] = $data->parent_id;
+                }
+                $sparentid = ($data) ? $data->parent_id : null;
+                $suserid   = $sparentid;
+            } while ($sparentid != null);
+
+            //loop parent find package
+            foreach ($parents as $kp => $vp) {
+                $myIndex = ($kp+1);
+                $user    = User::find($value->user_id);
+                if ($myIndex <= $user->deep) {
+                    $userParent = User::find($vp);
+                    if ($userParent) {
+                        // config percent
+                        $configPercent      = self::config('gen_'.$myIndex);
+                        // find same package
+                        $checkParentPackage = UserPackage::where(['status' => '1', 'user_id' => $userParent->id, 'package_id' => $value->package_id])->first();
+                        if ($checkParentPackage) {
+                            // add kind meter
+                            $process = self::createdHisKindMeter([
+                                'user_id'    => $userParent->id,
+                                'package_id' => $value->package_id,
+                                'percentage' => $configPercent,
+                                'type'       => '1'
+                            ]);
+
+                            // end of kind
+                            $process = self::createdEndOfDonation($dataTrx->id);
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public static function functionUserDeep($user_id) {
+        $userPackage = UserPackage::select('user_packages.*', 'packages.level', 'packages.gen_deep')->where(['user_packages.user_id' => $user_id, 'user_packages.status' => '1'])
+                                ->leftJoin('packages', 'packages.id', '=', 'user_packages.package_id')
+                                ->orderByDesc('packages.level')
+                                ->first();
+        $deep        = ($userPackage) ? $userPackage->gen_deep : 0;
+        $updateUser  = User::whereId($user_id)->update([
+            'deep' => $deep
+        ]);
+
+        return ($updateUser) ? true : false;
+    }
+
     public static function createdEndOfDonation($trx_id) {
         $dataTrx        = TrxPackage::whereId($trx_id)->first();
         $dataPackage    = UserPackage::where(['package_id' => $dataTrx->package_id, 'user_id' => $dataTrx->user_id])->first();
@@ -63,6 +124,9 @@ class Helper {
             $processUpdatePackageUser = UserPackage::whereId($dataPackage->id)->update([
                 'status' => '0'
             ]);
+
+            // set deep user
+            $process = self::functionUserDeep($dataTrx->user_id);
 
             // update kind
             $processUpdateKind = HisKindMeter::whereId($dataHisKind->id)->update([
@@ -374,4 +438,36 @@ class Helper {
         return ($id != '-') ? $data[$id] : $data;
     }
 
+    public static function colorPackage($id) {
+        $data = [
+           'Regular'   => '#66B7E2',
+           'Advance'   => '#439243',
+           'Premium'   => '#E0E266',
+           'Solitaire' => '#C84C4C'
+        ];
+
+        return ($id != '-') ? (isset($data[$id]) ? $data[$id] : $data[0]) : $data;
+    }
+
+    public static function ratePackage($amount, $fee) {
+        $configRate = self::config('donation_rate');
+        return ($amount * $configRate) + $fee;
+    }
+
+    public static function typeTrx($id) {
+        $data = [
+            '1'  => 'Deposit',
+            '2'  => 'Withdrawal',
+            '3'  => 'Transfer',
+            '4'  => 'Donation Package',
+            '5'  => 'Daily Blessing',
+            '6'  => 'Reward',
+            '7'  => 'Social Event',
+            '8'  => 'Different Rate',
+            '9'  => 'Package Redeem',
+            '10' => 'Kindness Meter',
+        ];
+
+        return ($id != '-') ? (isset($data[$id]) ? $data[$id] : $data[0]) : $data;
+    }
 }

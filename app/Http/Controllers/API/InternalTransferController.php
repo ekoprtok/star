@@ -18,11 +18,19 @@ class InternalTransferController extends Controller {
             'user_id'      => 'required',
         ]);
 
-        $user_id = $request->user_id;
-        $wallet  = UserWallet::where('user_id', $user_id)->first();
+        $user_id  = $request->user_id;
+        $wallet   = UserWallet::where('user_id', $user_id)->first();
+        $checkTrx = TrxIntTransfer::selectRaw('SUM(amount) as pending')->where(['user_wallet_id' => $wallet->id, 'status' => '0'])->first();
+        $amount   = ($wallet->rbalance_amount - $checkTrx->pending);
 
-        $wallet  = UserWallet::where('user_id', $user_id)->first();
-        if ($wallet->rbalance_amount < $request->amount) {
+        if ($request->amount <= 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Internal transfer request amount must greater than 0'
+            ]);
+        }
+
+        if ($amount < $request->amount) {
             return response()->json([
                 'success' => false,
                 'message' => 'Your balance is not enough'
@@ -36,6 +44,15 @@ class InternalTransferController extends Controller {
                 'message' => 'Email not registered'
             ]);
         }
+
+        $user    = User::whereId($emailTo->id)->first();
+        if ($user->id == $user_id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You cant doing internal transfer to your self'
+            ]);
+        }
+
 
         $walletTo  = UserWallet::where('user_id', $emailTo->id)->first();
 
@@ -90,7 +107,7 @@ class InternalTransferController extends Controller {
             ]);
 
             // notif to user to
-            Helper::sendNotif([
+            $process = Helper::sendNotif([
                 'type'          => "internal_transfer",
                 'message'       => "You get a transfer from an {$userFrom->email} of {$amount}",
                 'from_user_id'  => "2",
@@ -98,7 +115,7 @@ class InternalTransferController extends Controller {
             ]);
 
             // notif to user from
-            Helper::sendNotif([
+            $process = Helper::sendNotif([
                 'type'          => "internal_transfer",
                 'message'       => "Your transfer of {$amount} to {$userTo->email} was successfully sent",
                 'from_user_id'  => "2",
@@ -106,7 +123,7 @@ class InternalTransferController extends Controller {
             ]);
         }else {
             // notif to user from
-            Helper::sendNotif([
+            $process = Helper::sendNotif([
                 'type'          => "internal_transfer",
                 'message'       => "Your transfer of {$amount} to {$userTo->email} was rejected",
                 'from_user_id'  => "2",

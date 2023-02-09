@@ -14,6 +14,8 @@ class TrxWithdrawal extends Model
         'submitted_at',
         'user_wallet_id',
         'amount',
+        'withdrawal_fee',
+        'net_amount',
         'status',
         'responsed_by',
         'responsed_at',

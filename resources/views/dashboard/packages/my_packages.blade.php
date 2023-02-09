@@ -56,7 +56,7 @@
         $.ajax({
             url  : '{{ route('product.list') }}',
             data : {
-                id : "{{ Helper::encrypt(Auth::user()->id) }}"
+                id : "{{ Auth::user()->id }}"
             },
             success: function(r) {
                 let content = '';

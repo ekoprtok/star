@@ -14,15 +14,22 @@ use App\Models\TrxPackageRedeem;
 use App\Models\TrxSocialEvent;
 use App\Models\UserWallet;
 use App\Models\Notification;
+use App\Models\Member;
 use Helper;
 
 class DashboardController extends Controller {
 
     public function index(Request $request) {
-        $id         = $request->id;
-        $userWallet = UserWallet::where('user_id', $id)->first();
-        $balance    = ($userWallet) ? Helper::format_harga($userWallet->rbalance_amount) : Helper::format_harga(0);
-        $notif_data = Notification::where(['to_user_id' => $id, 'is_read' => '0'])->limit(5)->get();
+        $id             = $request->id;
+        $userWallet     = UserWallet::where('user_id', $id)->first();
+        $balance        = ($userWallet) ? Helper::format_harga($userWallet->rbalance_amount) : Helper::format_harga(0);
+        $balance_avai   = 0;
+        if ($userWallet) {
+            $trxInternal  = TrxIntTransfer::selectRaw('SUM(amount) as pending')->where(['status' => '0', 'user_wallet_id' => $userWallet->id])->first();
+            $trxWd        = TrxWithdrawal::selectRaw('SUM(amount) as pending')->where(['status' => '0', 'user_wallet_id' => $userWallet->id])->first();
+            $balance_avai = $userWallet->rbalance_amount - ($trxInternal->pending + $trxWd->pending);
+        }
+        $notif_data     = Notification::where(['to_user_id' => $id, 'is_read' => '0'])->orderByDesc('created_at')->limit(5)->get();
         if ($notif_data) {
             foreach ($notif_data as $key => $value) {
                 $value->created_at_f = $value->created_at->diffForHumans();
@@ -40,9 +47,25 @@ class DashboardController extends Controller {
             'daily_income'      => '0',
             'weekly_income'     => '0',
             'monthly_income'    => '0',
+            'social_event'      => TrxSocialEvent::where('status', '0')->count(),
             'balance'           => $balance,
+            'balance_available' => Helper::format_harga($balance_avai),
             'config'            => Helper::config()
         ]);
+    }
+
+    public function tree(Request $request) {
+        $where  = ($request->id) ? ['parent_id' => $request->id] : ['user_id' => $request->parent_id];
+        $select = ['members.user_id as id', 'users.email as text'];
+        $data   = Member::select($select)->where($where)->leftJoin('users', 'users.id', '=', 'members.user_id')->get();
+        if ($data) {
+            foreach ($data as $key => $value) {
+                $haveChild        = Member::select($select)->leftJoin('users', 'users.id', '=', 'members.user_id')->where('parent_id', $value->id)->get();
+                $value->state     = ($haveChild->count() > 0) ? 'closed' : 'open';
+                $value->children  = $haveChild;
+            }
+        }
+        return response()->json($data);
     }
 
     public function testimoni() {
@@ -65,34 +88,37 @@ class DashboardController extends Controller {
         $userWallet  = UserWallet::where('user_id', $user->id)->first();
         $deposit     = TrxDeposit::where('user_wallet_id', $userWallet->id)->selectRaw('submitted_at, amount as description, status, "Deposit" as type, file_path as file');
         $withdraw    = TrxWithdrawal::where('user_wallet_id', $userWallet->id)->selectRaw('submitted_at, amount as description, status, "Withdrawal" as type, NULL as file');
-        $internal    = TrxIntTransfer::where('user_wallet_id', $userWallet->id)->selectRaw('submitted_at, amount as description, status, "Internal Transfer" as type, NULL as file');
+        $internal    = TrxIntTransfer::where('user_wallet_id', $userWallet->id)
+                            ->leftJoin('user_wallets', 'user_wallets.id', '=', 'trx_int_transfers.to_wallet_id')
+                            ->leftJoin('users', 'users.id', '=', 'user_wallets.user_id')
+                            ->selectRaw('trx_int_transfers.submitted_at, CONCAT(trx_int_transfers.amount,"~",users.email) as description, trx_int_transfers.status, "Internal Transfer" as type, NULL as file');
         $redeem      = TrxPackageRedeem::where('user_id', $user->id)->leftJoin('packages', 'packages.id', '=', 'trx_package_redeems.package_id')->selectRaw('submitted_at, CONCAT(ramount,"~",name) as description, status, "Package Redeem" as type, NULL as file');
         $challeng    = TrxDailyChallenge::where('user_id', $user->id)->leftJoin('daily_challenges', 'daily_challenges.id', '=', 'trx_daily_challenges.dialy_challenge_id')->selectRaw('submitted_at, IF(daily_challenges.isText="1", file_path, "-") as description, status, "Daily Challenge" as type, IF(daily_challenges.isText="1", "-", file_path) as file');
-        $socialEvent = TrxSocialEvent::where('user_id', $user->id)->selectRaw('submitted_at, description, status, "Social Event" as type, file_path as file');
-        $data        = TrxPackage::where('trx_packages.user_id', $user_id)->leftJoin('packages', 'packages.id', '=', 'trx_packages.package_id')->selectRaw('trx_packages.submitted_at, packages.name as description, "1" as status, "Package" as type, NULL as file')
+        $data        = TrxSocialEvent::where('user_id', $user->id)->selectRaw('submitted_at, description, status, "Social Event" as type, file_path as file')
+        // $data        = TrxPackage::where('trx_packages.user_id', $user_id)->leftJoin('packages', 'packages.id', '=', 'trx_packages.package_id')->selectRaw('trx_packages.submitted_at, packages.name as description, "~" as status, "Package" as type, NULL as file')
                         ->union($internal)
                         ->union($deposit)
                         ->union($withdraw)
                         ->union($challeng)
                         ->union($redeem)
-                        ->union($socialEvent)
+                        // ->union($socialEvent)
                         ->offset($offset)
                         ->limit($limit)
                         ->orderByDesc('submitted_at')
                         ->get();
         if ($data) {
             foreach ($data as $key => $value) {
-                if ($value->type == 'Package Redeem') {
+                if ($value->type == 'Package Redeem' || $value->type == 'Internal Transfer') {
                     $dataAmount         = explode('~', $value->description);
                     $price              = Helper::format_harga((isset($dataAmount[0]) ? $dataAmount[0] : 0));
                     $desc               = (isset($dataAmount[1])) ? $dataAmount[1] : '';
-                    $value->description = $price.' of '.$desc.' package';
+                    $value->description = $price.' '.($value->type == 'Internal Transfer' ? 'to' : 'of').' '.$desc.($value->type == 'Internal Transfer' ? '' : ' package');
                 }else {
                     $value->description = ($value->type != 'Package' && $value->type != 'Daily Challenge' && $value->type != 'Social Event') ? Helper::format_harga($value->description) : $value->description;
                 }
-                $folder             = ($value->type == 'Social Event') ? 'socialEvent' : 'dailyChallenge';
+                $folder             = ($value->type == 'Social Event') ? 'socialEvent' : ($value->type == 'Deposit' ? 'deposit' : 'dailyChallenge');
                 $value->file        = ($value->file) ? '<a href="'.asset('uploads/'.$folder.'/'.$value->file).'" target="_blank">'.$value->file.'</a>' : '-';
-                $value->status      = '<span class="badge bg-'.Helper::invoiceStatusClass($value->status).'">'.Helper::statusApproval($value->status).'</span>';
+                $value->status      = ($value->status != '~') ? '<span class="badge bg-'.Helper::invoiceStatusClass($value->status).'">'.Helper::statusApproval($value->status).'</span>' : '-';
             }
         }
 

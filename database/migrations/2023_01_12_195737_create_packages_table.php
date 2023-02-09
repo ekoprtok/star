@@ -22,6 +22,7 @@ class CreatePackagesTable extends Migration
             $table->float('rjoin_fee', 14, 2);
             $table->float('rdaily_blessing', 14, 2);
             $table->text('img_url')->nullable();
+            $table->integer('gen_deep');
             $table->string('created_by');
             $table->timestamps();
         });

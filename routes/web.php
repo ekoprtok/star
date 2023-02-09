@@ -42,6 +42,14 @@ Route::prefix('dashboard')->middleware(['auth','verified'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 });
 
+Route::prefix('balance')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [DashboardController::class, 'balance'])->name('dashboard.balance');
+});
+
+Route::prefix('team-tree')->middleware(['auth','verified'])->group(function () {
+    Route::get('/', [DashboardController::class, 'tree'])->name('dashboard.team.tree');
+});
+
 Route::prefix('packages')->middleware(['auth','verified'])->group(function () {
     Route::get('/', [PackagesController::class, 'index'])->name('dashboard.packages');
 });
@@ -105,7 +113,6 @@ Route::prefix('social-event')->middleware(['auth','verified'])->group(function (
 Route::prefix('admin-package')->middleware(['auth','verified'])->group(function () {
     Route::get('/', [PackagesController::class, 'package'])->name('admin.package');
     Route::get('/form', [PackagesController::class, 'packageForm'])->name('admin.package.form');
-    Route::get('/percentage/{id}', [PackagesController::class, 'percentageForm'])->name('admin.package.percentage.form');
 });
 
 Route::prefix('admin-daily')->middleware(['auth','verified'])->group(function () {

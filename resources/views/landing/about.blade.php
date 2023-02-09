@@ -34,6 +34,7 @@
             <div class="col-xl-3 col-sm-6">
                 <div class="pricing pricing-s2 card card-shadow round-md">
                     <div class="card-inner card-inner-lg">
+                        <img class="h-160px package-icon" src="{{ asset('/landing/new_image/icon_packages-01-new-min.png') }}" alt="">
                         <h2 class="pricing-amount text-purple">$130</h2>
                         <h5 class="pricing-title">Regular</h5>
                         <span class="sub-title">3 generation kindness meter</span>
@@ -49,6 +50,7 @@
             <div class="col-xl-3 col-sm-6">
                 <div class="pricing pricing-s2 card card-shadow round-md">
                     <div class="card-inner card-inner-lg">
+                        <img class="h-160px package-icon" src="{{ asset('/landing/new_image/icon_packages-02-new-min.png') }}" alt="">
                         <h2 class="pricing-anount text-purple">$1,300</h2>
                         <h5 class="pricing-title">Advance</h5>
                         <span class="sub-title">5 generation kindness meter</span>
@@ -64,6 +66,7 @@
             <div class="col-xl-3 col-sm-6">
                 <div class="pricing pricing-s2 card card-shadow round-md">
                     <div class="card-inner card-inner-lg">
+                        <img class="h-160px package-icon" src="{{ asset('/landing/new_image/icon_packages-03-new-min.png') }}" alt="">
                         <h2 class="pricing-anount text-purple">$12,750</h2>
                         <h5 class="pricing-title">Premium</h5>
                         <span class="sub-title">7 generation kindness meter</span>
@@ -79,6 +82,7 @@
             <div class="col-xl-3 col-sm-6">
                 <div class="pricing pricing-s2 card card-shadow round-md">
                     <div class="card-inner card-inner-lg">
+                        <img class="h-160px package-icon" src="{{ asset('/landing/new_image/icon_packages-04-new-min.png') }}" alt="">
                         <div class="pricing-badge">Popular</div>
                         <h2 class="pricing-anount text-purple">$125,000</h2>
                         <h5 class="pricing-title">Solitaire</h5>
@@ -176,7 +180,7 @@
             <div class="col-xl-3 col-sm-6">
                 <div class="pricing pricing-s2 card card-shadow round-md">
                     <div class="card-inner card-inner-lg">
-                        <img class="h-60px" src="{{ asset('/landing/new_image/icon_packages-01-min.png') }}" alt="">
+                        <img class="h-160px package-icon2" src="{{ asset('/landing/new_image/icon_packages-01-new-min.png') }}" alt="">
                         <h5 class="pricing-title">Regular</h5>
                         <hr class="hr border-light">
                         <ul class="pricing-feature list list-nostyle">
@@ -196,7 +200,7 @@
             <div class="col-xl-3 col-sm-6">
                 <div class="pricing pricing-s2 card card-shadow round-md">
                     <div class="card-inner card-inner-lg">
-                        <img class="h-60px" src="{{ asset('/landing/new_image/icon_packages-02-min.png') }}" alt="">
+                        <img class="h-160px package-icon2" src="{{ asset('/landing/new_image/icon_packages-02-new-min.png') }}" alt="">
                         <h5 class="pricing-title">Advance</h5>
                         <hr class="hr border-light">
                         <ul class="pricing-feature list list-nostyle">
@@ -216,7 +220,7 @@
             <div class="col-xl-3 col-sm-6">
                 <div class="pricing pricing-s2 card card-shadow round-md">
                     <div class="card-inner card-inner-lg">
-                        <img class="h-60px" src="{{ asset('/landing/new_image/icon_packages-03-min.png') }}" alt="">
+                        <img class="h-160px package-icon2" src="{{ asset('/landing/new_image/icon_packages-03-new-min.png') }}" alt="">
                         <h5 class="pricing-title">Premium</h5>
                         <hr class="hr border-light">
                         <ul class="pricing-feature list list-nostyle">
@@ -236,7 +240,7 @@
             <div class="col-xl-3 col-sm-6">
                 <div class="pricing pricing-s2 card card-shadow round-md">
                     <div class="card-inner card-inner-lg">
-                        <img class="h-60px" src="{{ asset('/landing/new_image/icon_packages-04-min.png') }}" alt="">
+                        <img class="h-160px package-icon2" src="{{ asset('/landing/new_image/icon_packages-04-new-min.png') }}" alt="">
                         <h5 class="pricing-title">Solitaire</h5>
                         <hr class="hr border-light">
                         <ul class="pricing-feature list list-nostyle">
@@ -286,87 +290,92 @@
             </div>
         </div>
         <div class="row justify-content-center justify-content-lg-between align-items-center g-gs">
-            <div class="col-xl-3 col-sm-6">
+            <div class="col-xl-xxx col-sm-6">
                 <div class="pricing pricing-s2 card card-shadow round-md">
                     <div class="card-inner card-inner-lg">
                         <img class="h-60px" src="{{ asset('/landing/new_image/icon_packages-06-min.png') }}" alt="">
+                        <img class="h-160px donation-icon" src="{{ asset('/landing/new_image/icon_packages-06-min.png') }}" alt="">
                         <h5 class="pricing-title">Donator</h5>
                         <hr class="hr border-light">
                         <ul class="pricing-feature list list-nostyle">
-                            <li>Direct Donator : 3</li>
-                            <li>Must Have : -</li>
-                            <li>Team Donator : 10</li>
-                            <li>Donation Total : $10,000</li>
-                            <li>Reward : $250</li>
-                            <li>Social Event : $0</li>
+                            <li><span>Direct Donator :</span> 3</li>
+                            <li><span>Must Have :</span> -</li>
+                            <li><span>Team Donator :</span> 10</li>
+                            <li><span>Donation Total :</span> $10,000</li>
+                            <li><span>Reward :</span> $250</li>
+                            <li><span>Social Event :</span> $0</li>
                         </ul>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6">
+            <div class="col-xl-xxx col-sm-6">
                 <div class="pricing pricing-s2 card card-shadow round-md">
                     <div class="card-inner card-inner-lg">
                         <img class="h-60px" src="{{ asset('/landing/new_image/icon_packages-07-min.png') }}" alt="">
+                        <img class="h-160px donation-icon" src="{{ asset('/landing/new_image/icon_packages-07-min.png') }}" alt="">
                         <h5 class="pricing-title">Coordinator</h5>
                         <hr class="hr border-light">
                         <ul class="pricing-feature list list-nostyle">
-                            <li>Direct Donator : 5</li>
-                            <li>Must Have : 8 donators</li>
-                            <li>Team Donator : 100</li>
-                            <li>Donation Total : $100,000</li>
-                            <li>Reward : $2,500</li>
-                            <li>Social Event : $500</li>
+                            <li><span>Donator :</span> 5</li>
+                            <li><span>Must Have :</span> 8 donators</li>
+                            <li><span>Team Donator :</span> 100</li>
+                            <li><span>Donation Total :</span> $100,000</li>
+                            <li><span>Reward :</span> $2,500</li>
+                            <li><span>Social Event :</span> $500</li>
                         </ul>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6">
+            <div class="col-xl-xxx col-sm-6">
                 <div class="pricing pricing-s2 card card-shadow round-md">
                     <div class="card-inner card-inner-lg">
                         <img class="h-60px" src="{{ asset('/landing/new_image/icon_packages-08-min.png') }}" alt="">
+                        <img class="h-160px donation-icon" src="{{ asset('/landing/new_image/icon_packages-08-min.png') }}" alt="">
                         <h5 class="pricing-title">Supervisor</h5>
                         <hr class="hr border-light">
                         <ul class="pricing-feature list list-nostyle">
-                            <li>Direct Donator : 10</li>
-                            <li>Must Have : 8 coordinators</li>
-                            <li>Team Donator : 1000</li>
-                            <li>Donation Total : $900,000</li>
-                            <li>Reward : $22,500</li>
-                            <li>Social Event : $4,500</li>
+                            <li><span>Direct Donator :</span> 10</li>
+                            <li><span>Must Have :</span> 8 coordinators</li>
+                            <li><span>Team Donator :</span> 1000</li>
+                            <li><span>Donation Total :</span> $900,000</li>
+                            <li><span>Reward :</span> $22,500</li>
+                            <li><span>Social Event :</span> $4,500</li>
                         </ul>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6">
+            <div class="col-xl-xxx col-sm-6">
                 <div class="pricing pricing-s2 card card-shadow round-md">
                     <div class="card-inner card-inner-lg">
                         <img class="h-60px" src="{{ asset('/landing/new_image/icon_packages-09-min.png') }}" alt="">
+                        <img class="h-160px donation-icon" src="{{ asset('/landing/new_image/icon_packages-09-min.png') }}" alt="">
                         <h5 class="pricing-title">Manager</h5>
                         <hr class="hr border-light">
                         <ul class="pricing-feature list list-nostyle">
-                            <li>Direct Donator : 15</li>
-                            <li>Must Have : 4 supervisors</li>
-                            <li>Team Donator : 10,000</li>
-                            <li>Donation Total : $7,500,000</li>
-                            <li>Reward : $187,500</li>
-                            <li>Social Event : $37,500</li>
+                            <li><span>Direct Donator :</span> 15</li>
+                            <li><span>Must Have :</span> 4 supervisors</li>
+                            <li><span>Team Donator :</span> 10,000</li>
+                            <li><span>Donation Total :</span> $7,500,000</li>
+                            <li><span>Reward :</span> $187,500</li>
+                            <li><span>Social Event :</span> $37,500</li>
                         </ul>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6">
+            <div class="col-xl-xxx col-sm-6">
                 <div class="pricing pricing-s2 card card-shadow round-md">
                     <div class="card-inner card-inner-lg">
                         <img class="h-60px" src="{{ asset('/landing/new_image/icon_packages-10-min.png') }}" alt="">
+                        <img class="h-160px donation-icon" src="{{ asset('/landing/new_image/icon_packages-10-min.png') }}" alt="">
                         <h5 class="pricing-title">Director</h5>
                         <hr class="hr border-light">
                         <ul class="pricing-feature list list-nostyle">
-                            <li>Direct Donator : 20</li>
-                            <li>Must Have : 2 managers</li>
-                            <li>Team Donator : 100,000</li>
-                            <li>Donation Total : $50,000,000</li>
-                            <li>Reward : $1,250,000</li>
-                            <li>Social Event : $250,000</li>
+                            <li><span>Direct Donator :</span> 20</li>
+                            <li><span>Must Have :</span> 2 managers</li>
+                            <li><span>Team Donator :</span> 100,000</li>
+                            <li><span>Donation Total :</span> $50,000,000</li>
+                            <li><span>Reward :</span> $1,250,000</li>
+                            <li><span>Social Event :</span> $250,000</li>
                         </ul>
                     </div>
                 </div>
@@ -407,7 +416,7 @@
             </div>
         </div>
         <div class="row justify-content-center justify-content-lg-between align-items-center g-gs">
-            <div class="col-xl-3 col-sm-6">
+            <div class="col-xl-xxx col-sm-6">
                 <div class="pricing pricing-s2 card card-shadow round-md">
                     <div class="card-inner card-inner-lg">
                         <img class="h-60px" src="{{ asset('/landing/new_image/icon_packages-06-min.png') }}" alt="">
@@ -419,7 +428,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6">
+            <div class="col-xl-xxx col-sm-6">
                 <div class="pricing pricing-s2 card card-shadow round-md">
                     <div class="card-inner card-inner-lg">
                         <img class="h-60px" src="{{ asset('/landing/new_image/icon_packages-07-min.png') }}" alt="">
@@ -431,7 +440,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6">
+            <div class="col-xl-xxx col-sm-6">
                 <div class="pricing pricing-s2 card card-shadow round-md">
                     <div class="card-inner card-inner-lg">
                         <img class="h-60px" src="{{ asset('/landing/new_image/icon_packages-08-min.png') }}" alt="">
@@ -443,7 +452,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6">
+            <div class="col-xl-xxx col-sm-6">
                 <div class="pricing pricing-s2 card card-shadow round-md">
                     <div class="card-inner card-inner-lg">
                         <img class="h-60px" src="{{ asset('/landing/new_image/icon_packages-09-min.png') }}" alt="">
@@ -455,7 +464,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6">
+            <div class="col-xl-xxx col-sm-6">
                 <div class="pricing pricing-s2 card card-shadow round-md">
                     <div class="card-inner card-inner-lg">
                         <img class="h-60px" src="{{ asset('/landing/new_image/icon_packages-10-min.png') }}" alt="">

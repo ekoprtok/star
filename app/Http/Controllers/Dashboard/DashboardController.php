@@ -16,4 +16,12 @@ class DashboardController extends Controller {
         return view('dashboard.users.index');
     }
 
+    public function tree() {
+        return view('dashboard.users.tree');
+    }
+
+    public function balance() {
+        return view('dashboard.users.balance');
+    }
+
 }

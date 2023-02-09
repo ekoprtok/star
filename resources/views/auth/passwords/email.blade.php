@@ -32,6 +32,6 @@
     </div>
 </form>
 <div class="form-note-s2 pt-5">
-    <a href="{{ route('login') }}"><strong>Return to login</strong></a>
+    <a href="{{ route('login') }}"><strong>Return to Sign In</strong></a>
 </div>
 @endsection

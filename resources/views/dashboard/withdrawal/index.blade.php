@@ -27,7 +27,7 @@
                             <div class="form-group">
                                 <label class="form-label">Amount*</label>
                                 <div class="form-control-wrap">
-                                    <input type="number" step=".01" min="0" class="form-control" name="amount">
+                                    <input type="number" step=".001" min="0" class="form-control" name="amount">
                                     <span class="text-danger amount_err"></span>
                                 </div>
                             </div>
@@ -38,7 +38,8 @@
                                 <div class="form-control-wrap">
                                     <h3 class="balance">0</h3>
                                 </div>
-                                <small>each withdrawal will be deducted by a fee of $<small class="withdrawal_fee"></small></small>
+                                <small>each withdrawal will be deducted by a fee of <small class="withdrawal_fee"></small>%</small><br>
+                                <small>your available balance <small class="balance_available"></small></small>
                                 <br>
                                 <br>
                                 <label class="form-label">Estimated Value Received</label>
@@ -65,7 +66,7 @@
     $('input[name="amount"]').keyup(function() {
         const fee     = $('.withdrawal_fee').html();
         let value     = $(this).val();
-        let estimated = parseFloat(value) - parseFloat(fee);
+        let estimated = parseFloat(value) - ((parseFloat(fee) / 100) * parseFloat(value));
         $('.balance_estimated').html(estimated || 0);
     })
 

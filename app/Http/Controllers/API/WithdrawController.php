@@ -17,10 +17,12 @@ class WithdrawController extends Controller {
             'user_id'      => 'required',
         ]);
 
-        $user_id = $request->user_id;
-        $wallet  = UserWallet::where('user_id', $user_id)->first();
-        $fee     = Helper::config('withdrawal_fee');
-        $amount  = $request->amount - $fee;
+        $user_id    = $request->user_id;
+        $wallet     = UserWallet::where('user_id', $user_id)->first();
+        $fee        = (Helper::config('withdrawal_fee') / 100) * $request->amount;
+        $checkTrx   = TrxWithdrawal::selectRaw('SUM(amount) as pending')->where(['user_wallet_id' => $wallet->id, 'status' => '0'])->first();
+        $amount     = $request->amount - $fee;
+        $amountBal  = $wallet->rbalance_amount - $checkTrx->pending;
 
         if ($amount <= 0) {
             return response()->json([
@@ -29,14 +31,14 @@ class WithdrawController extends Controller {
             ]);
         }
 
-        if ($wallet->rbalance_amount <= 0) {
+        if ($amountBal <= 0) {
             return response()->json([
                 'success' => false,
                 'message' => 'Your balance is not enough'
             ]);
         }
 
-        if ($wallet->rbalance_amount < $amount) {
+        if ($amountBal < $amount) {
             return response()->json([
                 'success' => false,
                 'message' => 'Your balance is not enough'
@@ -46,7 +48,9 @@ class WithdrawController extends Controller {
         $create  = TrxWithdrawal::create([
             'submitted_at'      => date('Y-m-d H:i:s'),
             'user_wallet_id'    => $wallet->id,
-            'amount'            => $amount,
+            'amount'            => $request->amount,
+            'withdrawal_fee'    => $fee,
+            'net_amount'        => $amount,
             'status'            => '0'
         ]);
 
@@ -65,7 +69,7 @@ class WithdrawController extends Controller {
             'status'       => $request->status
         ]);
 
-        $amount     = Helper::format_harga($withdraw->amount);
+        $amount     = Helper::format_harga($withdraw->net_amount);
         $oldWallet  = UserWallet::find($request->user_wallet_id);
         // approve reduce balance user
         if ($request->status == '1') {
@@ -86,10 +90,21 @@ class WithdrawController extends Controller {
                 'to_user_id'    => $oldWallet->user_id
             ]);
 
+            // add fee to owner
             // wallet owner
             $process = Helper::createdOwnerWalletHistory([
                 'user_id'   => $oldWallet->user_id,
-                'amount'    => $withdraw->amount,
+                'amount'    => $withdraw->withdrawal_fee,
+                'type'      => '2',
+                'status'    => 'in',
+                'trx_id'    => $request->id,
+                'insertTo'  => 'real'
+            ]);
+
+            // wallet owner
+            $process = Helper::createdOwnerWalletHistory([
+                'user_id'   => $oldWallet->user_id,
+                'amount'    => $withdraw->net_amount,
                 'type'      => '2',
                 'status'    => 'out',
                 'trx_id'    => $request->id,

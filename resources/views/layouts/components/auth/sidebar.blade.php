@@ -4,7 +4,7 @@
             <div class="slider-item">
                 <div class="nk-feature nk-feature-center">
                     <div class="nk-feature-img">
-                        <img class="round" src="{{ asset('landing/images/hand.png') }}">
+                        <img class="round" src="{{ asset('landing/new_image/slide_1.png') }}">
                     </div>
                     <div class="nk-feature-content py-4 p-sm-5 text-center">
                         <h4>Spread kindness to the world
@@ -12,17 +12,28 @@
                     </div>
                 </div>
             </div>
-            {{-- <div class="slider-item">
+            <div class="slider-item">
                 <div class="nk-feature nk-feature-center">
                     <div class="nk-feature-img">
-                        <img class="round" src="{{ asset('account/images/20944999.png') }}">
+                        <img class="round" src="{{ asset('landing/new_image/slide_2.png') }}">
                     </div>
-                    <div class="nk-feature-content py-4 p-sm-5">
-                        <h4>Ipsum Lorem</h4>
-                        <p>Text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
+                    <div class="nk-feature-content py-4 p-sm-5 text-center">
+                        <h4>Spread kindness to the world
+                            and bring prosperity to all</h4>
                     </div>
                 </div>
-            </div> --}}
+            </div>
+            <div class="slider-item">
+                <div class="nk-feature nk-feature-center">
+                    <div class="nk-feature-img">
+                        <img class="round" src="{{ asset('landing/new_image/slide_3.png') }}">
+                    </div>
+                    <div class="nk-feature-content py-4 p-sm-5 text-center">
+                        <h4>Spread kindness to the world
+                            and bring prosperity to all</h4>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="slider-dots"></div>
         <div class="slider-arrows"></div>

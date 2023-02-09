@@ -13,9 +13,44 @@ use App\Models\TrxDailyBlessing;
 use App\Models\TrxPackage;
 use App\Models\TrxPackageRedeem;
 use App\Models\TrxSocialEvent;
+use App\Models\UserWalletHistory;
 use Helper;
 
 class HistoryController extends Controller {
+
+    public function balance(Request $request) {
+        $draw   = $request->get('draw');
+        $search = $request->get('search')['value'];
+        $offset = $request->get('start') - 1;
+        $limit  = $request->get('length');
+
+        $data   = UserWalletHistory::where(function ($query) use ($search) {
+            $query->where('trx_at', 'LIKE', '%' . $search . '%');
+        })->orderByDesc('trx_at')
+            ->offset($offset)
+            ->limit($limit)
+            ->get();
+
+        if ($data) {
+            foreach ($data as $key => $value) {
+                $value->type   = Helper::typeTrx($value->type);
+                $value->amount = '<span class="text-'.($value->status == 'in' ? 'success' : 'danger').'">'.($value->status == 'in' ? '+' : '-').Helper::format_harga($value->amount).'</span>';
+            }
+        }
+
+        $dataCount = UserWalletHistory::where(function ($query) use ($search) {
+            $query->where('trx_at', 'LIKE', '%' . $search . '%');
+        })->count();
+
+        return response()->json([
+            'draw'            => $draw,
+            'recordsTotal'    => $dataCount,
+            'recordsFiltered' => $dataCount,
+            'data'            => $data,
+            'success'         => true,
+        ]);
+
+    }
 
     public function redeemList(Request $request) {
         $draw   = $request->get('draw');

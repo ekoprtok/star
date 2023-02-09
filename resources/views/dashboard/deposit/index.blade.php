@@ -35,13 +35,13 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="form-label">Please Upload a Pictire</label>
+                                <label class="form-label">Please Upload a Picture</label>
                                 <div class="form-control-wrap">
                                     <div class="upload-zone">
                                         <div class="dz-message" data-dz-message>
                                             <span class="dz-message-text">Drag and drop file</span>
                                             <span class="dz-message-or">or</span>
-                                            <button class="btn btn-primary">SELECT</button>
+                                            <a class="btn btn-primary">SELECT</a>
                                         </div>
                                     </div>
                                 </div>

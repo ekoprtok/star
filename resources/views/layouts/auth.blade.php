@@ -32,7 +32,7 @@
                             </div>
 
                             <div class="nk-block nk-auth-footer">
-                                <div class="nk-block-between">
+                                {{-- <div class="nk-block-between">
                                     <ul class="nav nav-sm">
                                         <li class="nav-item">
                                             <a class="nav-link" href="#">Terms & Condition</a>
@@ -63,7 +63,7 @@
                                             </div>
                                         </li>
                                     </ul>
-                                </div>
+                                </div> --}}
                                 <div class="mt-3">
                                     <p>&copy; 2022 {{ config('app.name', 'Laravel') }}. All Rights Reserved.</p>
                                 </div>

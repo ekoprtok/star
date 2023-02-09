@@ -27,10 +27,12 @@ use App\Http\Controllers\API\SocialEventController;
 */
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::get('/testimoni', [DashboardController::class, 'testimoni'])->name('landing.testimoni');
+Route::post('/tree-list', [DashboardController::class, 'tree'])->name('request.tree');
 
 Route::prefix('cron')->group(function () {
     Route::get('/loop-trx-rank', [CronJobController::class, 'loopTrxRank'])->name('cron.loop.trx.rank');
     Route::get('/loop-end-donation', [CronJobController::class, 'endOfDonation'])->name('cron.loop.end.donation');
+    Route::get('/loop-kindnes-down', [CronJobController::class, 'kindnesMeterDownline'])->name('cron.loop.kindnes.down');
 });
 
 Route::get('/cron', [CronJobController::class, 'index']);
@@ -43,6 +45,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/transaction-list', [HistoryController::class, 'trxHistory'])->name('transaction.list');
     Route::post('/internaltrf-list', [HistoryController::class, 'internaltrf'])->name('internaltrf.list');
     Route::post('/dialy-unapp-list', [HistoryController::class, 'blessingUnapp'])->name('dialy.unapp.list');
+    Route::post('/dashboard-balance', [HistoryController::class, 'balance'])->name('dashboard.balance.list');
     Route::post('/admin-users-list', [HistoryController::class, 'users'])->name('admin.users.list');
     Route::post('/admin-redeem-list', [HistoryController::class, 'redeemList'])->name('admin.redeem.list');
     Route::post('/admin-package-list', [PackageController::class, 'packageList'])->name('admin.package.list');
@@ -75,12 +78,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/admin-package-edit/{id}', [PackageController::class, 'getEdit'])->name('admin.package.edit');
     Route::delete('/admin-package-delete', [PackageController::class, 'packageDelete'])->name('admin.package.delete');
     Route::post('/admin-package-gift-process', [PackageController::class, 'formGift'])->name('admin.package.gift.process');
-
-    // package percentage
-    Route::get('/admin-package-percentage/{id}', [PackageController::class, 'getPercentage'])->name('admin.package.percentage.list');
-    Route::post('/admin-package-percentage-process', [PackageController::class, 'percentageProcess'])->name('admin.package.percentage.process');
-    Route::delete('/admin-package-percentage-delete', [PackageController::class, 'percentageDelete'])->name('admin.package.percentage.delete');
-    Route::get('/admin-package-percentage-edit', [PackageController::class, 'percentageEdit'])->name('admin.package.percentage.edit');
 
     // dashboard
     Route::get('/admin-dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');

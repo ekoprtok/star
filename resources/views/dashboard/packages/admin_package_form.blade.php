@@ -5,9 +5,10 @@
         <div class="nk-content-body">
             <div class="nk-block-head nk-block-head-sm">
                 <div class="nk-block-between">
-                    <div class="nk-block-head-content">
+                    <a href="{{ route('admin.package') }}" class="nk-block-head-content d-flex flex-row align-items-center justify-content-center">
+                        <i class="bi bi-chevron-left fs-4"></i>
                         <h3 class="nk-block-title page-title">Manage Donation Package</h3>
-                    </div>
+                     </a>
                 </div>
             </div>
             <div class="nk-block">
@@ -20,7 +21,7 @@
                                     <div class="form-group">
                                         <label class="form-label">Package Name</label>
                                         <div class="form-control-wrap">
-                                            <input type="text" class="form-control" name="name">
+                                            <input type="text" class="form-control" name="name" placeholder="Your package name">
                                             <input type="hidden" name="id" value={{ isset($id) ? $id : '' }}>
                                             <input type="hidden" name="created_by" value={{ Auth::user()->id }}>
                                             <small class="text-danger name_err"></small>
@@ -30,7 +31,7 @@
                                     <div class="form-group">
                                         <label class="form-label">Package Value</label>
                                         <div class="form-control-wrap">
-                                            <input type="number" step=".01" min="0" class="form-control" name="rvalue">
+                                            <input type="number" step=".001" min="0" class="form-control" name="rvalue" placeholder="0">
                                             <small class="text-danger rvalue_err"></small>
                                         </div>
                                     </div>
@@ -38,7 +39,7 @@
                                     <div class="form-group">
                                         <label class="form-label">Join Fee</label>
                                         <div class="form-control-wrap">
-                                            <input type="number" step=".01" min="0" class="form-control" name="rjoin_fee">
+                                            <input type="number" step=".001" min="0" class="form-control" name="rjoin_fee" placeholder="0">
                                             <small class="text-danger rjoin_fee_err"></small>
                                         </div>
                                     </div>
@@ -47,21 +48,27 @@
                                     <div class="form-group">
                                         <label class="form-label">Level</label>
                                         <div class="form-control-wrap">
-                                            <input type="number" step=".01" min="0" class="form-control" name="level">
+                                            <select name="level" class="form-control" required>
+                                                <option value="">- Level -</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                            </select>
                                             <small class="text-danger level_err"></small>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">Donation</label>
                                         <div class="form-control-wrap">
-                                            <input type="number" step=".01" min="0" class="form-control" name="rdonation">
+                                            <input type="number" step=".001" min="0" class="form-control" name="rdonation" placeholder="0">
                                             <small class="text-danger rdonation_err"></small>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="form-label">Dialy Blassing</label>
+                                        <label class="form-label">Dialy Blessing</label>
                                         <div class="form-control-wrap">
-                                            <input type="number" step=".01" min="0" class="form-control" name="rdaily_blessing">
+                                            <input type="number" step=".001" min="0" class="form-control" name="rdaily_blessing" placeholder="0">
                                             <small class="text-danger rdaily_blessing_err"></small>
                                         </div>
                                     </div>
@@ -114,7 +121,8 @@
                             </table> --}}
 
                                 <div class="col-sm-6">
-                                    <button class="btn btn-primary">Submit</button>
+                                    <a class="btn btn-outline-primary me-1" href="{{ route('admin.package') }}">Cancel</a>
+                                    <button class="btn btn-primary">Save</button>
                                 </div>
                             </div>
                         </form>

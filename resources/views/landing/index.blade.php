@@ -155,7 +155,7 @@
                                 <div class="col-lg-6">
                                     <div class="card card-shadow round-xl">
                                         <div class="card-inner card-inner-lg">
-                                            <div class="review review-s2">
+                                            <div class="w-100">
                                                 <div class="review-content">
                                                     <div class="review-rating rating rating-sm">
                                                         <ul class="rating-stars">

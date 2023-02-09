@@ -36,7 +36,7 @@
                 <div class="col-lg-6 col-md-10">
                     <div class="header-caption">
                         <h1 class="header-title fw-medium">Helping Hand Community Club</h1>
-                        <div class="header-text">dashboarddashboard
+                        <div class="header-text">
                             <p>Spread kindness to the world and bring prosperity to all. </p>
                         </div>
                         <ul class="header-action btns-inline">

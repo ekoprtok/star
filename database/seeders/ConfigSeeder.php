@@ -58,6 +58,60 @@ class ConfigSeeder extends Seeder
                 'value'         => '50',
                 'created_at'    => date('Y-m-d H:i:s')
             ],
+            [
+                'id'            => Str::orderedUuid(),
+                'key'           => 'gen_1',
+                'value'         => '10',
+                'created_at'    => date('Y-m-d H:i:s')
+            ],
+            [
+                'id'            => Str::orderedUuid(),
+                'key'           => 'gen_2',
+                'value'         => '5',
+                'created_at'    => date('Y-m-d H:i:s')
+            ],
+            [
+                'id'            => Str::orderedUuid(),
+                'key'           => 'gen_3',
+                'value'         => '3',
+                'created_at'    => date('Y-m-d H:i:s')
+            ],
+            [
+                'id'            => Str::orderedUuid(),
+                'key'           => 'gen_4',
+                'value'         => '2',
+                'created_at'    => date('Y-m-d H:i:s')
+            ],
+            [
+                'id'            => Str::orderedUuid(),
+                'key'           => 'gen_5',
+                'value'         => '1',
+                'created_at'    => date('Y-m-d H:i:s')
+            ],
+            [
+                'id'            => Str::orderedUuid(),
+                'key'           => 'gen_6',
+                'value'         => '1',
+                'created_at'    => date('Y-m-d H:i:s')
+            ],
+            [
+                'id'            => Str::orderedUuid(),
+                'key'           => 'gen_7',
+                'value'         => '1',
+                'created_at'    => date('Y-m-d H:i:s')
+            ],
+            [
+                'id'            => Str::orderedUuid(),
+                'key'           => 'gen_8',
+                'value'         => '1',
+                'created_at'    => date('Y-m-d H:i:s')
+            ],
+            [
+                'id'            => Str::orderedUuid(),
+                'key'           => 'gen_9',
+                'value'         => '1',
+                'created_at'    => date('Y-m-d H:i:s')
+            ],
         ];
 
         Config::insert($data);

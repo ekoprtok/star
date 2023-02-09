@@ -3,7 +3,7 @@
 @section('content')
 <div class="nk-block-head">
     <div class="nk-block-head-content">
-        <h5 class="nk-block-title">Register</h5>
+        <h5 class="nk-block-title">Sign Up</h5>
         <div class="nk-block-des">
             <p>Create New {{ config('app.name', 'Laravel') }} Account</p>
         </div>
@@ -66,14 +66,14 @@
         @enderror
     </div>
 
-    <div class="form-group">
+    {{-- <div class="form-group">
         <div class="custom-control custom-control-xs custom-checkbox">
             <input type="checkbox" class="custom-control-input" id="checkbox">
             <label class="custom-control-label" for="checkbox">I agree to <a tabindex="-1" href="#">Privacy Policy</a> &amp; <a tabindex="-1" href="#"> Terms.</a></label>
         </div>
-    </div>
+    </div> --}}
     <div class="form-group">
-        <button class="btn btn-lg btn-primary btn-block">Register</button>
+        <button class="btn btn-lg btn-primary btn-block">Sign Up</button>
     </div>
 </form><!-- form -->
 <div class="form-note-s2 pt-4"> Already have an account ?

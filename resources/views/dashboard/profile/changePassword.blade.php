@@ -42,7 +42,7 @@
                                         </div>
                                     </div>
 
-                                    <button class="btn btn-primary">Submit</button>
+                                    <button class="btn btn-primary">Change Password</button>
                                 </div>
                             </div>
                         </form>

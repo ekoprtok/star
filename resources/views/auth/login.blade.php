@@ -3,7 +3,7 @@
 @section('content')
 <div class="nk-block-head">
     <div class="nk-block-head-content">
-        <h5 class="nk-block-title">Sign-In</h5>
+        <h5 class="nk-block-title">Sign In</h5>
         <div class="nk-block-des">
             <p>Access the {{ config('app.name', 'Laravel') }} panel using your email and
                 password</p>

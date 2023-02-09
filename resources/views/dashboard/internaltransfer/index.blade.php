@@ -45,6 +45,9 @@
                               <div class="form-control-wrap">
                                   <h3 class="balance">0</h3>
                               </div>
+                              <small>your available balance <small class="balance_available"></small></small>
+                              <br>
+                              <br>
                            </div>
                         </div>
 

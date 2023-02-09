@@ -65,7 +65,7 @@ class DailyController extends Controller {
     public function formCrud(Request $request) {
         $id        = $request->id;
         $validated = $request->validate([
-            'name'       => 'required|min:8'.($id ? '' : '|unique:daily_challenges'),
+            'name'       => 'required|min:8|max:255'.($id ? '' : '|unique:daily_challenges'),
             'point'      => 'required|between:0.1,100',
             'isText'     => 'required'
         ]);
@@ -246,6 +246,7 @@ class DailyController extends Controller {
                 'user_id'      => $data->user_id,
                 'package_id'   => $data->package_id,
                 'percentage'   => Helper::kindMeterCal($challenge->point, $package->rdonation),
+                'type'         => '2',
                 'status'       => '2'
             ]);
 

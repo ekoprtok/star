@@ -26,9 +26,21 @@
                             </a>
                         </li>
                         <li class="nk-menu-item">
+                            <a href="{{ route('dashboard.balance') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-wallet-saving"></em></span>
+                                <span class="nk-menu-text">Your Balance</span>
+                            </a>
+                        </li>
+                        <li class="nk-menu-item">
                             <a href="{{ route('dashboard.packages') }}" class="nk-menu-link">
                                 <span class="nk-menu-icon"><em class="icon ni ni-package"></em></span>
                                 <span class="nk-menu-text">Buy Packages</span>
+                            </a>
+                        </li>
+                        <li class="nk-menu-item">
+                            <a href="{{ route('dashboard.team.tree') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-menu-alt"></em></span>
+                                <span class="nk-menu-text">Your Team Tree</span>
                             </a>
                         </li>
                         {{-- <li class="nk-menu-item">
@@ -116,7 +128,7 @@
                         <li class="nk-menu-item">
                             <a href="{{ route('dashboard.internaltrf') }}" class="nk-menu-link">
                                 <span class="nk-menu-icon"><em class="icon ni ni-wallet-in"></em></span>
-                                <span class="nk-menu-text">Internal Transfer History</span>
+                                <span class="nk-menu-text">Internal Transfer Request</span>
                             </a>
                         </li>
 
@@ -162,7 +174,7 @@
                         @endif
                     </ul>
                 </div>
-                <div class="nk-sidebar-footer">
+                {{-- <div class="nk-sidebar-footer">
                     <ul class="nk-menu nk-menu-footer">
                         <li class="nk-menu-item">
                             <a href="#" class="nk-menu-link">
@@ -189,7 +201,7 @@
                             </div>
                         </li>
                     </ul>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

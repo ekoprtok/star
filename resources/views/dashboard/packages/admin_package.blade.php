@@ -30,7 +30,7 @@
                                     <th>Value</th>
                                     <th>Donation</th>
                                     <th>Join Fee</th>
-                                    <th>Daily Blassing</th>
+                                    <th>Daily Blessing</th>
                                     <th>Gift</th>
                                     <th>Action</th>
                                 </tr>

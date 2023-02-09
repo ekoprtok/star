@@ -5,9 +5,10 @@
     <div class="nk-content-body">
        <div class="nk-block-head nk-block-head-sm">
           <div class="nk-block-between">
-             <div class="nk-block-head-content">
+             <a href="{{ route('admin.daily') }}" class="nk-block-head-content d-flex flex-row align-items-center justify-content-center">
+                <i class="bi bi-chevron-left fs-4"></i>
                 <h3 class="nk-block-title page-title">Manage Daily</h3>
-             </div>
+             </a>
           </div>
        </div>
        <div class="nk-block">
@@ -40,7 +41,8 @@
                             <small class="text-danger isText_err"></small>
                          </div>
 
-                        <button class="btn btn-primary">Submit</button>
+                        <a class="btn btn-outline-primary me-1" href="{{ route('admin.daily') }}">Cancel</a>
+                        <button class="btn btn-primary">Save</button>
                      </div>
                   </form>
                </div>

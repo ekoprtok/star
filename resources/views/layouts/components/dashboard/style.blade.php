@@ -150,6 +150,11 @@
     .form-control:focus {
         border-color: #C9B56D !important;
     }
+    .btn-outline-primary {
+        color: #C9B56D;
+        border-color: #C9B56D;
+        background-color : transparent;
+    }
     .nk-menu-footer .nk-menu-link:hover {
         color: #9E8424;
     }
@@ -226,4 +231,43 @@
         max-height: 400px;
         overflow-y: auto;
     }
+
+    .package-icon {
+        position: absolute;
+        bottom: 0;
+        right: -70px;
+        opacity: 15%;
+    }
+    .package-icon2 {
+        position: absolute;
+        top: -20px;
+        right: -70px;
+        opacity: 15%;
+    }
+    .donation-icon {
+        position: absolute;
+        bottom: -24px;
+        right: -70px;
+        opacity: 15%;
+    }
+    .nk-wgw-name.header-pack-color {
+        margin: -15px -20px;
+        padding: 20px;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+    }
+
+    .nk-wgw-name.header-pack-color .title {
+        color: white;
+    }
+
+    .col-xl-xxx {
+        flex: 0 0 auto;
+        width: 20%;
+    }
+
+    li span {
+        display: block;
+    }
+
 </style>

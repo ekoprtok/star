@@ -9,9 +9,15 @@ use App\Models\RankTransaction;
 use App\Models\Member;
 use App\Models\User;
 use App\Models\TrxPackage;
+use App\Models\UserPackage;
+use App\Models\Package;
 use Helper;
 
 class CronJobController extends Controller {
+
+    public function kindnesMeterDownline() {
+        $process = Helper::kindnesMeterDownline();
+    }
 
     public function endOfDonation() {
         $data = TrxPackage::all();

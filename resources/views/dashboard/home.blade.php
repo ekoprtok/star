@@ -141,6 +141,24 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-sm-3">
+                                <div class="card bg-light">
+                                    <div class="nk-wgw sm">
+                                        <a class="nk-wgw-inner" href="{{ route('dashboard.package.redeem') }}">
+                                            <div class="nk-wgw-name">
+                                                <h5 class="nk-wgw-title title">Social Event</h5>
+                                            </div>
+                                            <div class="nk-wgw-balance">
+                                                <div class="social_event fw-500 fs-5">
+                                                    <div class="spinner-border spinner-border-sm" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -311,7 +329,7 @@
                     <div class="my-4">
                         <div class="d-flex flex-row align-items-center justify-content-between">
                             <h5 class="title mb-0">Your Packages</h5>
-                            <a href="{{ route('dashboard.mypackages') }}" class="fw-bold btn-see-all-pkg">See All</a>
+                            {{-- <a href="{{ route('dashboard.mypackages') }}" class="fw-bold btn-see-all-pkg">See All</a> --}}
                         </div>
                         <div class="my-2">
                             <div class="row card-product">
@@ -322,7 +340,7 @@
 
                     <div class="card card-bordered">
                         <div class="nk-refwg">
-                            <div class="nk-refwg-invite card-inner">
+                            <div class="nk-refwg-invite card-inner w-100 border-white">
                                 <div class="nk-refwg-head g-3">
                                     <div class="nk-refwg-title">
                                         <h5 class="title">Refer Us & Earn</h5>
@@ -346,7 +364,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="nk-refwg-stats card-inner bg-lighter">
+                            {{-- <div class="nk-refwg-stats card-inner bg-lighter">
                                 <div class="nk-refwg-group g-3">
                                     <div class="nk-refwg-name">
                                         <h6 class="title">Team Information <em class="icon ni ni-info"
@@ -378,7 +396,7 @@
                                 <div class="nk-refwg-ck">
                                     <canvas class="chart-refer-stats" id="refBarChart"></canvas>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -403,7 +421,7 @@
                     </div>
                 </div>
 
-                <div class="nk-block">
+                {{-- <div class="nk-block">
                     <div class="card card-bordered">
                         <div class="card-inner card-inner-lg">
                             <div class="align-center flex-wrap flex-md-nowrap g-4">
@@ -423,7 +441,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             @endif
         </div>
     </div>
@@ -526,21 +544,24 @@
                         let item      = r.master[inx];
                         let value     = r.data.find(it => it.package_id == item.id);
                         let menu      = '';
-                        if (value && (value?.package_type != '0')) {
+                        let compliment= '';
+                        if (value) {
                             menu += `
                                 <li>
-                                    <a class="dropdown-item ${value && (value?.package_type != '0') ? '' : 'disabled'}" href="javascript:void(0);" onclick="blessing('${item.id}', '${user_id}')">Daily Blessing</a>
+                                    <a class="dropdown-item ${value && (value?.package_type != '0') ? '' : 'disabled'}" href="javascript:void(0);" onclick="blessing('${item.id}', '${user_id}', '${item.amount}')">Daily Blessing</a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item ${value && (value?.package_type != '0') ? '' : 'disabled'}" href="javascript:void(0);" onclick="challenge('${item.id}')">Daily Challenge</a>
                                 </li>
+                                <li>
+                                    <a class="dropdown-item ${value && (value?.percentage > 0) ? '' : 'disabled'}" href="javascript:void(0)" onclick="redeemGift('${value?.id}')">Redeem</a>
+                                </li>
                             `;
+
                         }
 
-                        if (value && (value?.package_type == '0' && value?.percentage > 0)) {
-                            menu += `
-                                <li><a class="dropdown-item" href="javascript:void(0)" onclick="redeemGift('${value?.id}')">Redeem</a></li>
-                            `;
+                        if (value && (value?.package_type == '0')) {
+                            compliment = '<span class="badge bg-light text-dark">Compliment</span>';
                         }
 
                         content += `
@@ -549,15 +570,16 @@
                                     <div class="${(value ? '' : 'not-own')}"></div>
                                     <div class="nk-wgw sm">
                                         <div class="nk-wgw-inner">
-                                            <div class="nk-wgw-name">
+                                            <div class="d-flex flex-row justify-content-between nk-wgw-name header-pack-color mb-2" style="background-color : ${item.color}">
                                                 <h5 class="nk-wgw-title title">Package ${item.name}</h5>
+                                                ${compliment}
                                             </div>
                                             <div class="gauge-container">
                                                 <div class="gauge" ${value ? 'data-value="'+value.percentage+'"' : 'data-value="0"'}></div>
                                             </div>
                                             <div class="d-flex justify-content-center align-items-center">
                                                 <div class="dropdown">
-                                                    <button class="${(value && value.status == '0' ? 'disabled' : '')} px-5 btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <button class="px-5 btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                                         Menu
                                                     </button>
                                                     <ul class="dropdown-menu menu-custom" aria-labelledby="dropdownMenuButton1">
@@ -622,10 +644,10 @@
             })
         });
 
-        function blessing(id, user) {
+        function blessing(id, user, amount) {
             Swal.fire({
                 title              : "Confirmation",
-                text               : "Are you sure want to request?",
+                text               : `You will earn ${amount} per day. Do you want to claim now?`,
                 showCloseButton    : true,
                 showCancelButton   : true,
                 confirmButtonText  : "Yes"

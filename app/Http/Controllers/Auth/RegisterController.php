@@ -51,7 +51,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'username'     => ['required', 'max:255', 'unique:users'],
+            'username'     => ['required', 'string', 'max:255', 'unique:users', 'alpha_dash'],
             'email'        => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password'     => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -66,13 +66,15 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $user = User::create([
-            'referral_code' => Helper::referralCode(),
             'role'          => '0',
             'email'         => $data['email'],
             'password'      => Hash::make($data['password']),
             'username'      => $data['username'],
             'ref_temp'      => ($data['referral']) ? $data['referral'] : null
         ]);
+
+        $referral_code = substr($user->id, 0, 6);
+        $updateUserId  = User::whereId($user->id)->update(['referral_code' => $referral_code]);
 
         return $user;
     }

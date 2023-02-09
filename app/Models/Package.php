@@ -18,6 +18,7 @@ class Package extends Model
         'rjoin_fee',
         'rdaily_blessing',
         'img_url',
+        'gen_deep',
         'created_by',
     ];
 

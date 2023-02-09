@@ -27,6 +27,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'web_token',
         'ref_temp',
+        'deep',
     ];
 
     /**

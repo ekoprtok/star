@@ -79,12 +79,12 @@
                                                 <span>Change Password</span>
                                             </a>
                                         </li>
-                                        <li>
+                                        {{-- <li>
                                             <a href="{{ route('dashboard') }}">
                                                 <em class="icon ni ni-activity-alt"></em>
                                                 <span>Activity Log</span>
                                             </a>
-                                        </li>
+                                        </li> --}}
                                         {{-- <li><a class="dark-switch" href="#"><em class="icon ni ni-moon"></em><span>Dark Mode</span></a></li> --}}
                                     </ul>
                                 </div>
