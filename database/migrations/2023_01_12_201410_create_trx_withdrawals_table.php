@@ -17,9 +17,9 @@ class CreateTrxWithdrawalsTable extends Migration
             $table->uuid('id')->primary();
             $table->string('submitted_at');
             $table->string('user_wallet_id');
-            $table->float('amount', 14, 2);
-            $table->float('withdrawal_fee', 14, 2);
-            $table->float('net_amount', 14, 2);
+            $table->float('amount', 14, 3);
+            $table->float('withdrawal_fee', 14, 3);
+            $table->float('net_amount', 14, 3);
             $table->enum('status', ['0', '1', '2'])->default('0');
             $table->string('responsed_by')->nullable();
             $table->string('responsed_at')->nullable();

@@ -17,7 +17,7 @@ class CreateUserPackagesTable extends Migration
             $table->uuid('id')->primary();
             $table->string('user_id');
             $table->string('package_id');
-            $table->float('rvalue', 14, 2);
+            $table->float('rvalue', 14, 3);
             $table->enum('package_type', ['0', '1'])->default('1');
             $table->enum('status', ['0', '1'])->default('1');
             $table->timestamps();

@@ -17,7 +17,7 @@ class CreateTrxRankDonationsTable extends Migration
             $table->uuid('id')->primary();
             $table->string('trx_rank_id');
             $table->string('user_id');
-            $table->float('rdonation', 14, 2);
+            $table->float('rdonation', 14, 3);
             $table->timestamps();
         });
     }

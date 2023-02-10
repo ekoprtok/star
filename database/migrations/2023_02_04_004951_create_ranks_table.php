@@ -20,9 +20,9 @@ class CreateRanksTable extends Migration
             $table->integer('direct_donator');
             $table->integer('must_have_dwline');
             $table->integer('total_team_donator');
-            $table->float('rrank_donation_total', 14, 2);
-            $table->float('rreward', 14, 2);
-            $table->float('rsocial_event', 14, 2);
+            $table->float('rrank_donation_total', 14, 3);
+            $table->float('rreward', 14, 3);
+            $table->float('rsocial_event', 14, 3);
             $table->boolean('is_contributor')->default(false);
             $table->timestamps();
         });

@@ -17,7 +17,7 @@ class CreateHisKindMetersTable extends Migration
             $table->uuid('id')->primary();
             $table->string('user_id');
             $table->string('package_id');
-            $table->float('percentage', 14, 2);
+            $table->float('percentage', 14, 3);
             $table->enum('type', ['1', '2'])->default('1'); // 1 beli paket, 2 daily challenge
             $table->enum('status', ['0', '1'])->default('0'); // 1 claimed, 0 open
             $table->timestamps();

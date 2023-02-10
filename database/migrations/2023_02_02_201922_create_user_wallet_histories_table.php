@@ -30,7 +30,7 @@ class CreateUserWalletHistoriesTable extends Migration
             $table->integer('type');
             $table->string('user_id');
             $table->string('user_wallet_id');
-            $table->float('amount', 14, 2);
+            $table->float('amount', 14, 3);
             $table->enum('status', ['in', 'out'])->default('in');
             $table->timestamps();
         });
