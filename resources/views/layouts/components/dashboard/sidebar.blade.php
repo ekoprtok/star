@@ -34,7 +34,7 @@
                         <li class="nk-menu-item">
                             <a href="{{ route('dashboard.packages') }}" class="nk-menu-link">
                                 <span class="nk-menu-icon"><em class="icon ni ni-package"></em></span>
-                                <span class="nk-menu-text">Buy Packages</span>
+                                <span class="nk-menu-text">Donation</span>
                             </a>
                         </li>
                         <li class="nk-menu-item">

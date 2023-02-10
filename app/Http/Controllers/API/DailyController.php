@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\DailyChallenge;
 use App\Models\TrxDailyBlessing;
 use App\Models\TrxDailyChallenge;
+use App\Models\TrxPackage;
 use App\Models\Package;
 use App\Models\UserWallet;
 use Helper;
@@ -233,7 +234,7 @@ class DailyController extends Controller {
         $data       = TrxDailyChallenge::find($request->id);
         $challenge  = DailyChallenge::find($data->dialy_challenge_id);
         $package    = Package::find($data->package_id);
-        $process = TrxDailyChallenge::where('id', $request->id)->update([
+        $process    = TrxDailyChallenge::where('id', $request->id)->update([
             'responsed_by'  => $request->user_id,
             'responsed_at'  => date('Y-m-d H:i:s'),
             'status'        => $request->status
@@ -247,8 +248,12 @@ class DailyController extends Controller {
                 'package_id'   => $data->package_id,
                 'percentage'   => Helper::kindMeterCal($challenge->point, $package->rdonation),
                 'type'         => '2',
-                'status'       => '2'
+                'status'       => '0'
             ]);
+
+            // add knes meter
+            $dataTrxPackage = TrxPackage::where(['user_id' => $data->user_id, 'package_id' => $data->package_id])->first();
+            $process        = Helper::createdEndOfDonation($dataTrxPackage->id);
 
             // notif to user
             Helper::sendNotif([
@@ -257,8 +262,6 @@ class DailyController extends Controller {
                 'from_user_id'  => "2",
                 'to_user_id'    => $data->user_id
             ]);
-
-            // add knes meter
         }else {
             // notif to user
             Helper::sendNotif([

@@ -66,7 +66,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="form-label">Dialy Blessing</label>
+                                        <label class="form-label">Daily Blessing</label>
                                         <div class="form-control-wrap">
                                             <input type="number" step=".001" min="0" class="form-control" name="rdaily_blessing" placeholder="0">
                                             <small class="text-danger rdaily_blessing_err"></small>

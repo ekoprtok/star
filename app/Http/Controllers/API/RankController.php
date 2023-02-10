@@ -79,7 +79,7 @@ class RankController extends Controller {
         $id        = $request->id;
         $validated = $request->validate([
             'level'                  => 'required',
-            'name'                   => 'required|min:4',
+            'name'                   => 'required|min:4|max:255',
             'direct_donator'         => 'required',
             'must_have_dwline'       => 'required',
             'total_team_donator'     => 'required',
@@ -102,6 +102,22 @@ class RankController extends Controller {
                 return response()->json([
                     'success' => false,
                     'message' => 'Name already used',
+                ]);
+            }
+        }else {
+            $checkName = Rank::where('name', $request->name)->where('id', '!=', $id)->count();
+            if ($checkName > 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Name already used',
+                ]);
+            }
+
+            $checkLevel = Rank::where('level', $request->level)->where('id', '!=', $id)->count();
+            if ($checkLevel > 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Level already used',
                 ]);
             }
         }

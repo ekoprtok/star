@@ -144,7 +144,7 @@
                             <div class="col-sm-3">
                                 <div class="card bg-light">
                                     <div class="nk-wgw sm">
-                                        <a class="nk-wgw-inner" href="{{ route('dashboard.package.redeem') }}">
+                                        <a class="nk-wgw-inner" href="{{ route('dashboard.social.event.request') }}">
                                             <div class="nk-wgw-name">
                                                 <h5 class="nk-wgw-title title">Social Event</h5>
                                             </div>
@@ -206,6 +206,25 @@
                                     <div class="nk-wgw sm">
                                         <a class="nk-wgw-inner" href="#">
                                             <div class="nk-wgw-name">
+                                                <h5 class="nk-wgw-title title">Current Balance</h5>
+                                            </div>
+                                            <div class="nk-wgw-balance">
+                                                <div class="current_balance fw-500 fs-5">
+                                                    <div class="spinner-border spinner-border-sm" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="card bg-light">
+                                    <div class="nk-wgw sm">
+                                        <a class="nk-wgw-inner" href="#">
+                                            <div class="nk-wgw-name">
                                                 <h5 class="nk-wgw-title title">Daily Income</h5>
                                             </div>
                                             <div class="nk-wgw-balance">
@@ -261,7 +280,7 @@
                         </div>
                     </div>
 
-                    <div class="my-3">
+                    {{-- <div class="my-3">
                         <div class="nk-block-head-xs">
                             <div class="nk-block-between-md g-2">
                                 <div class="nk-block-head-content">
@@ -299,7 +318,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                 </div>
             @endif
@@ -360,7 +379,7 @@
                                             <em class="icon ni ni-link-alt"></em>
                                         </div>
                                         <input type="text" class="form-control copy-text" id="refUrl"
-                                            value="{{ route('dashboard') }}?ref={{ Auth::user()->referral_code }}">
+                                            value="{{ route('register') }}?ref={{ Auth::user()->referral_code }}">
                                     </div>
                                 </div>
                             </div>

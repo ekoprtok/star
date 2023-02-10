@@ -6,7 +6,7 @@
        <div class="nk-block-head nk-block-head-sm">
           <div class="nk-block-between">
              <div class="nk-block-head-content">
-                <h3 class="nk-block-title page-title">Donation Package</h3>
+                <h3 class="nk-block-title page-title">Donation</h3>
              </div>
           </div>
        </div>
@@ -28,25 +28,26 @@
             let content = '';
             r.data.map((item, index) => {
                 content += `
-                <div class="col-md-6 col-xxl-3">
-                    <div class="card card-bordered pricing">
-                        <div class="pricing-head">
-                            <div class="pricing-title">
-                                <h4 class="card-title title">${item.name}</h4>
-                            </div>
-                        </div>
-                        <div class="pricing-body">
-                            <ul class="pricing-features">
-                                <li><span class="w-50">Donation</span> <span class="ms-auto">${item.rdonation}</span></li>
-                                <li><span class="w-50">Join Fee</span> <span class="ms-auto">${item.rjoin_fee}</span></li>
-                                <li class="fw-bold"><span class="w-50">Total</span> <span class="ms-auto">${item.rvalue}</span></li>
+                <div class="col-xl-3 col-sm-6">
+                    <div class="pricing pricing-s2 card card-shadow card-bordered round-md d-block overflow-hidden">
+                        <div class="card-inner card-inner-lg">
+                            <img class="h-160px package-icon3" src="http://localhost:8000/landing/new_image/icon_packages-0${(index+1)}-new-min.png" alt="">
+                            <h2 class=" fs-1 text-purple pb-3">${item.price}</h2>
+                            <h5 class="pricing-title pb-0">Regular</h5>
+                            <span class="sub-title">${item.gen_deep} generation kindness meter</span>
+                            <hr class="hr border-light">
+                            <ul class="pricing-feature list list-nostyle nodot">
+                                <li>Donation : ${item.rdonation}</li>
+                                <li>Joining Fee : ${item.rjoin_fee}</li>
+                                <li>Daily Blessing : ${item.rdaily_blessing}/day</li>
                             </ul>
+
                             <div class="pricing-action">
                                 <a class="btn btn-outline-primary" onclick="buying('${item.id}')">Buy Now</a>
                             </div>
                         </div>
                     </div>
-                    </div>
+                </div>
                 `;
             });
             $('.card-product').html(content);

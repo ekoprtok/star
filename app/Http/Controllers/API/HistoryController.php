@@ -26,7 +26,7 @@ class HistoryController extends Controller {
 
         $data   = UserWalletHistory::where(function ($query) use ($search) {
             $query->where('trx_at', 'LIKE', '%' . $search . '%');
-        })->orderByDesc('trx_at')
+        })->where('user_id', $request->user_id)->orderByDesc('trx_at')
             ->offset($offset)
             ->limit($limit)
             ->get();
@@ -40,7 +40,7 @@ class HistoryController extends Controller {
 
         $dataCount = UserWalletHistory::where(function ($query) use ($search) {
             $query->where('trx_at', 'LIKE', '%' . $search . '%');
-        })->count();
+        })->where('user_id', $request->user_id)->count();
 
         return response()->json([
             'draw'            => $draw,

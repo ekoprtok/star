@@ -40,7 +40,7 @@
                         <span class="sub-title">3 generation kindness meter</span>
                         <hr class="hr border-light">
                         <ul class="pricing-feature list list-nostyle">
-                            <li>Donation : $120</li>
+                            <li>Donation : $100</li>
                             <li>Joining Fee : $10</li>
                             <li>Daily Blessing : $0.135/day</li>
                         </ul>
@@ -56,7 +56,7 @@
                         <span class="sub-title">5 generation kindness meter</span>
                         <hr class="hr border-light">
                         <ul class="pricing-feature list list-nostyle">
-                            <li>Donation : $1,200</li>
+                            <li>Donation : $1,000</li>
                             <li>Joining Fee : $100</li>
                             <li>Daily Blessing : $8.5/day</li>
                         </ul>
@@ -72,7 +72,7 @@
                         <span class="sub-title">7 generation kindness meter</span>
                         <hr class="hr border-light">
                         <ul class="pricing-feature list list-nostyle">
-                            <li>Donation : $12,000</li>
+                            <li>Donation : $10,000</li>
                             <li>Joining Fee : $750</li>
                             <li>Daily Blessing : $22.5/day</li>
                         </ul>
@@ -89,7 +89,7 @@
                         <span class="sub-title">9 generation kindness meter</span>
                         <hr class="hr border-light">
                         <ul class="pricing-feature list list-nostyle">
-                            <li>Donation : $120,000</li>
+                            <li>Donation : $100,000</li>
                             <li>Joining Fee : $5000</li>
                             <li>Daily Blessing : $275/day</li>
                         </ul>

@@ -17,14 +17,14 @@ class PackageController extends Controller {
 
     public function index(Request $request) {
         $id   = $request->id;
-        $data = ($id) ? UserPackage::select('user_packages.*','packages.name')->where('user_id', $id)->leftJoin('packages', 'packages.id', '=', 'user_packages.package_id')->get() : Package::all();
+        $data = ($id) ? UserPackage::select('user_packages.*','packages.name')->where(['user_id' => $id, 'status' => '1'])->leftJoin('packages', 'packages.id', '=', 'user_packages.package_id')->get() : Package::orderBy('level')->get();
         if ($data) {
             foreach ($data as $key => $value) {
                 $this->setAttr($value, $key);
             }
         }
 
-        $master = Package::all();
+        $master = Package::orderBy('level')->get();
         if ($master) {
             foreach ($master as $key => $value) {
                 $value->color  = Helper::colorPackage($value->name);
@@ -190,7 +190,7 @@ class PackageController extends Controller {
         // create user package
         $processPac = UserPackage::create([
             'user_id'      => $user_id,
-            'rvalue'       => $checkPackage->rvalue,
+            'rvalue'       => $checkPackage->rdonation,
             'package_id'   => $id
         ]);
 
@@ -252,7 +252,7 @@ class PackageController extends Controller {
         }
 
         // check if user have same package
-        $checkTrx = Package::where([
+        $checkTrx = UserPackage::where([
             'user_id'    => $checkUser->id,
             'package_id' => $checkPackage->id,
             'status'     => '1'
@@ -302,14 +302,6 @@ class PackageController extends Controller {
             'created_by'      => 'required',
         ]);
 
-        $dataPackage = Package::where('level', $request->level)->count();
-        if ($dataPackage > 0) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Level has been used',
-            ]);
-        }
-
         if ($id) {
             $process = Package::where('id', $id)->update([
                 'name'            => $request->name,
@@ -322,6 +314,15 @@ class PackageController extends Controller {
                 'img_url'         => null,
             ]);
         } else {
+
+            $dataPackage = Package::where('level', $request->level)->count();
+            if ($dataPackage > 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Level has been used',
+                ]);
+            }
+
             $process = Package::create([
                 'name'            => $request->name,
                 'rvalue'          => $request->rvalue,
@@ -358,7 +359,7 @@ class PackageController extends Controller {
             $query->where('name', 'LIKE', '%' . $search . '%');
         })->offset($offset)
             ->limit($limit)
-            ->orderByDesc('created_at')
+            ->orderBy('level')
             ->get();
 
         if ($data) {
@@ -369,7 +370,7 @@ class PackageController extends Controller {
 
         $dataCount = Package::where(function ($query) use ($search) {
             $query->where('name', 'LIKE', '%' . $search . '%');
-        })->orderByDesc('created_at')
+        })->orderBy('level')
             ->count();
 
         return response()->json([
@@ -420,11 +421,12 @@ class PackageController extends Controller {
         ])->sum('percentage');
 
         $totalPrice             = Helper::ratePackage($value->rdonation, $value->rjoin_fee);
-        $value->rvalue          = Helper::format_harga($totalPrice);
+        $value->price           = Helper::format_harga($totalPrice);
+        $value->rvalue          = Helper::format_harga($value->rvalue);
         $value->rdonation       = Helper::format_harga($value->rdonation);
         $value->rjoin_fee       = Helper::format_harga($value->rjoin_fee);
         $value->rdaily_blessing = Helper::format_harga($value->rdaily_blessing);
-        $value->percentage      = ($percentage) ? $percentage : 0;
+        $value->percentage      = ($percentage) ? round($percentage, 2) : 0;
         $value->gift            = '
             <a class="btn btn-xs btn-outline-primary" onclick="sendGift(\''.$value->id.'\', \''.$value->name.'\')" href="javascript:void(0)" title="Send Package">
                 Send

@@ -177,7 +177,7 @@
         box-shadow : none !important;
     }
     .logo-img {
-        max-height: 70px;
+        max-height: 70px !important;
     }
     @media (max-width: 1540px) {
         .logo-img {
@@ -232,6 +232,12 @@
         overflow-y: auto;
     }
 
+    .package-icon3 {
+        position: absolute;
+        bottom: 0;
+        right: -80px;
+        opacity: 15%;
+    }
     .package-icon {
         position: absolute;
         bottom: 0;
@@ -268,6 +274,25 @@
 
     li span {
         display: block;
+    }
+
+    .after-opacity-90:after {
+        opacity: 0.6 !important;
+    }
+    .after-opacity-95:after {
+        opacity: 0.7 !important;
+    }
+
+    .nodot ul {
+        list-style: none;
+    }
+
+    .nodot.list li:before {
+        content : none;
+    }
+
+    .nodot li {
+        padding-left : 0;
     }
 
 </style>

@@ -65,15 +65,16 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $user = User::create([
+        $defaultRef = Helper::config('default_referral_code');
+        $user       = User::create([
             'role'          => '0',
             'email'         => $data['email'],
             'password'      => Hash::make($data['password']),
             'username'      => $data['username'],
-            'ref_temp'      => ($data['referral']) ? $data['referral'] : null
+            'ref_temp'      => ($data['referral']) ? $data['referral'] : $defaultRef
         ]);
 
-        $referral_code = substr($user->id, 0, 6);
+        $referral_code = $data['username'];
         $updateUserId  = User::whereId($user->id)->update(['referral_code' => $referral_code]);
 
         return $user;

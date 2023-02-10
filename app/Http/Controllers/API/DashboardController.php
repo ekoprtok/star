@@ -15,6 +15,8 @@ use App\Models\TrxSocialEvent;
 use App\Models\UserWallet;
 use App\Models\Notification;
 use App\Models\Member;
+use App\Models\OwnerWallet;
+use Carbon\Carbon;
 use Helper;
 
 class DashboardController extends Controller {
@@ -35,6 +37,14 @@ class DashboardController extends Controller {
                 $value->created_at_f = $value->created_at->diffForHumans();
             }
         }
+
+        $dataDepoDaily   = TrxDeposit::selectRaw('SUM(amount) as amount')->whereDate('submitted_at', date('Y-m-d'))->first();
+        $dataDepoMonth   = TrxDeposit::selectRaw('SUM(amount) as amount')->whereMonth('submitted_at', date('m'))->whereYear('submitted_at', date('Y'))->first();
+        $dataDepoWeekly  = TrxDeposit::selectRaw('SUM(amount) as amount')
+                                                        ->whereBetween('submitted_at', [Carbon::now()->subWeek()->format("Y-m-d H:i:s"), Carbon::now()])
+                                                        ->first();
+
+        $balanceOwner   = OwnerWallet::first();
         return response()->json([
             'daily_challenge'   => TrxDailyChallenge::where('status', '0')->count(),
             'deposit'           => TrxDeposit::where('status', '0')->count(),
@@ -44,9 +54,10 @@ class DashboardController extends Controller {
             'notification_count'=> count($notif_data),
             'notification'      => $notif_data,
             'redeem'            => TrxPackageRedeem::where('status', '0')->count(),
-            'daily_income'      => '0',
-            'weekly_income'     => '0',
-            'monthly_income'    => '0',
+            'daily_income'      => Helper::format_harga(($dataDepoDaily ? $dataDepoDaily->amount : 0)),
+            'weekly_income'     => Helper::format_harga(($dataDepoWeekly ? $dataDepoWeekly->amount : 0)),
+            'monthly_income'    => Helper::format_harga(($dataDepoMonth ? $dataDepoMonth->amount : 0)),
+            'current_balance'   => Helper::format_harga(($balanceOwner ? $balanceOwner->rbalance_amount : 0)),
             'social_event'      => TrxSocialEvent::where('status', '0')->count(),
             'balance'           => $balance,
             'balance_available' => Helper::format_harga($balance_avai),
@@ -55,17 +66,32 @@ class DashboardController extends Controller {
     }
 
     public function tree(Request $request) {
-        $where  = ($request->id) ? ['parent_id' => $request->id] : ['user_id' => $request->parent_id];
-        $select = ['members.user_id as id', 'users.email as text'];
+        if ($request->id) {
+            $where = ['parent_id' => $request->id];
+        }else {
+            $where = ['user_id'   => $request->parent_id];
+        }
+        $select = ['members.user_id as id', 'members.parent_id', 'users.email as text'];
         $data   = Member::select($select)->where($where)->leftJoin('users', 'users.id', '=', 'members.user_id')->get();
         if ($data) {
             foreach ($data as $key => $value) {
-                $haveChild        = Member::select($select)->leftJoin('users', 'users.id', '=', 'members.user_id')->where('parent_id', $value->id)->get();
-                $value->state     = ($haveChild->count() > 0) ? 'closed' : 'open';
-                $value->children  = $haveChild;
+                $this->setChild($select, $value);
             }
         }
         return response()->json($data);
+    }
+
+    public function setChild($select, $value) {
+        $subWhere         = ['parent_id' => $value->id];
+        $haveChild        = Member::select($select)->leftJoin('users', 'users.id', '=', 'members.user_id')->where($subWhere)->get();
+        $value->state     = ($haveChild->count() > 0) ? 'closed' : 'open';
+        $value->children  = $haveChild;
+
+        if ($value->children) {
+            foreach ($value->children as $k => $v) {
+                $this->setChild($select, $v);
+            }
+        }
     }
 
     public function testimoni() {

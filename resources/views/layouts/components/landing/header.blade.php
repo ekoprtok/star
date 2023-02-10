@@ -32,13 +32,11 @@
     @if (Route::is('landing'))
     <div class="header-content my-auto py-6 is-dark">
         <div class="container mt-n4 mt-lg-0">
-            <div class="row">
-                <div class="col-lg-6 col-md-10">
-                    <div class="header-caption">
-                        <h1 class="header-title fw-medium">Helping Hand Community Club</h1>
-                        <div class="header-text">
-                            <p>Spread kindness to the world and bring prosperity to all. </p>
-                        </div>
+            <div class="row align-items-center justify-content-center">
+                <div class="col-lg-9 col-md-10 text-center">
+                    <div class="text-block is-compact py-3">
+                        <h3 class="title">Helping Hand Community Club</h3>
+                        <h1>Spread kindness to the world and bring prosperity to all.</h1>
                         <ul class="header-action btns-inline">
                             <li><a href="{{ route('dashboard') }}" class="btn btn-primary btn-lg btn-round"><span>Join Us!</span></a></li>
                         </ul>

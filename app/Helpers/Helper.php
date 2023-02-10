@@ -60,7 +60,8 @@ class Helper {
                         // config percent
                         $configPercent      = self::config('gen_'.$myIndex);
                         // find same package
-                        $checkParentPackage = UserPackage::where(['status' => '1', 'user_id' => $userParent->id, 'package_id' => $value->package_id])->first();
+                        $checkParentPackage    = UserPackage::where(['status' => '1', 'user_id' => $userParent->id, 'package_id' => $value->package_id])->first();
+                        $checkParentTrxPackage = TrxPackage::where(['user_id' => $userParent->id, 'package_id' => $value->package_id])->first();
                         if ($checkParentPackage) {
                             // add kind meter
                             $process = self::createdHisKindMeter([
@@ -70,8 +71,12 @@ class Helper {
                                 'type'       => '1'
                             ]);
 
+                            sleep(0.5);
+
                             // end of kind
-                            $process = self::createdEndOfDonation($dataTrx->id);
+                            if ($process) {
+                                $process = self::createdEndOfDonation($checkParentTrxPackage->id);
+                            }
                         }
                     }
                 }
@@ -97,11 +102,11 @@ class Helper {
     public static function createdEndOfDonation($trx_id) {
         $dataTrx        = TrxPackage::whereId($trx_id)->first();
         $dataPackage    = UserPackage::where(['package_id' => $dataTrx->package_id, 'user_id' => $dataTrx->user_id])->first();
-        $dataHisKind    = HisKindMeter::where(['package_id' => $dataTrx->package_id, 'user_id' => $dataTrx->user_id])->first();
+        $dataHisKind    = HisKindMeter::selectRaw('SUM(percentage) as percentage')->where(['package_id' => $dataTrx->package_id, 'user_id' => $dataTrx->user_id, 'status' => '0'])->first();
         $dataUserWallet = UserWallet::where('user_id', $dataTrx->user_id)->first();
 
         $percentage     = ($dataHisKind) ? $dataHisKind->percentage : 0;
-        if ($percentage >= 100 && $dataPackage->status == '1') {
+        if ($percentage >= 100) {
             $percentIsBuy   = self::config('kindness_percentage');
             $percentIsFree  = self::config('kindness_gift_percentage');
             $amount         = 0;
@@ -121,7 +126,10 @@ class Helper {
             ]);
 
             // update package
-            $processUpdatePackageUser = UserPackage::whereId($dataPackage->id)->update([
+            $processUpdatePackageUser = UserPackage::whereId([
+                'package_id' => $dataTrx->package_id,
+                'user_id' => $dataTrx->user_id
+            ])->update([
                 'status' => '0'
             ]);
 
@@ -129,7 +137,10 @@ class Helper {
             $process = self::functionUserDeep($dataTrx->user_id);
 
             // update kind
-            $processUpdateKind = HisKindMeter::whereId($dataHisKind->id)->update([
+            $processUpdateKind = HisKindMeter::where([
+                'package_id' => $dataTrx->package_id,
+                'user_id' => $dataTrx->user_id
+            ])->update([
                 'status' => '1'
             ]);
 
@@ -144,11 +155,13 @@ class Helper {
             ]);
 
         }
+
+        return true;
     }
 
     public static function createdOwnerWalletHistory($data) {
         $userId  = $data['user_id'];
-        $ownerId = User::where('role', '8')->first()->id;
+        $ownerId = User::where('role', '9')->first()->id;
         $amount  = $data['amount'];
         $type    = $data['type'];
         $status  = $data['status'];
@@ -164,9 +177,9 @@ class Helper {
         if ($inserTo == 'real') {
             // insert to real
             if ($status == 'in') {
-                $newAmount = $amount_sys + $amount;
+                $newAmount = $amount_real + $amount;
             }else {
-                $newAmount = $amount_sys - $amount;
+                $newAmount = $amount_real - $amount;
             }
 
             // update wallet owner
@@ -185,9 +198,9 @@ class Helper {
         }else { //sys
             // insert to wallet
             if ($status == 'in') {
-                $newAmount = $amount_real + $amount;
+                $newAmount = $amount_sys + $amount;
             }else {
-                $newAmount = $amount_real - $amount;
+                $newAmount = $amount_sys - $amount;
             }
 
             // update wallet owner
@@ -465,7 +478,7 @@ class Helper {
             '7'  => 'Social Event',
             '8'  => 'Different Rate',
             '9'  => 'Package Redeem',
-            '10' => 'Kindness Meter',
+            '10' => 'End Of Donation',
         ];
 
         return ($id != '-') ? (isset($data[$id]) ? $data[$id] : $data[0]) : $data;

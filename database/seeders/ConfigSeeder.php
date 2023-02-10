@@ -112,6 +112,12 @@ class ConfigSeeder extends Seeder
                 'value'         => '1',
                 'created_at'    => date('Y-m-d H:i:s')
             ],
+            [
+                'id'            => Str::orderedUuid(),
+                'key'           => 'default_referral_code',
+                'value'         => 'null',
+                'created_at'    => date('Y-m-d H:i:s')
+            ],
         ];
 
         Config::insert($data);

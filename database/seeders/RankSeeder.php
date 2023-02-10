@@ -57,7 +57,7 @@ class RankSeeder extends Seeder
             ],
             [
                 'id'                    => Str::orderedUuid(),
-                'level'                 => '2',
+                'level'                 => '3',
                 'name'                  => 'Supervisor',
                 'direct_donator'        => '10',
                 'must_have_dwline'      => '6',
@@ -70,7 +70,7 @@ class RankSeeder extends Seeder
             ],
             [
                 'id'                    => Str::orderedUuid(),
-                'level'                 => '3',
+                'level'                 => '4',
                 'name'                  => 'Manager',
                 'direct_donator'        => '10',
                 'must_have_dwline'      => '4',
@@ -83,7 +83,7 @@ class RankSeeder extends Seeder
             ],
             [
                 'id'                    => Str::orderedUuid(),
-                'level'                 => '4',
+                'level'                 => '5',
                 'name'                  => 'Director',
                 'direct_donator'        => '20',
                 'must_have_dwline'      => '2',

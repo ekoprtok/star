@@ -27,6 +27,7 @@
                                 <tr>
                                     <th>Level</th>
                                     <th>Package</th>
+                                    <th>Price</th>
                                     <th>Value</th>
                                     <th>Donation</th>
                                     <th>Join Fee</th>
@@ -89,6 +90,10 @@
                 },
                 {
                     data: "name"
+                },
+                {
+                    data: "price",
+                    className: "text-end"
                 },
                 {
                     data: "rvalue",
