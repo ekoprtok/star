@@ -18,22 +18,20 @@
                     <div class="row gy-4">
                         <div class="col-sm-6">
                             <div class="form-group">
-                            <label class="form-label">Date</label>
-                            <div class="form-control-wrap">
-                                <span class="form-control">{{ date('d F Y') }}</span>
-                                <input type="hidden" name="file_path">
-                                <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                            </div>
+                                <label class="form-label">Date</label>
+                                <div class="form-control-wrap">
+                                    <span class="form-control">{{ date('d F Y') }}</span>
+                                    <input type="hidden" name="file_path">
+                                    <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                                </div>
                             </div>
                             <div class="form-group">
-                            <label class="form-label">Amount*</label>
-                            <div class="form-control-wrap">
-                                <input type="number" step=".01" min="0" class="form-control" name="amount">
-                                <span class="text-danger amount_err"></span>
+                                <label class="form-label">Amount*</label>
+                                <div class="form-control-wrap">
+                                    <input type="number" step=".01" min="{{ Helper::config('minimum_deposit') }}" class="form-control" name="amount">
+                                    <span class="text-danger amount_err"></span>
+                                </div>
                             </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="form-label">Please Upload a Picture</label>
                                 <div class="form-control-wrap">
@@ -46,6 +44,30 @@
                                     </div>
                                 </div>
                                 <span class="text-danger file_path_err"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label">Wallet Address</label>
+                                <div class="form-control-wrap">
+                                    <div class="form-clip clipboard-init" data-clipboard-target="#refUrl"
+                                        data-success="Copied" data-text="Copy Link"><em
+                                            class="clipboard-icon icon ni ni-copy"></em> <span
+                                            class="clipboard-text">Copy Link</span></div>
+                                    <div class="form-icon">
+                                        <em class="icon ni ni-wallet-saving"></em>
+                                    </div>
+                                    <input type="text" class="form-control copy-text" id="refUrl"
+                                        value="{{ Helper::config('deposit_address') }}">
+                                </div>
+                            </div>
+
+                            <div>
+                                <ul>
+                                    <li style="list-style-type: circle">Please don’t deposit any other digital assets except <b>USDT(ERC20)</b> to the above address. Otherwise, you may lose your assets permanently.</li>
+                                    <li style="list-style-type: circle"><b>Minimum</b> deposit amount: <b>{{ Helper::config('minimum_deposit') }} USDT(ERC20)</b>. Any deposits less than the minimum will not be credited or refunded.</li>
+                                    <li style="list-style-type: circle">Only Send USDT to this address.</li>
+                                </ul>
                             </div>
                         </div>
 

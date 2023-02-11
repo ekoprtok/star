@@ -72,7 +72,7 @@ class RankSeeder extends Seeder
                 'id'                    => Str::orderedUuid(),
                 'level'                 => '4',
                 'name'                  => 'Manager',
-                'direct_donator'        => '10',
+                'direct_donator'        => '15',
                 'must_have_dwline'      => '4',
                 'total_team_donator'    => '10000',
                 'rrank_donation_total'  => '7500000',

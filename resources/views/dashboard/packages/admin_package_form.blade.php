@@ -37,7 +37,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="form-label">Join Fee</label>
+                                        <label class="form-label">Management Fee</label>
                                         <div class="form-control-wrap">
                                             <input type="number" step=".001" min="0" class="form-control" name="rjoin_fee" placeholder="0">
                                             <small class="text-danger rjoin_fee_err"></small>

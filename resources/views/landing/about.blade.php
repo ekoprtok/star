@@ -41,7 +41,7 @@
                         <hr class="hr border-light">
                         <ul class="pricing-feature list list-nostyle">
                             <li>Donation : $100</li>
-                            <li>Joining Fee : $10</li>
+                            <li>Management Fee : $10</li>
                             <li>Daily Blessing : $0.135/day</li>
                         </ul>
                     </div>
@@ -57,7 +57,7 @@
                         <hr class="hr border-light">
                         <ul class="pricing-feature list list-nostyle">
                             <li>Donation : $1,000</li>
-                            <li>Joining Fee : $100</li>
+                            <li>Management Fee : $100</li>
                             <li>Daily Blessing : $8.5/day</li>
                         </ul>
                     </div>
@@ -73,7 +73,7 @@
                         <hr class="hr border-light">
                         <ul class="pricing-feature list list-nostyle">
                             <li>Donation : $10,000</li>
-                            <li>Joining Fee : $750</li>
+                            <li>Management Fee : $750</li>
                             <li>Daily Blessing : $22.5/day</li>
                         </ul>
                     </div>
@@ -90,7 +90,7 @@
                         <hr class="hr border-light">
                         <ul class="pricing-feature list list-nostyle">
                             <li>Donation : $100,000</li>
-                            <li>Joining Fee : $5000</li>
+                            <li>Management Fee : $5000</li>
                             <li>Daily Blessing : $275/day</li>
                         </ul>
                     </div>

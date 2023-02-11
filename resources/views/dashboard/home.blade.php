@@ -352,7 +352,12 @@
                         </div>
                         <div class="my-2">
                             <div class="row card-product">
-
+                                <div class="d-flex flex-row align-items-center">
+                                    <div class="spinner-border spinner-border-sm text-warning me-2" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    Loading your packages...
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -591,7 +596,6 @@
                                         <div class="nk-wgw-inner">
                                             <div class="d-flex flex-row justify-content-between nk-wgw-name header-pack-color mb-2" style="background-color : ${item.color}">
                                                 <h5 class="nk-wgw-title title">Package ${item.name}</h5>
-                                                ${compliment}
                                             </div>
                                             <div class="gauge-container">
                                                 <div class="gauge" ${value ? 'data-value="'+value.percentage+'"' : 'data-value="0"'}></div>
@@ -620,6 +624,7 @@
                 }
 
                 $('.card-product').html(content);
+                setMeter();
             }
         });
 

@@ -29,10 +29,11 @@ class DepositController extends Controller {
             'user_id'      => 'required',
         ]);
 
-        if ($request->amount <= 0) {
+        $min_deposit = Helper::config('minimum_deposit');
+        if ($request->amount < $min_deposit) {
             return response()->json([
                 'success' => false,
-                'message' => 'Deposit request amount must greater than 0'
+                'message' => 'Deposit request amount must greater than '.$min_deposit
             ]);
         }
 

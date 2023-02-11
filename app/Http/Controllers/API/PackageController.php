@@ -425,7 +425,7 @@ class PackageController extends Controller {
         $value->rvalue          = Helper::format_harga($value->rvalue);
         $value->rdonation       = Helper::format_harga($value->rdonation);
         $value->rjoin_fee       = Helper::format_harga($value->rjoin_fee);
-        $value->rdaily_blessing = Helper::format_harga($value->rdaily_blessing);
+        $value->rdaily_blessing = Helper::format_harga($value->rdaily_blessing, '$', ($value->level == '1' ? 3 : 2));
         $value->percentage      = ($percentage) ? round($percentage, 2) : 0;
         $value->gift            = '
             <a class="btn btn-xs btn-outline-primary" onclick="sendGift(\''.$value->id.'\', \''.$value->name.'\')" href="javascript:void(0)" title="Send Package">

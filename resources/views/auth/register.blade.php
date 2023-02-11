@@ -59,7 +59,7 @@
     <div class="form-group">
         <label class="form-label" for="referral">{{ __('Referral Code') }}</label>
         <div class="form-control-wrap">
-            <input id="referral" type="text" placeholder="Enter your referral" class="form-control form-control-lg @error('referral') is-invalid @enderror" name="referral" value="{{ old('referral') }}" autocomplete="referral">
+            <input id="referral" type="text" placeholder="Enter your referral" class="form-control form-control-lg @error('referral') is-invalid @enderror" name="referral" value="{{ old('referral') ? old('referral') : request()->get('ref') }}" autocomplete="referral">
         </div>
         @error('referral')
             <small class="text-danger" role="alert">{{ $message }}</small>

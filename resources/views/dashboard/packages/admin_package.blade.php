@@ -30,7 +30,7 @@
                                     <th>Price</th>
                                     <th>Value</th>
                                     <th>Donation</th>
-                                    <th>Join Fee</th>
+                                    <th>Management Fee</th>
                                     <th>Daily Blessing</th>
                                     <th>Gift</th>
                                     <th>Action</th>

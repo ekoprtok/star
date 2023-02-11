@@ -118,6 +118,18 @@ class ConfigSeeder extends Seeder
                 'value'         => 'null',
                 'created_at'    => date('Y-m-d H:i:s')
             ],
+            [
+                'id'            => Str::orderedUuid(),
+                'key'           => 'deposit_address',
+                'value'         => '0x26817672928FCD62eC4f7f49E1e5C68Dd45112af',
+                'created_at'    => date('Y-m-d H:i:s')
+            ],
+            [
+                'id'            => Str::orderedUuid(),
+                'key'           => 'minimum_deposit',
+                'value'         => '1',
+                'created_at'    => date('Y-m-d H:i:s')
+            ],
         ];
 
         Config::insert($data);
