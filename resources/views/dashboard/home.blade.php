@@ -619,7 +619,7 @@
                 if (r.data.length > 0) {
                     $('.btn-see-all-pkg').show();
                 }else {
-                    // content += `<div class="col-lg-4 col-12">You dont have any package, lets go buy a package <a href="{{ route('dashboard.packages') }}">here</a>, be sure your balance is enought.</div>`;
+                    // content += `<div class="col-lg-4 col-12">You dont have any package, lets go donate a package <a href="{{ route('dashboard.packages') }}">here</a>, be sure your balance is enought.</div>`;
                     $('.btn-see-all-pkg').hide();
                 }
 

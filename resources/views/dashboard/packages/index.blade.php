@@ -62,7 +62,7 @@
     function buying(id) {
         Swal.fire({
             title             : "Confirmation",
-            text              : "Are you sure to buy this package?",
+            text              : "Are you sure to donate?",
             showCloseButton   : true,
             showCancelButton  : true,
             confirmButtonText : "Yes"

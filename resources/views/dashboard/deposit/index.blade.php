@@ -64,8 +64,8 @@
 
                             <div>
                                 <ul>
-                                    <li style="list-style-type: circle">Please don’t deposit any other digital assets except <b>USDT(ERC20)</b> to the above address. Otherwise, you may lose your assets permanently.</li>
-                                    <li style="list-style-type: circle"><b>Minimum</b> deposit amount: <b>{{ Helper::config('minimum_deposit') }} USDT(ERC20)</b>. Any deposits less than the minimum will not be credited or refunded.</li>
+                                    <li style="list-style-type: circle">Please don’t deposit any other digital assets except <b>USDT(TRC20)</b> to the above address. Otherwise, you may lose your assets permanently.</li>
+                                    <li style="list-style-type: circle"><b>Minimum</b> deposit amount: <b>{{ Helper::config('minimum_deposit') }} USDT(TRC20)</b>. Any deposits less than the minimum will not be credited or refunded.</li>
                                     <li style="list-style-type: circle">Only Send USDT to this address.</li>
                                 </ul>
                             </div>

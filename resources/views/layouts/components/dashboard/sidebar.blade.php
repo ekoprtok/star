@@ -15,7 +15,7 @@
             <div class="nk-sidebar-content">
                 <div class="nk-sidebar-menu">
                     <ul class="nk-menu">
-                        @if (Auth::user()->role != '9')
+                        @if (Auth::user()->role == '0')
                         <li class="nk-menu-heading">
                             <h6 class="overline-title">Menu</h6>
                         </li>
@@ -63,7 +63,7 @@
                         </li> --}}
                         @endif
 
-                        @if (Auth::user()->role == '9')
+                        @if (Auth::user()->role != '0')
                         <li class="nk-menu-heading">
                             <h6 class="overline-title">Admin Panel</h6>
                         </li>

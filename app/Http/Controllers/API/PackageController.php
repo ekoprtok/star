@@ -176,7 +176,7 @@ class PackageController extends Controller {
         if ($trxPackage) {
             return response()->json([
                 'success' => false,
-                'message' => 'You have buy the same package before'
+                'message' => 'You have donate the same package before'
             ]);
         }
 
@@ -221,7 +221,7 @@ class PackageController extends Controller {
 
         return response()->json([
             'success' => $process ? true : false,
-            'message' => $process ? 'Package is already yours' : 'there was a problem buying the package, please try again in a moment',
+            'message' => $process ? 'Thanks for donate' : 'Error processing data, please try again.',
         ]);
     }
 

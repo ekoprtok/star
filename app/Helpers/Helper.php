@@ -445,7 +445,7 @@ class Helper {
         $id = (string)$id;
         $data = [
             '0' => 'Compliment',
-            '1' => 'Buy',
+            '1' => 'Donate',
         ];
 
         return ($id != '-') ? $data[$id] : $data;
