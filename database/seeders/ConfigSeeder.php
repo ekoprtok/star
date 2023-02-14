@@ -31,7 +31,7 @@ class ConfigSeeder extends Seeder
             [
                 'id'            => Str::orderedUuid(),
                 'key'           => 'withdrawal_min',
-                'value'         => '1.0',
+                'value'         => '25',
                 'created_at'    => date('Y-m-d H:i:s')
             ],
             [

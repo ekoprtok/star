@@ -345,6 +345,16 @@
                         </div>
                     </div>
 
+                    <div class="alert alert-light alert-icon alert-icon mt-2 warning_address" hidden>
+                        <em class="icon ni ni-cross-circle text-danger"></em> You have not added a <b class="text-danger">wallet address</b>, add a wallet address <a href="{{ route('dashboard.wallet.address') }}">here</a>
+                    </div>
+
+                    @if (Auth::user()->is_active_2fa != '1')
+                    <div class="alert alert-light alert-icon alert-icon mt-2">
+                        <em class="icon ni ni-cross-circle text-danger"></em> You have not activated <b class="text-danger">2FA authenticator</b>, activate 2FA authenticator <a href="{{ route('dashboard.authenticator') }}">here</a>
+                    </div>
+                    @endif
+
                     <div class="my-4">
                         <div class="d-flex flex-row align-items-center justify-content-between">
                             <h5 class="title mb-0">Your Packages</h5>
@@ -541,6 +551,7 @@
     <script>
         var user_id       = "{{ Auth::user()->id }}";
         var userPackageId = '';
+        getAddress();
         getMasterDailyChallenge();
 
         $('.master_daily_challenge').change(function () {

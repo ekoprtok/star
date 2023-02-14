@@ -197,4 +197,24 @@
             }
         })
     }
+
+    function getAddress() {
+        $.ajax({
+            url      : '{{ route('wallet.address.get') }}',
+            data     : {
+                user_id : '{{ Auth::user()->id }}'
+            },
+            dataType : 'jSON',
+            success  : function(r) {
+                if (typeof r != 'string') {
+                    // alert
+                    $('.warning_address').attr('hidden', false);
+                    $('.btn-withdraw').attr('disabled', true);
+                }else {
+                    $('input[name="address"]').val(r);
+                }
+
+            }
+        })
+    }
 </script>

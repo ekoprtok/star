@@ -105,6 +105,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // profile
     Route::post('/change-password-process', [ProfileController::class, 'changePassword'])->name('change.password.process');
+    Route::post('/wallet-address-process', [ProfileController::class, 'walletAddressForm'])->name('wallet.address.process');
+    Route::get('/wallet-address-get', [ProfileController::class, 'walletAddressGet'])->name('wallet.address.get');
+    Route::get('/2fa-request', [ProfileController::class, 'authenticatorRequest'])->name('2fa.request');
+    Route::get('/2fa-check', [ProfileController::class, 'authenticatorCheck'])->name('2fa.check');
+    Route::get('/2fa-deactivate', [ProfileController::class, 'authenticatorUnactive'])->name('2fa.deactivate');
 
     // rank
     Route::delete('/rank-delete', [RankController::class, 'rankDelete'])->name('admin.rank.delete');

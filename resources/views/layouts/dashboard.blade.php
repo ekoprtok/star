@@ -18,12 +18,17 @@
 <body class="nk-body npc-crypto bg-white has-sidebar ">
     <div class="nk-app-root">
         <div class="nk-main">
-            @include('layouts.components.dashboard.sidebar')
-            @include('layouts.components.dashboard.subheader')
+            @if (!Route::is('dashboard.otp'))
+                @include('layouts.components.dashboard.sidebar')
+                @include('layouts.components.dashboard.subheader')
+            @endif
+
             <div class="nk-content nk-content-fluid">
                 @yield('content')
             </div>
-            @include('layouts.components.dashboard.footer')
+            @if (!Route::is('dashboard.otp'))
+                @include('layouts.components.dashboard.footer')
+            @endif
         </div>
     </div>
 

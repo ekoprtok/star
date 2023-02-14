@@ -74,6 +74,18 @@
                                 <div class="dropdown-inner">
                                     <ul class="link-list">
                                         <li>
+                                            <a href="{{ route('dashboard.wallet.address') }}">
+                                                <em class="icon ni ni-wallet-saving"></em>
+                                                <span>Wallet Address</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('dashboard.authenticator') }}">
+                                                <em class="icon ni ni-shield"></em>
+                                                <span>Security</span>
+                                            </a>
+                                        </li>
+                                        <li>
                                             <a href="{{ route('dashboard.change.password') }}">
                                                 <em class="icon ni ni-lock-alt"></em>
                                                 <span>Change Password</span>

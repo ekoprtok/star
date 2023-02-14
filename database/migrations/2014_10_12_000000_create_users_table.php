@@ -25,6 +25,9 @@ class CreateUsersTable extends Migration
             $table->string('web_token')->nullable();
             $table->string('ref_temp')->nullable();
             $table->string('deep')->default('0');
+            $table->string('google_secret')->nullable();
+            $table->enum('is_active_2fa', ['0', '1'])->default('0');
+            $table->enum('have_input_2fa', ['0', '1'])->default('0');
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

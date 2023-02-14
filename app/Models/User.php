@@ -28,6 +28,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'web_token',
         'ref_temp',
         'deep',
+        'google_secret',
+        'is_active_2fa',
+        'have_input_2fa'
     ];
 
     /**

@@ -50,7 +50,7 @@ class DashboardController extends Controller {
             'deposit'           => TrxDeposit::where('status', '0')->count(),
             'withdraw'          => TrxWithdrawal::where('status', '0')->count(),
             'internal_transfer' => TrxIntTransfer::where('status', '0')->count(),
-            'member'            => User::where('role', '!=', '9')->count(),
+            'member'            => User::where('role', '0')->count(),
             'notification_count'=> count($notif_data),
             'notification'      => $notif_data,
             'redeem'            => TrxPackageRedeem::where('status', '0')->count(),
@@ -71,7 +71,7 @@ class DashboardController extends Controller {
         }else {
             $where = ['user_id'   => $request->parent_id];
         }
-        $select = ['members.user_id as id', 'members.parent_id', 'users.email as text'];
+        $select = ['members.user_id as id', 'members.parent_id', 'users.username as text'];
         $data   = Member::select($select)->where($where)->leftJoin('users', 'users.id', '=', 'members.user_id')->get();
         if ($data) {
             foreach ($data as $key => $value) {

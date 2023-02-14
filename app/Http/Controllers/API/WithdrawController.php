@@ -23,11 +23,19 @@ class WithdrawController extends Controller {
         $checkTrx   = TrxWithdrawal::selectRaw('SUM(amount) as pending')->where(['user_wallet_id' => $wallet->id, 'status' => '0'])->first();
         $amount     = $request->amount - $fee;
         $amountBal  = $wallet->rbalance_amount - $checkTrx->pending;
+        $minWd      = Helper::config('withdrawal_min');
 
         if ($amount <= 0) {
             return response()->json([
                 'success' => false,
                 'message' => 'Withdrawal request amount must greater than 0'
+            ]);
+        }
+
+        if ($amount < $minWd) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Minimum withdrawal is '.Helper::format_harga($minWd)
             ]);
         }
 

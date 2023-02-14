@@ -423,7 +423,7 @@ class HistoryController extends Controller {
 
         $data       = User::where(function ($query) use ($search) {
             $query->where('email', 'LIKE', '%' . $search . '%');
-        })->where('role', '!=', '9')->offset($offset)
+        })->where('role', '0')->offset($offset)
             ->limit($limit)
             ->orderByDesc('created_at')
             ->get();
@@ -438,7 +438,7 @@ class HistoryController extends Controller {
 
         $dataCount = User::where(function ($query) use ($search) {
             $query->where('email', 'LIKE', '%' . $search . '%');
-        })->count();
+        })->where('role', '0')->count();
 
         return response()->json([
             'draw'            => $draw,

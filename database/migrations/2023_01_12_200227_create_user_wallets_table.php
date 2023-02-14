@@ -17,6 +17,7 @@ class CreateUserWalletsTable extends Migration
             $table->uuid('id')->primary();
             $table->string('user_id');
             $table->float('rbalance_amount', 14, 3);
+            $table->string('wallet_address')->nullable();
             $table->timestamps();
         });
     }

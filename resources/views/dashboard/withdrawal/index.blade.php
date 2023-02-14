@@ -13,6 +13,9 @@
        <div class="nk-block">
         <div class="card card-bordered card-preview">
             <div class="card-inner">
+                <div class="alert alert-light alert-icon alert-icon mt-2 warning_address" hidden>
+                    <em class="icon ni ni-cross-circle text-danger"></em> You have not added a <b class="text-danger">wallet address</b>, add a wallet address <a href="{{ route('dashboard.wallet.address') }}">here</a>
+                </div>
                 <form method="post" id="form">
                     @csrf
                     <div class="row gy-4">
@@ -41,16 +44,23 @@
                                 <small>each withdrawal will be deducted by a fee of <small class="withdrawal_fee"></small>%</small><br>
                                 <small>your available balance <small class="balance_available"></small></small>
                                 <br>
-                                <br>
                                 <label class="form-label">Estimated Value Received</label>
                                 <div class="form-control-wrap">
                                     <h4 class="balance_estimated">0</h4>
+                                </div>
+                                <br>
+                                <div>
+                                    <ul>
+                                        <li style="list-style-type: circle">Minimum withdrawal amount : <b class="withdrawal_min"></b> USDT (TRC20).</li>
+                                        <li style="list-style-type: circle">To ensure the safety of your funds, your withdrawal request will be manually reviewed, if your security strategy or password is changed. Please wait for phone calls or emails from our stuff.</li>
+                                        <li style="list-style-type: circle">Please make sure that your computer and browser are secure and your information is protected from being tampered or leaked.</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-sm-6">
-                            <button class="btn btn-primary">Submit</button>
+                            <button class="btn btn-primary btn-withdraw">Submit</button>
                         </div>
                     </div>
                 </form>
@@ -63,6 +73,7 @@
 
 @push('script')
 <script>
+    getAddress();
     $('input[name="amount"]').keyup(function() {
         const fee     = $('.withdrawal_fee').html();
         let value     = $(this).val();
