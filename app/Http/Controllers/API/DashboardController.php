@@ -14,6 +14,7 @@ use App\Models\TrxPackageRedeem;
 use App\Models\TrxSocialEvent;
 use App\Models\UserWallet;
 use App\Models\Notification;
+use App\Models\UserPackage;
 use App\Models\Member;
 use App\Models\OwnerWallet;
 use Carbon\Carbon;
@@ -112,7 +113,7 @@ class DashboardController extends Controller {
         $user_id     = $request->user_id;
         $user        = User::find($user_id);
         $userWallet  = UserWallet::where('user_id', $user->id)->first();
-        $deposit     = TrxDeposit::where('user_wallet_id', $userWallet->id)->selectRaw('submitted_at, amount as description, status, "Deposit" as type, file_path as file');
+        $deposit     = TrxDeposit::where('user_wallet_id', $userWallet->id)->selectRaw('submitted_at, CONCAT_WS("~", amount,received_amount,notes) as description, status, "Deposit" as type, file_path as file');
         $withdraw    = TrxWithdrawal::where('user_wallet_id', $userWallet->id)->selectRaw('submitted_at, amount as description, status, "Withdrawal" as type, NULL as file');
         $internal    = TrxIntTransfer::where('user_wallet_id', $userWallet->id)
                             ->leftJoin('user_wallets', 'user_wallets.id', '=', 'trx_int_transfers.to_wallet_id')
@@ -139,6 +140,12 @@ class DashboardController extends Controller {
                     $price              = Helper::format_harga((isset($dataAmount[0]) ? $dataAmount[0] : 0));
                     $desc               = (isset($dataAmount[1])) ? $dataAmount[1] : '';
                     $value->description = $price.' '.($value->type == 'Internal Transfer' ? 'to' : 'of').' '.$desc.($value->type == 'Internal Transfer' ? '' : ' package');
+                }elseif($value->type == 'Deposit') {
+                    $dataAmount         = explode('~', $value->description);
+                    $price              = Helper::format_harga((isset($dataAmount[0]) ? $dataAmount[0] : 0));
+                    $received           = Helper::format_harga((isset($dataAmount[1]) ? $dataAmount[1] : 0));
+                    $desc               = isset($dataAmount[2]) ? $dataAmount[2] : '';
+                    $value->description = $price.($value->status == '1' ? ' (received : '.$received.') '.$desc : '');
                 }else {
                     $value->description = ($value->type != 'Package' && $value->type != 'Daily Challenge' && $value->type != 'Social Event') ? Helper::format_harga($value->description) : $value->description;
                 }
@@ -160,6 +167,16 @@ class DashboardController extends Controller {
             'recordsFiltered' => $dataCount,
             'data'            => $data,
             'success'         => true
+        ]);
+    }
+
+    public function checkUsername(Request $request) {
+        $user   = User::where('referral_code', $request->uname)->count();
+        // $check  = UserPackage::where('user_id', $userId)->count();
+
+        return response()->json([
+            'exist'     => ($user > 0) ? true : false,
+            'message'   => ($user > 0) ? '' : 'Referral code does not exist yet',
         ]);
     }
 

@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label class="form-label">Please Upload a Pictire</label>
+                                        <label class="form-label">Please Upload a Picture</label>
                                         <div class="form-control-wrap">
                                             <div class="upload-zone">
                                                 <div class="dz-message" data-dz-message>

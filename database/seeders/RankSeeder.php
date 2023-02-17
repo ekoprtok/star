@@ -27,6 +27,7 @@ class RankSeeder extends Seeder
                 'rreward'               => '0',
                 'rsocial_event'         => '0',
                 'is_contributor'        => 1,
+                'diff_rate'             => 0,
                 'created_at'            => date('Y-m-d H:i:s')
             ],
             [
@@ -40,6 +41,7 @@ class RankSeeder extends Seeder
                 'rreward'               => '250',
                 'rsocial_event'         => '0',
                 'is_contributor'        => 0,
+                'diff_rate'             => 0.05,
                 'created_at'            => date('Y-m-d H:i:s')
             ],
             [
@@ -53,6 +55,7 @@ class RankSeeder extends Seeder
                 'rreward'               => '2500',
                 'rsocial_event'         => '500',
                 'is_contributor'        => 0,
+                'diff_rate'             => 0.075,
                 'created_at'            => date('Y-m-d H:i:s')
             ],
             [
@@ -66,6 +69,7 @@ class RankSeeder extends Seeder
                 'rreward'               => '22500',
                 'rsocial_event'         => '4500',
                 'is_contributor'        => 0,
+                'diff_rate'             => 0.1,
                 'created_at'            => date('Y-m-d H:i:s')
             ],
             [
@@ -79,6 +83,7 @@ class RankSeeder extends Seeder
                 'rreward'               => '187500',
                 'rsocial_event'         => '37500',
                 'is_contributor'        => 0,
+                'diff_rate'             => 0.125,
                 'created_at'            => date('Y-m-d H:i:s')
             ],
             [
@@ -92,6 +97,7 @@ class RankSeeder extends Seeder
                 'rreward'               => '1250000',
                 'rsocial_event'         => '250000',
                 'is_contributor'        => 0,
+                'diff_rate'             => 0.15,
                 'created_at'            => date('Y-m-d H:i:s')
             ],
         ];

@@ -8,6 +8,7 @@ use App\Models\TrxIntTransfer;
 use App\Models\TrxWithdrawal;
 use App\Models\TrxDeposit;
 use App\Models\User;
+use App\Models\Member;
 use App\Models\TrxDailyChallenge;
 use App\Models\TrxDailyBlessing;
 use App\Models\TrxPackage;
@@ -71,10 +72,10 @@ class HistoryController extends Controller {
             foreach ($data as $key => $value) {
                 if ($value->status == '0') {
                     $value->action    = '
-                        <a href="javascript::void(0)" onclick="process(\''.$value->id.'\', \''.$value->user_id.'\', \'1\')">Approve</a>
+                        <a href="javascript:void(0)" onclick="process(\''.$value->id.'\', \''.$value->user_id.'\', \'1\')">Approve</a>
                             &nbsp;
                             &nbsp;
-                        <a href="javascript::void(0)" class="text-danger" onclick="process(\''.$value->id.'\', \''.$value->user_id.'\', \'2\')">Reject</a>
+                        <a href="javascript:void(0)" class="text-danger" onclick="process(\''.$value->id.'\', \''.$value->user_id.'\', \'2\')">Reject</a>
                     ';
                 }else {
                     $value->action = '-';
@@ -156,10 +157,10 @@ class HistoryController extends Controller {
             foreach ($data as $key => $value) {
                 if ($value->status == '0') {
                     $value->action    = '
-                    <a href="javascript::void(0)" onclick="process(\''.$value->id.'\', \'1\', \''.$value->from_id.'\', \''.$value->to_id.'\')">Approve</a>
+                    <a href="javascript:void(0)" onclick="process(\''.$value->id.'\', \'1\', \''.$value->from_id.'\', \''.$value->to_id.'\')">Approve</a>
                     &nbsp;
                     &nbsp;
-                    <a href="javascript::void(0)" class="text-danger" onclick="process(\''.$value->id.'\', \'2\', \''.$value->from_id.'\', \''.$value->to_id.'\')">Reject</a>
+                    <a href="javascript:void(0)" class="text-danger" onclick="process(\''.$value->id.'\', \'2\', \''.$value->from_id.'\', \''.$value->to_id.'\')">Reject</a>
                     ';
                 }else {
                     $value->action = '-';
@@ -241,12 +242,7 @@ class HistoryController extends Controller {
             foreach ($data as $key => $value) {
                 $value->file_path = '<a href="'.asset('uploads/deposit/'.$value->file_path).'" target="_blank">'.$value->file_path.'</a>';
                 if ($value->status == '0') {
-                    $value->action    = '
-                    <a href="javascript::void(0)" onclick="process(\''.$value->id.'\', \'1\', \''.$value->user_wallet_id.'\')">Approve</a>
-                    &nbsp;
-                    &nbsp;
-                    <a href="javascript::void(0)" class="text-danger" onclick="process(\''.$value->id.'\', \'2\', \''.$value->user_wallet_id.'\')">Reject</a>
-                    ';
+                    $value->action    = '<a href="javascript:void(0);" onclick="view(\''.$value->id.'\', \''.$value->user_wallet_id.'\', \''.$value->amount.'\')">View</a>';
                 }else {
                     $value->action = '-';
                 }
@@ -289,10 +285,10 @@ class HistoryController extends Controller {
                 $value->file_path = '<a href="'.asset('uploads/socialEvent/'.$value->file_path).'" target="_blank">'.$value->file_path.'</a>';
                 if ($value->status == '0') {
                     $value->action    = '
-                    <a href="javascript::void(0)" onclick="process(\''.$value->id.'\', \'1\')">Approve</a>
+                    <a href="javascript:void(0)" onclick="process(\''.$value->id.'\', \'1\')">Approve</a>
                     &nbsp;
                     &nbsp;
-                    <a href="javascript::void(0)" class="text-danger" onclick="process(\''.$value->id.'\', \'2\')">Reject</a>
+                    <a href="javascript:void(0)" class="text-danger" onclick="process(\''.$value->id.'\', \'2\')">Reject</a>
                     ';
                 }else {
                     $value->action = '-';
@@ -336,10 +332,10 @@ class HistoryController extends Controller {
                 foreach ($data as $key => $value) {
                     if ($value->status == '0') {
                         $value->action    = '
-                            <a href="javascript::void(0);" onclick="process(\''.$value->id.'\', \'1\', \''.$value->user_wallet_id.'\')">Approve</a>
+                            <a href="javascript:void(0);" onclick="process(\''.$value->id.'\', \'1\', \''.$value->user_wallet_id.'\')">Approve</a>
                             &nbsp;
                             &nbsp;
-                            <a href="javascript::void(0);" class="text-danger" onclick="process(\''.$value->id.'\', \'2\', \''.$value->user_wallet_id.'\')">Reject</a>
+                            <a href="javascript:void(0);" class="text-danger" onclick="process(\''.$value->id.'\', \'2\', \''.$value->user_wallet_id.'\')">Reject</a>
                         ';
                     }else {
                         $value->action = '-';
@@ -386,10 +382,10 @@ class HistoryController extends Controller {
                 $value->proof = ($value->isText == '0') ? '<a href="'.asset('uploads/dailyChallenge/'.$value->file_path).'" target="_blank">'.$value->file_path.'</a>' : $value->file_path;
                 if ($value->status == '0') {
                     $value->action    = '
-                        <a href="javascript::void(0);" onclick="process(\''.$value->id.'\', \'1\')">Approve</a>
+                        <a href="javascript:void(0);" onclick="process(\''.$value->id.'\', \'1\')">Approve</a>
                         &nbsp;
                         &nbsp;
-                        <a href="javascript::void(0);" class="text-danger" onclick="process(\''.$value->id.'\', \'2\')">Reject</a>
+                        <a href="javascript:void(0);" class="text-danger" onclick="process(\''.$value->id.'\', \'2\')">Reject</a>
                     ';
                 }else {
                     $value->action = '-';
@@ -430,8 +426,11 @@ class HistoryController extends Controller {
 
         if ($data) {
             foreach ($data as $key => $value) {
+                $parent                 = Member::where('user_id', $value->id)->first();
+                $parentId               = ($parent) ? $parent->parent_id : 0;
+                $userParent             = User::find($parentId);
                 $value->created_at_f    = Helper::format_date($value->created_at);
-                $value->referral_code_f = ($value->referral_code) ? $value->referral_code : '-';
+                $value->referral_parent = ($userParent) ? $userParent->referral_code : '-';
                 $value->status_f        = '<span class="badge bg-'.Helper::statusUserClass(($value->email_verified_at) ? 1 : 0).'">'.Helper::statusUser(($value->email_verified_at) ? 1 : 0).'</span>';
             }
         }

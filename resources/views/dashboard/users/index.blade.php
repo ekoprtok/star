@@ -17,7 +17,8 @@
                         <thead>
                             <tr>
                                 <th>Email</th>
-                                <th>Referral Code</th>
+                                <th>Username</th>
+                                <th>Parent Ref Code</th>
                                 <th>Status</th>
                                 <th>Registered At</th>
                             </tr>
@@ -44,7 +45,8 @@
         },
         columns: [
             { data: 'email' },
-            { data: 'referral_code_f' },
+            { data: 'username' },
+            { data: 'referral_parent' },
             { data: 'status_f' },
             { data: 'created_at_f' }
         ],

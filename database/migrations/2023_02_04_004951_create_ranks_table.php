@@ -23,6 +23,7 @@ class CreateRanksTable extends Migration
             $table->float('rrank_donation_total', 14, 3);
             $table->float('rreward', 14, 3);
             $table->float('rsocial_event', 14, 3);
+            $table->float('diff_rate', 14, 3);
             $table->boolean('is_contributor')->default(false);
             $table->timestamps();
         });

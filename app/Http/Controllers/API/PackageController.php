@@ -11,6 +11,7 @@ use App\Models\UserWallet;
 use App\Models\HisKindMeter;
 use App\Models\TrxPackageRedeem;
 use App\Models\User;
+use App\Models\AllQueue;
 use Helper;
 
 class PackageController extends Controller {
@@ -219,6 +220,13 @@ class PackageController extends Controller {
         // kindnes from downline
         $process = Helper::kindnesMeterDownline($processPac->id);
 
+        // queue cron job
+        AllQueue::create([
+            'reference_id' => $processTrx->id,
+            'type'         => 'difference_rate',
+            'is_process'   => '0'
+        ]);
+
         return response()->json([
             'success' => $process ? true : false,
             'message' => $process ? 'Thanks for donate' : 'Error processing data, please try again.',
@@ -266,7 +274,7 @@ class PackageController extends Controller {
         }
 
         // add trx package
-        $process = TrxPackage::create([
+        $processTrx = TrxPackage::create([
             'submitted_at' => date('Y-m-d H:i:s'),
             'user_id'      => $checkUser->id,
             'package_id'   => $checkPackage->id,
@@ -276,13 +284,20 @@ class PackageController extends Controller {
         // add package user
         $process = UserPackage::create([
             'user_id'      => $checkUser->id,
-            'rvalue'       => $checkPackage->rvalue,
+            'rvalue'       => $checkPackage->rdonation,
             'package_id'   => $checkPackage->id,
             'package_type' => '0'
         ]);
 
         // set deep user
         $process = Helper::functionUserDeep($checkUser->id);
+
+        // queue cron job
+        AllQueue::create([
+            'reference_id' => $processTrx->id,
+            'type'         => 'difference_rate',
+            'is_process'   => '0'
+        ]);
 
         return response()->json([
             'success' => $process ? true : false,

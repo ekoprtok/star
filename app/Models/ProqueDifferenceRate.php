@@ -6,20 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\UuidTrait;
 
-class TrxDeposit extends Model
+class ProqueDifferenceRate extends Model
 {
     use HasFactory, UuidTrait;
 
     protected $fillable = [
-        'submitted_at',
-        'user_wallet_id',
-        'amount',
-        'file_path',
-        'received_amount',
-        'notes',
-        'status',
-        'responsed_by',
-        'responsed_at',
+        'queue_id',
+        'trx_packages_id',
+        'diff_rate_max',
+        'is_process'
     ];
 
     protected $casts = [

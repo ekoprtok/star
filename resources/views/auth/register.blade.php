@@ -61,6 +61,7 @@
         <div class="form-control-wrap">
             <input id="referral" type="text" placeholder="Enter your referral" class="form-control form-control-lg @error('referral') is-invalid @enderror" name="referral" value="{{ old('referral') ? old('referral') : request()->get('ref') }}" autocomplete="referral">
         </div>
+        <small class="text-danger username_err"></small>
         @error('referral')
             <small class="text-danger" role="alert">{{ $message }}</small>
         @enderror
@@ -73,7 +74,7 @@
         </div>
     </div> --}}
     <div class="form-group">
-        <button class="btn btn-lg btn-primary btn-block">Sign Up</button>
+        <button class="btn btn-lg btn-primary btn-block btn-sign-up">Sign Up</button>
     </div>
 </form><!-- form -->
 <div class="form-note-s2 pt-4"> Already have an account ?
@@ -84,5 +85,30 @@
 @endsection
 
 @push('script')
-
+<script>
+    $("form").submit(function(e){
+        $('.btn-sign-up').attr('disabled', true);
+        e.preventDefault();
+        if ($('#referral').val() != '') {
+            $.ajax({
+                url  : '{{ route('check.username') }}',
+                type : 'POST',
+                data : {
+                    uname : $('#referral').val()
+                },
+                dataType : 'jSON',
+                success  : function (r) {
+                    if (!r.exist) {
+                        $('.username_err').html(r.message);
+                        $('.btn-sign-up').attr('disabled', false);
+                    }else {
+                        e.currentTarget.submit();
+                    }
+                }
+            })
+        }else {
+            e.currentTarget.submit();
+        }
+    });
+</script>
 @endpush

@@ -18,6 +18,8 @@ class CreateTrxDepositsTable extends Migration
             $table->string('submitted_at');
             $table->string('user_wallet_id');
             $table->float('amount', 14, 3);
+            $table->float('received_amount', 14, 3);
+            $table->text('notes')->nullable();
             $table->string('file_path');
             $table->enum('status', ['0', '1', '2'])->default('0');
             $table->string('responsed_by')->nullable();

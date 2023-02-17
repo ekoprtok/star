@@ -54,7 +54,8 @@ class Helper {
             foreach ($parents as $kp => $vp) {
                 $myIndex = ($kp+1);
                 $user    = User::find($value->user_id);
-                if ($myIndex <= $user->deep) {
+                // if ($myIndex <= $user->deep) {
+                if ($myIndex <= 9) {
                     $userParent = User::find($vp);
                     if ($userParent) {
                         // config percent
@@ -223,77 +224,80 @@ class Helper {
 
     public static function initDataUser($userId = 0, $referral = '') {
         // referal member
-        $parent  = User::where('referral_code', $referral)->first();
-        $process = Member::create([
-            'parent_id' => ($parent) ? $parent->id : null,
-            'user_id'   => $userId
-        ]);
-
-        // if ($referral) {
-            // init rank transaction
-            // contributor
-            $contributor       = Rank::where('level', '0')->first();
-            $dataRankTrxContri = [
-                'user_id'                   => $userId,
-                'parent_id'                 => ($parent) ? $parent->id : null,
-                'rank_id'                   => $contributor->id,
-                'direct_donator'            => $contributor->direct_donator,
-                'must_have_dwline'          => $contributor->must_have_dwline,
-                'total_team_donator'        => $contributor->total_team_donator,
-                'rrank_donation_total'      => $contributor->rrank_donation_total,
-                'rreward'                   => $contributor->rreward,
-                'rsocial_event'             => $contributor->rsocial_event,
-                'res_direct_donator'        => 0,
-                'res_must_have_dwline'      => 0,
-                'res_total_team_donator'    => 0,
-                'res_rrank_donation_total'  => 0,
-                'res_rreward'               => 0,
-                'res_rsocial_event'         => 0,
-                'status'                    => '1',
-            ];
-
-            $processContri = RankTransaction::create($dataRankTrxContri);
-
-            // donator
-            $donator          = Rank::where('level', '1')->first();
-            $dataRankTrxDonat = [
-                'user_id'                   => $userId,
-                'parent_id'                 => ($parent) ? $parent->id : null,
-                'rank_id'                   => $donator->id,
-                'direct_donator'            => $donator->direct_donator,
-                'must_have_dwline'          => $donator->must_have_dwline,
-                'total_team_donator'        => $donator->total_team_donator,
-                'rrank_donation_total'      => $donator->rrank_donation_total,
-                'rreward'                   => $donator->rreward,
-                'rsocial_event'             => $donator->rsocial_event,
-                'res_direct_donator'        => 0,
-                'res_must_have_dwline'      => 0,
-                'res_total_team_donator'    => 0,
-                'res_rrank_donation_total'  => 0,
-                'res_rreward'               => 0,
-                'res_rsocial_event'         => 0,
-                'status'                    => '0',
-            ];
-
-            $processDonat = RankTransaction::create($dataRankTrxDonat);
-            // queue cron job
-            AllQueue::create([
-                'reference_id' => $processDonat->id,
-                'type'         => 'rank_register',
-                'is_process'   => '0'
+        $parent      = User::where('referral_code', $referral)->first();
+        $checkMember = Member::where('user_id', $userId)->first();
+        if (!$checkMember) {
+            $process = Member::create([
+                'parent_id' => ($parent) ? $parent->id : null,
+                'user_id'   => $userId
             ]);
-        // }
 
-        // wallet
-        $process = UserWallet::create([
-            'rbalance_amount' => 0,
-            'user_id'         => $userId
-        ]);
+            // if ($referral) {
+                // init rank transaction
+                // contributor
+                $contributor       = Rank::where('level', '0')->first();
+                $dataRankTrxContri = [
+                    'user_id'                   => $userId,
+                    'parent_id'                 => ($parent) ? $parent->id : null,
+                    'rank_id'                   => $contributor->id,
+                    'direct_donator'            => $contributor->direct_donator,
+                    'must_have_dwline'          => $contributor->must_have_dwline,
+                    'total_team_donator'        => $contributor->total_team_donator,
+                    'rrank_donation_total'      => $contributor->rrank_donation_total,
+                    'rreward'                   => $contributor->rreward,
+                    'rsocial_event'             => $contributor->rsocial_event,
+                    'res_direct_donator'        => 0,
+                    'res_must_have_dwline'      => 0,
+                    'res_total_team_donator'    => 0,
+                    'res_rrank_donation_total'  => 0,
+                    'res_rreward'               => 0,
+                    'res_rsocial_event'         => 0,
+                    'status'                    => '1',
+                ];
 
-        $user     = User::find($userId);
-        $token    = $user->createToken('web_token')->plainTextToken;
-        $initRank = Rank::where('level', '0')->first();
-        User::where(['id' => $userId])->update(['web_token' => $token, 'ref_temp' => null, 'rank_id' => $initRank->id]);
+                $processContri = RankTransaction::create($dataRankTrxContri);
+
+                // donator
+                $donator          = Rank::where('level', '1')->first();
+                $dataRankTrxDonat = [
+                    'user_id'                   => $userId,
+                    'parent_id'                 => ($parent) ? $parent->id : null,
+                    'rank_id'                   => $donator->id,
+                    'direct_donator'            => $donator->direct_donator,
+                    'must_have_dwline'          => $donator->must_have_dwline,
+                    'total_team_donator'        => $donator->total_team_donator,
+                    'rrank_donation_total'      => $donator->rrank_donation_total,
+                    'rreward'                   => $donator->rreward,
+                    'rsocial_event'             => $donator->rsocial_event,
+                    'res_direct_donator'        => 0,
+                    'res_must_have_dwline'      => 0,
+                    'res_total_team_donator'    => 0,
+                    'res_rrank_donation_total'  => 0,
+                    'res_rreward'               => 0,
+                    'res_rsocial_event'         => 0,
+                    'status'                    => '0',
+                ];
+
+                $processDonat = RankTransaction::create($dataRankTrxDonat);
+                // queue cron job
+                AllQueue::create([
+                    'reference_id' => $processDonat->id,
+                    'type'         => 'rank_register',
+                    'is_process'   => '0'
+                ]);
+            // }
+
+            // wallet
+            $process = UserWallet::create([
+                'rbalance_amount' => 0,
+                'user_id'         => $userId
+            ]);
+
+            $user     = User::find($userId);
+            $token    = $user->createToken('web_token')->plainTextToken;
+            $initRank = Rank::where('level', '0')->first();
+            User::where(['id' => $userId])->update(['web_token' => $token, 'ref_temp' => null, 'rank_id' => $initRank->id]);
+        }
     }
 
     public static function referralCode() {

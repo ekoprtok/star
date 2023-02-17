@@ -33,6 +33,7 @@
                                 <th>Total Rank Donation</th>
                                 <th>Reward</th>
                                 <th>Social Event</th>
+                                <th>Difference Rate</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -67,6 +68,7 @@
             { data: "rrank_donation_total", className : "text-end" },
             { data: "rreward", className : "text-end" },
             { data: "rsocial_event", className : "text-end" },
+            { data: "diff_rate", className : "text-end" },
             { data: "action", className : "text-center" },
         ],
         ordering : false

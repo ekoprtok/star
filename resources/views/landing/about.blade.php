@@ -42,7 +42,7 @@
                         <ul class="pricing-feature list list-nostyle">
                             <li>Donation : $100</li>
                             <li>Management Fee : $10</li>
-                            <li>Daily Blessing : $0.135/day</li>
+                            <li>Daily Blessing : $0.15/day</li>
                         </ul>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                         <ul class="pricing-feature list list-nostyle">
                             <li>Donation : $1,000</li>
                             <li>Management Fee : $100</li>
-                            <li>Daily Blessing : $8.5/day</li>
+                            <li>Daily Blessing : $2/day</li>
                         </ul>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
                         <ul class="pricing-feature list list-nostyle">
                             <li>Donation : $10,000</li>
                             <li>Management Fee : $750</li>
-                            <li>Daily Blessing : $22.5/day</li>
+                            <li>Daily Blessing : $30/day</li>
                         </ul>
                     </div>
                 </div>
@@ -91,7 +91,7 @@
                         <ul class="pricing-feature list list-nostyle">
                             <li>Donation : $100,000</li>
                             <li>Management Fee : $5000</li>
-                            <li>Daily Blessing : $275/day</li>
+                            <li>Daily Blessing : $400/day</li>
                         </ul>
                     </div>
                 </div>

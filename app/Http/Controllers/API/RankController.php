@@ -30,6 +30,7 @@ class RankController extends Controller {
                 $value->rrank_donation_total = Helper::format_harga($value->rrank_donation_total);
                 $value->rreward              = Helper::format_harga($value->rreward);
                 $value->rsocial_event        = Helper::format_harga($value->rsocial_event);
+                $value->diff_rate            = Helper::format_harga($value->diff_rate, '$', ($value->level == '2' || $value->level == '4' ? 3 : 2));
 
                 $value->action     =
                 '
@@ -85,6 +86,7 @@ class RankController extends Controller {
             'total_team_donator'     => 'required',
             'rrank_donation_total'   => 'required',
             'rreward'                => 'required',
+            'diff_rate'              => 'required',
             'rsocial_event'          => 'required'
         ]);
 
@@ -132,6 +134,7 @@ class RankController extends Controller {
                 'rrank_donation_total'   => $request->rrank_donation_total,
                 'rreward'                => $request->rreward,
                 'rsocial_event'          => $request->rsocial_event,
+                'diff_rate'              => $request->diff_rate,
                 'is_contributor'         => '0'
             ]);
         }else {
@@ -144,6 +147,7 @@ class RankController extends Controller {
                 'rrank_donation_total'   => $request->rrank_donation_total,
                 'rreward'                => $request->rreward,
                 'rsocial_event'          => $request->rsocial_event,
+                'diff_rate'              => $request->diff_rate,
                 'is_contributor'         => '0'
             ]);
         }

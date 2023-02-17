@@ -72,7 +72,7 @@
                         </div>
 
                         <div class="col-sm-6">
-                        <button class="btn btn-primary">Submit</button>
+                            <button class="btn btn-primary btn-process">Submit</button>
                         </div>
                     </div>
                 </form>
@@ -93,13 +93,21 @@
             type: "POST",
             data: $('#form').serialize(),
             dataType: "jSON",
+            beforeSend: function() {
+                $('.btn-process').attr('disabled', true);
+            },
             error: function(request, status, error) {
+                $('.btn-process').attr('disabled', false);
                 showResponseHeader(request);
             },
             success: function(r) {
                 NioApp.Toast(r.message, (r.success ? "success" : "error"), {
                     position: "top-right"
                 });
+
+                setTimeout(() => {
+                    $('.btn-process').attr('disabled', false);
+                }, 1000);
 
                 if (r.success) {
                     setTimeout(() => {
@@ -114,7 +122,7 @@
         NioApp.Dropzone('.upload-zone', {
             url           : '{{ route('deposit.uploadImage') }}',
             maxFiles      : 1,
-            acceptedFiles : 'image/png,image/jpg',
+            acceptedFiles : 'image/jpeg,image/png,application/pdf',
             autoDiscover  : true,
             sending: function(file, xhr, formData) {
                 // formData.append("invoice", $('input[name="invoice"]').val());

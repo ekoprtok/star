@@ -12,8 +12,14 @@ use App\Models\UserWallet;
 class DepositController extends Controller {
 
     public function uploadImage(Request $request) {
-        $filename = time() . '.' . $request->file->extension();
-        $process  = $request->file->move(public_path('uploads/deposit'), $filename);
+        if ($request->file->extension() == 'heic' || $request->file->extension() == 'heif') {
+            $filename = time() . '.' . $request->file->extension();
+            Maestroerror\HeicToJpg::convert("image1.heic")->saveAs("image1.jpg");
+        }else {
+            $filename = time() . '.' . $request->file->extension();
+            $process  = $request->file->move(public_path('uploads/deposit'), $filename);
+        }
+
 
         return response()->json([
             'success' => ($process ? true : false),
@@ -54,14 +60,23 @@ class DepositController extends Controller {
     }
 
     public function adminProcess(Request $request) {
+        if ($request->received_amount <= 0 && $request->status == '1') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Received amount must be greater than 0'
+            ]);
+        }
+
         $depo    = TrxDeposit::find($request->id);
         $process = TrxDeposit::where('id', $request->id)->update([
-            'responsed_by' => $request->user_id,
-            'responsed_at' => date('Y-m-d H:i:s'),
-            'status'       => $request->status
+            'responsed_by'    => $request->user_id,
+            'received_amount' => ($request->status == '1' ? $request->received_amount : 0),
+            'notes'           => $request->notes,
+            'responsed_at'    => date('Y-m-d H:i:s'),
+            'status'          => $request->status
         ]);
 
-        $amount     = Helper::format_harga($depo->amount);
+        $amount     = Helper::format_harga($request->received_amount);
         $oldWallet  = UserWallet::find($request->user_wallet_id);
         if ($request->status == '1') {
 
@@ -70,14 +85,14 @@ class DepositController extends Controller {
                 'trx_id'  => $request->id,
                 'type'    => '1',
                 'user_id' => $oldWallet->user_id,
-                'amount'  => $depo->amount,
+                'amount'  => $request->received_amount,
                 'status'  => 'in'
             ]);
 
             // notif to user
             Helper::sendNotif([
                 'type'          => "deposit",
-                'message'       => "Your deposit of {$amount} was successfully",
+                'message'       => "Your deposit of {$amount} was successfully".($request->notes ? ', with notes : '.$request->notes : ''),
                 'from_user_id'  => "2",
                 'to_user_id'    => $oldWallet->user_id
             ]);
@@ -85,7 +100,7 @@ class DepositController extends Controller {
             // wallet owner
             $process = Helper::createdOwnerWalletHistory([
                 'user_id'   => $oldWallet->user_id,
-                'amount'    => $depo->amount,
+                'amount'    => $request->received_amount,
                 'type'      => '1',
                 'status'    => 'in',
                 'trx_id'    => $request->id,
@@ -95,7 +110,7 @@ class DepositController extends Controller {
             // notif to user
             Helper::sendNotif([
                 'type'          => "deposit",
-                'message'       => "Your deposit of {$amount} was rejected",
+                'message'       => "Your deposit of {$amount} was rejected".($request->notes ? ', with notes : '.$request->notes : ''),
                 'from_user_id'  => "2",
                 'to_user_id'    => $oldWallet->user_id
             ]);

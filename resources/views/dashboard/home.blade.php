@@ -220,7 +220,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-sm-3">
+                            {{-- <div class="col-sm-3">
                                 <div class="card bg-light">
                                     <div class="nk-wgw sm">
                                         <a class="nk-wgw-inner" href="#">
@@ -275,7 +275,7 @@
                                         </a>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
                         </div>
                     </div>

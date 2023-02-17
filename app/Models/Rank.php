@@ -19,7 +19,8 @@ class Rank extends Model
         'rrank_donation_total',
         'rreward',
         'rsocial_event',
-        'is_contributor'
+        'is_contributor',
+        'diff_rate'
     ];
 
     protected $casts = [

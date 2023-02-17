@@ -28,11 +28,13 @@ use App\Http\Controllers\API\SocialEventController;
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::get('/testimoni', [DashboardController::class, 'testimoni'])->name('landing.testimoni');
 Route::post('/tree-list', [DashboardController::class, 'tree'])->name('request.tree');
+Route::post('/check-username', [DashboardController::class, 'checkUsername'])->name('check.username');
 
 Route::prefix('cron')->group(function () {
     Route::get('/loop-trx-rank', [CronJobController::class, 'loopTrxRank'])->name('cron.loop.trx.rank');
     Route::get('/loop-end-donation', [CronJobController::class, 'endOfDonation'])->name('cron.loop.end.donation');
     Route::get('/loop-kindnes-down', [CronJobController::class, 'kindnesMeterDownline'])->name('cron.loop.kindnes.down');
+    Route::get('/loop-rate-dif', [CronJobController::class, 'rateDiff'])->name('cron.loop.rate.diff');
 });
 
 Route::get('/cron', [CronJobController::class, 'index']);

@@ -56,6 +56,12 @@
                                 <small class="text-danger level_err"></small>
                              </div>
 
+                             <div class="form-group">
+                                <label class="form-label">Difference Rate</label>
+                                <input type="number" min="0" step=".001" class="form-control" name="diff_rate" required>
+                                <small class="text-danger diff_rate_err"></small>
+                             </div>
+
                              <a class="btn btn-outline-primary me-1" href="{{ route('admin.rank') }}">Cancel</a>
                             <button class="btn btn-primary">Save</button>
                         </div>
