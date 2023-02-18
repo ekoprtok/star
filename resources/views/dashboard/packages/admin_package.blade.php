@@ -168,7 +168,8 @@
                             url      : "{{ route('admin.package.gift.process') }}",
                             data     : {
                                 package_id : $('.package_id').val(),
-                                user       : $('input[name="user"]').val()
+                                user       : $('input[name="user"]').val(),
+                                admin_id   : '{{ Auth::user()->id }}'
                             },
                             type     : "POST",
                             dataType : "jSON",

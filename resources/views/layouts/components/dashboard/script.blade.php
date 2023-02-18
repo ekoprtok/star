@@ -108,6 +108,7 @@
         return Math.random() * (max - min) + min;
     }
 
+    @if(!Route::is('dashboard.admin.detail.user'))
     // info dashboard
     $.ajax({
         url      : "{{ route('admin.dashboard') }}",
@@ -122,6 +123,7 @@
             setHtmlProps(response)
         }
     })
+    @endif
 </script>
 
 <script>

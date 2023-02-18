@@ -85,6 +85,12 @@
                                 <span class="nk-menu-text">Users</span>
                             </a>
                         </li>
+                        <li class="nk-menu-item">
+                            <a href="{{ route('dashboard.tree.admin') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-folder"></em></span>
+                                <span class="nk-menu-text">Team Tree</span>
+                            </a>
+                        </li>
 
                         <li class="nk-menu-heading">
                             <h6 class="overline-title">Need Approval</h6>

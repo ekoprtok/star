@@ -20,6 +20,7 @@
                                 <th>User</th>
                                 <th>Product</th>
                                 <th>Type</th>
+                                <th>Created By</th>
                             </tr>
                         </thead>
                     </table>
@@ -47,6 +48,7 @@
             { data: 'email' },
             { data: 'name' },
             { data: 'package_type' },
+            { data: 'created_by' },
         ],
         ordering : false
     });

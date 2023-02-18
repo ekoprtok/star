@@ -68,6 +68,25 @@ class CronJobController extends Controller {
                             'isMore'    => $acumRateMax.' => low'
                         ];
 
+                        // add wallet user
+                        $addWalletUser = Helper::createdWalletHistory([
+                            'trx_id'    => $dataTrxPackage->id,
+                            'type'      => '8',
+                            'user_id'   => $firstParentId,
+                            'amount'    => (float)($acumRate * $rDonation),
+                            'status'    => 'in'
+                        ]);
+
+                        // reduce wallet owner
+                        $reduceWalletOwner = Helper::createdOwnerWalletHistory([
+                            'user_id'  => $firstParentId,
+                            'amount'   => (float)($acumRate * $rDonation),
+                            'type'     => '3',
+                            'status'   => 'out',
+                            'trx_id'   => $dataTrxPackage->id,
+                            'insertTo' => 'sys'
+                        ]);
+
                         foreach ($parents as $kp => $vp) {
                             // stop if max rate
                             // if ($acumRateMax >= $configMaxRate) {
@@ -96,7 +115,7 @@ class CronJobController extends Controller {
                             // }
                         }
 
-                        $remainderBalance = Helper::config('diff_rate_max') * $rDonation;
+                        // $remainderBalance = Helper::config('diff_rate_max') * $rDonation;
                         if ($dataInsert) {
                             foreach ($dataInsert as $kd => $vd) {
                                 if ($vd['rate'] > 0) {
@@ -117,26 +136,16 @@ class CronJobController extends Controller {
                                     // reduce wallet owner
                                     $reduceWalletOwner = Helper::createdOwnerWalletHistory([
                                         'user_id'  => $vd['user_id'],
-                                        'amount'   => $vd['ramount'],
+                                        'amount'   => (float)$vd['ramount'],
                                         'type'     => '3',
                                         'status'   => 'out',
                                         'trx_id'   => $dataTrxPackage->id,
                                         'insertTo' => 'sys'
                                     ]);
 
-                                    $remainderBalance -= $vd['ramount'];
+                                    // $remainderBalance -= $vd['ramount'];
                                 }
                             }
-
-                            // add wallet owner
-                            $addWalletOwner = Helper::createdOwnerWalletHistory([
-                                'user_id'  => $dataTrxPackage->user_id,
-                                'amount'   => $remainderBalance,
-                                'type'     => '2',
-                                'status'   => 'in',
-                                'trx_id'   => $dataTrxPackage->id,
-                                'insertTo' => 'sys'
-                            ]);
                         }
                     }
                 }

@@ -16,6 +16,7 @@ use App\Models\UserWallet;
 use App\Models\Notification;
 use App\Models\UserPackage;
 use App\Models\Member;
+use App\Models\Rank;
 use App\Models\OwnerWallet;
 use Carbon\Carbon;
 use Helper;
@@ -25,6 +26,11 @@ class DashboardController extends Controller {
     public function index(Request $request) {
         $id             = $request->id;
         $userWallet     = UserWallet::where('user_id', $id)->first();
+        $userData       = User::find($id);
+        $username       = ($userData) ? $userData->username : '';
+        $rankId         = ($userData) ? $userData->rank_id : '';
+        $dataRank       = Rank::find($rankId);
+        $rank           = ($dataRank) ? $dataRank->name : '-';
         $balance        = ($userWallet) ? Helper::format_harga($userWallet->rbalance_amount) : Helper::format_harga(0);
         $balance_avai   = 0;
         if ($userWallet) {
@@ -62,8 +68,31 @@ class DashboardController extends Controller {
             'social_event'      => TrxSocialEvent::where('status', '0')->count(),
             'balance'           => $balance,
             'balance_available' => Helper::format_harga($balance_avai),
-            'config'            => Helper::config()
+            'config'            => Helper::config(),
+            'username'          => $username,
+            'rank'              => $rank
         ]);
+    }
+
+    public function adminTree(Request $request) {
+        if ($request->id) {
+            $where = ['parent_id' => $request->id];
+        }else {
+            if ($request->parent_id == '-') {
+                $where = ['parent_id'   => null];
+            }else {
+                $where = ['user_id'   => $request->parent_id];
+            }
+        }
+        $select = ['members.user_id as id', 'members.parent_id', 'users.username as text'];
+        $data   = Member::select($select)->where($where)->leftJoin('users', 'users.id', '=', 'members.user_id')->get();
+        if ($data) {
+            foreach ($data as $key => $value) {
+                $value->link = route('dashboard.admin.detail.user', ['id' => $value->id]);
+                $this->setChildAdmin($select, $value);
+            }
+        }
+        return response()->json($data);
     }
 
     public function tree(Request $request) {
@@ -95,6 +124,20 @@ class DashboardController extends Controller {
         }
     }
 
+    public function setChildAdmin($select, $value) {
+        $subWhere         = ['parent_id' => $value->id];
+        $haveChild        = Member::select($select)->leftJoin('users', 'users.id', '=', 'members.user_id')->where($subWhere)->get();
+        $value->state     = ($haveChild->count() > 0) ? 'closed' : 'open';
+        $value->children  = $haveChild;
+
+        if ($value->children) {
+            foreach ($value->children as $k => $v) {
+                $v->link = route('dashboard.admin.detail.user', ['id' => $v->id]);
+                $this->setChildAdmin($select, $v);
+            }
+        }
+    }
+
     public function testimoni() {
         $data = TrxDailyChallenge::select('users.username', 'trx_daily_challenges.file_path')
                         ->leftJoin('daily_challenges', 'daily_challenges.id', '=', 'trx_daily_challenges.dialy_challenge_id')
@@ -114,7 +157,7 @@ class DashboardController extends Controller {
         $user        = User::find($user_id);
         $userWallet  = UserWallet::where('user_id', $user->id)->first();
         $deposit     = TrxDeposit::where('user_wallet_id', $userWallet->id)->selectRaw('submitted_at, CONCAT_WS("~", amount,received_amount,notes) as description, status, "Deposit" as type, file_path as file');
-        $withdraw    = TrxWithdrawal::where('user_wallet_id', $userWallet->id)->selectRaw('submitted_at, amount as description, status, "Withdrawal" as type, NULL as file');
+        $withdraw    = TrxWithdrawal::where('user_wallet_id', $userWallet->id)->selectRaw('submitted_at, CONCAT_WS("~", amount,net_amount,withdrawal_fee) as description, status, "Withdrawal" as type, NULL as file');
         $internal    = TrxIntTransfer::where('user_wallet_id', $userWallet->id)
                             ->leftJoin('user_wallets', 'user_wallets.id', '=', 'trx_int_transfers.to_wallet_id')
                             ->leftJoin('users', 'users.id', '=', 'user_wallets.user_id')
@@ -146,6 +189,12 @@ class DashboardController extends Controller {
                     $received           = Helper::format_harga((isset($dataAmount[1]) ? $dataAmount[1] : 0));
                     $desc               = isset($dataAmount[2]) ? $dataAmount[2] : '';
                     $value->description = $price.($value->status == '1' ? ' (received : '.$received.') '.$desc : '');
+                }elseif($value->type == 'Withdrawal') {
+                    $dataAmount         = explode('~', $value->description);
+                    $amount             = Helper::format_harga((isset($dataAmount[0]) ? $dataAmount[0] : 0));
+                    $received           = Helper::format_harga((isset($dataAmount[1]) ? $dataAmount[1] : 0));
+                    $fee                = Helper::format_harga((isset($dataAmount[2]) ? $dataAmount[2] : 0));
+                    $value->description = $amount.' (net: '.$received.', fee: '.$fee.')';
                 }else {
                     $value->description = ($value->type != 'Package' && $value->type != 'Daily Challenge' && $value->type != 'Social Event') ? Helper::format_harga($value->description) : $value->description;
                 }

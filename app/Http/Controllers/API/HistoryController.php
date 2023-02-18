@@ -117,6 +117,11 @@ class HistoryController extends Controller {
 
         if ($data) {
             foreach ($data as $key => $value) {
+                $user                = User::find($value->user_id);
+                $admin               = User::find($value->responsed_by);
+                $username            = ($user) ? $user->username : '-';
+                $usernameAdmin       = ($admin) ? $admin->username : '-';
+                $value->created_by   = ($value->package_type == '1') ? $username : $usernameAdmin;
                 $value->package_type = Helper::packageType($value->package_type);
             }
         }
@@ -340,7 +345,7 @@ class HistoryController extends Controller {
                     }else {
                         $value->action = '-';
                     }
-                    $value->amount_f  = Helper::format_harga($value->amount);
+                    $value->amount_f  = Helper::format_harga($value->amount).' (net : '.Helper::format_harga($value->net_amount).', fee : '.Helper::format_harga($value->withdrawal_fee).')';
                     $value->status_f  = '<span class="badge bg-'.Helper::invoiceStatusClass($value->status).'">'.Helper::statusApproval($value->status).'</span>';
                 }
             }

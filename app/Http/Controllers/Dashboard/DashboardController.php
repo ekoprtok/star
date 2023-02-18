@@ -24,4 +24,13 @@ class DashboardController extends Controller {
         return view('dashboard.users.balance');
     }
 
+    public function adminTree() {
+        return view('dashboard.users.adminTree');
+    }
+
+    public function detailUser(Request $request) {
+        $id = $request->id;
+        return view('dashboard.users.detailUser', compact('id'));
+    }
+
 }

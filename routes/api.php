@@ -28,6 +28,7 @@ use App\Http\Controllers\API\SocialEventController;
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::get('/testimoni', [DashboardController::class, 'testimoni'])->name('landing.testimoni');
 Route::post('/tree-list', [DashboardController::class, 'tree'])->name('request.tree');
+Route::post('/admin-tree-list', [DashboardController::class, 'adminTree'])->name('request.admin.tree');
 Route::post('/check-username', [DashboardController::class, 'checkUsername'])->name('check.username');
 
 Route::prefix('cron')->group(function () {

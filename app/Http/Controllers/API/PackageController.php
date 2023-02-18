@@ -278,6 +278,7 @@ class PackageController extends Controller {
             'submitted_at' => date('Y-m-d H:i:s'),
             'user_id'      => $checkUser->id,
             'package_id'   => $checkPackage->id,
+            'responsed_by' => $request->admin_id,
             'package_type' => '0'
         ]);
 

@@ -8,7 +8,13 @@
                 <div class="nk-block-between-md g-4">
                     <div class="nk-block-head-content">
                         <div class="nk-block-des">
-                            <p>Welcome!</p>
+                            @if (Auth::user()->role == '0')
+                                <p>Welcome! <span class="username"></span> | <span class="rank"></span></p>
+                            @endif
+
+                            @if (Auth::user()->role != '0')
+                                <p>Welcome!</p>
+                            @endif
                         </div>
                     </div>
                     @if (Auth::user()->role == '0')
@@ -339,7 +345,7 @@
                                 </div>
                                 <div class="nk-wg7-foot">
                                     <span class="nk-wg7-note">Last activity at
-                                        <span>{{ Helper::format_date(date('Y-m-d H:i:s'), 'l, d M Y') }}</span></span>
+                                        <span>{{ Helper::format_date(date('Y-m-d H:i:s'), 'l, d M Y H:i') }}</span></span>
                                 </div>
                             </div>
                         </div>
