@@ -87,26 +87,6 @@
                     for (let inx      = 0; inx <= (r.master.length -1); inx++) {
                         let item      = r.master[inx];
                         let value     = r.data.find(it => it.package_id == item.id);
-                        let menu      = '';
-                        let compliment= '';
-                        if (value) {
-                            menu += `
-                                <li>
-                                    <a class="dropdown-item ${value && (value?.package_type != '0') ? '' : 'disabled'}" href="javascript:void(0);" onclick="blessing('${item.id}', '${user_id}', '${item.amount}')">Daily Blessing</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item ${value && (value?.package_type != '0') ? '' : 'disabled'}" href="javascript:void(0);" onclick="challenge('${item.id}')">Daily Challenge</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item ${value && (value?.percentage > 0) ? '' : 'disabled'}" href="javascript:void(0)" onclick="redeemGift('${value?.id}')">Redeem</a>
-                                </li>
-                            `;
-
-                        }
-
-                        if (value && (value?.package_type == '0')) {
-                            compliment = '<span class="badge bg-light text-dark">Compliment</span>';
-                        }
 
                         content += `
                             <div class="col-lg-3 col-12">
@@ -119,16 +99,6 @@
                                             </div>
                                             <div class="gauge-container">
                                                 <div class="gauge" ${value ? 'data-value="'+value.percentage+'"' : 'data-value="0"'}></div>
-                                            </div>
-                                            <div class="d-flex justify-content-center align-items-center">
-                                                <div class="dropdown">
-                                                    <button class="px-5 btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        Menu
-                                                    </button>
-                                                    <ul class="dropdown-menu menu-custom" aria-labelledby="dropdownMenuButton1">
-                                                        ${menu}
-                                                    </ul>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>

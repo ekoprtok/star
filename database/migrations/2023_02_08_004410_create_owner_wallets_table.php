@@ -16,8 +16,8 @@ class CreateOwnerWalletsTable extends Migration
         Schema::create('owner_wallets', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('user_id');
-            $table->float('rbalance_amount');
-            $table->float('rbalance_amount_real');
+            $table->float('rbalance_amount', 14, 3);
+            $table->float('rbalance_amount_real', 14, 3);
             $table->timestamps();
         });
     }

@@ -33,4 +33,8 @@ class DashboardController extends Controller {
         return view('dashboard.users.detailUser', compact('id'));
     }
 
+    public function adminBalance() {
+        return view('dashboard.users.balanceAdmin');
+    }
+
 }

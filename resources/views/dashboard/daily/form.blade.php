@@ -27,8 +27,8 @@
                         </div>
 
                         <div class="form-group">
-                           <label class="form-label">Point</label>
-                           <input type="number" step=".01" min="0" class="form-control" name="point" max="100" required>
+                           <label class="form-label">Rate</label>
+                           <input type="number" step=".01" min="0" class="form-control" name="point" required>
                            <small class="text-danger point_err"></small>
                         </div>
 

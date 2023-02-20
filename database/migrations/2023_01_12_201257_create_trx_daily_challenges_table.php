@@ -20,6 +20,7 @@ class CreateTrxDailyChallengesTable extends Migration
             $table->string('package_id');
             $table->string('dialy_challenge_id');
             $table->string('file_path')->nullable();
+            $table->float('amount', 14, 3);
             $table->enum('status', ['0', '1', '2'])->default('0');
             $table->string('responsed_by')->nullable();
             $table->string('responsed_at')->nullable();

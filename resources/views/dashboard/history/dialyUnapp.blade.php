@@ -21,6 +21,7 @@
                                 <th>User</th>
                                 <th>Package</th>
                                 <th>Proof</th>
+                                <th>Amount</th>
                                 <th>Type</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -32,6 +33,23 @@
        </div>
     </div>
  </div>
+
+<div class="modal fade" id="modalProof" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Proof</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center fs-5">
+            <img src="" class="img-proof">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
 @endsection
 
 @push('script')
@@ -53,6 +71,7 @@
             { data: 'email' },
             { data: 'name' },
             { data: 'proof' },
+            { data: 'amount' },
             { data: 'isText' },
             { data: 'status', className : 'text-center' },
             { data: 'action', className : 'text-center' },
@@ -91,6 +110,11 @@
                 })
             }
         })
+    }
+
+    function modalPop(url) {
+        $('#modalProof').modal('show');
+        $('.img-proof').attr('src', url);
     }
 </script>
 @endpush

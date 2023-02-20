@@ -99,7 +99,7 @@
             NioApp.Dropzone('.upload-zone', {
                 url: '{{ route('social.event.uploadImage') }}',
                 maxFiles: 1,
-                acceptedFiles: 'image/png,image/jpg',
+                acceptedFiles: 'image/jpeg,image/png',
                 autoDiscover: true,
                 sending: function(file, xhr, formData) {
                     // formData.append("invoice", $('input[name="invoice"]').val());

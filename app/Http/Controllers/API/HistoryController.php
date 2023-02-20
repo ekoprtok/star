@@ -80,8 +80,9 @@ class HistoryController extends Controller {
                 }else {
                     $value->action = '-';
                 }
-                $value->ramount = Helper::format_harga($value->ramount);
-                $value->status  = '<span class="badge bg-'.Helper::invoiceStatusClass($value->status).'">'.Helper::statusApproval($value->status).'</span>';
+                $value->ramount     = Helper::format_harga($value->ramount);
+                $value->description = $value->kindeness_percen.'% x '.Helper::format_harga($value->rdonation).' x '.$value->redeem_rate.'%';
+                $value->status      = '<span class="badge bg-'.Helper::invoiceStatusClass($value->status).'">'.Helper::statusApproval($value->status).'</span>';
             }
         }
 
@@ -245,7 +246,7 @@ class HistoryController extends Controller {
 
         if ($data) {
             foreach ($data as $key => $value) {
-                $value->file_path = '<a href="'.asset('uploads/deposit/'.$value->file_path).'" target="_blank">'.$value->file_path.'</a>';
+                $value->file_path = '<a href="javascript:void(0)" onclick="modalPop(\''.asset('uploads/deposit/'.$value->file_path).'\')">'.$value->file_path.'</a>';
                 if ($value->status == '0') {
                     $value->action    = '<a href="javascript:void(0);" onclick="view(\''.$value->id.'\', \''.$value->user_wallet_id.'\', \''.$value->amount.'\')">View</a>';
                 }else {
@@ -287,7 +288,7 @@ class HistoryController extends Controller {
 
         if ($data) {
             foreach ($data as $key => $value) {
-                $value->file_path = '<a href="'.asset('uploads/socialEvent/'.$value->file_path).'" target="_blank">'.$value->file_path.'</a>';
+                $value->file_path = '<a href="javascript:void(0)" onclick="modalPop(\''.asset('uploads/socialEvent/'.$value->file_path).'\')" >'.$value->file_path.'</a>';
                 if ($value->status == '0') {
                     $value->action    = '
                     <a href="javascript:void(0)" onclick="process(\''.$value->id.'\', \'1\')">Approve</a>
@@ -345,7 +346,7 @@ class HistoryController extends Controller {
                     }else {
                         $value->action = '-';
                     }
-                    $value->amount_f  = Helper::format_harga($value->amount).' (net : '.Helper::format_harga($value->net_amount).', fee : '.Helper::format_harga($value->withdrawal_fee).')';
+                    $value->amount_f  = Helper::format_harga($value->amount).' (net : '.Helper::format_harga($value->net_amount, '$', 3).', fee : '.Helper::format_harga($value->withdrawal_fee, '$', 3).')';
                     $value->status_f  = '<span class="badge bg-'.Helper::invoiceStatusClass($value->status).'">'.Helper::statusApproval($value->status).'</span>';
                 }
             }
@@ -384,7 +385,7 @@ class HistoryController extends Controller {
 
         if ($data) {
             foreach ($data as $key => $value) {
-                $value->proof = ($value->isText == '0') ? '<a href="'.asset('uploads/dailyChallenge/'.$value->file_path).'" target="_blank">'.$value->file_path.'</a>' : $value->file_path;
+                $value->proof = ($value->isText == '0') ? '<a href="javascript:void(0)" onclick="modalPop(\''.asset('uploads/dailyChallenge/'.$value->file_path).'\')">'.$value->file_path.'</a>' : $value->file_path;
                 if ($value->status == '0') {
                     $value->action    = '
                         <a href="javascript:void(0);" onclick="process(\''.$value->id.'\', \'1\')">Approve</a>
@@ -396,6 +397,7 @@ class HistoryController extends Controller {
                     $value->action = '-';
                 }
 
+                $value->amount = Helper::format_harga($value->amount);
                 $value->isText = ($value->isText == '0') ? 'Social Event' : 'Testimoni';
                 $value->status = '<span class="badge bg-'.Helper::invoiceStatusClass($value->status).'">'.Helper::statusApproval($value->status).'</span>';
             }

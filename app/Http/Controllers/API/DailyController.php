@@ -49,6 +49,11 @@ class DailyController extends Controller {
 
     public function dailyChallenge() {
         $data = DailyChallenge::orderByDesc('created_at')->get();
+        if ($data) {
+            foreach ($data as $key => $value) {
+                $value->point_f = Helper::format_harga($value->point);
+            }
+        }
         return response()->json([
             'success' => true,
             'data'    => $data
@@ -110,6 +115,7 @@ class DailyController extends Controller {
 
     public function setAttrDaily($value, $key) {
         $value->no         = $key + 1;
+        $value->point      = Helper::format_harga($value->point);
         $value->isText     = ($value->isText == '1') ? 'Text' : 'File';
         $value->action     =
             '
@@ -188,6 +194,7 @@ class DailyController extends Controller {
         $validated = $request->validate([
             'package_id'  => 'required',
             'user_id'     => 'required',
+            'rate'        => 'required',
             'text_review' => ($dataDaily->isText == '1' ? 'required|min:8' : ''),
             'file_path'   => ($dataDaily->isText == '1' ? '' : 'required|image'),
         ]);
@@ -219,6 +226,7 @@ class DailyController extends Controller {
             'package_id'            => $request->package_id,
             'dialy_challenge_id'    => $request->dialy_challenge_id,
             'file_path'             => ($dataDaily->isText == '1') ? $request->text_review : $filename,
+            'amount'                => $dataDaily->point,
             'status'                => '0'
         ];
 
@@ -242,23 +250,28 @@ class DailyController extends Controller {
 
         if ($request->status == '1') {
 
-            // kind meter
-            $process = Helper::createdHisKindMeter([
-                'user_id'      => $data->user_id,
-                'package_id'   => $data->package_id,
-                'percentage'   => Helper::kindMeterCal($challenge->point, $package->rdonation),
-                'type'         => '2',
-                'status'       => '0'
+            $process = Helper::createdWalletHistory([
+                'trx_id'  => $request->id,
+                'type'    => '11',
+                'user_id' => $data->user_id,
+                'amount'  => $data->amount,
+                'status'  => 'in'
             ]);
 
-            // add knes meter
-            $dataTrxPackage = TrxPackage::where(['user_id' => $data->user_id, 'package_id' => $data->package_id])->first();
-            $process        = Helper::createdEndOfDonation($dataTrxPackage->id);
+            $process = Helper::createdOwnerWalletHistory([
+                'trx_id'  => $request->id,
+                'type'    => '9',
+                'user_id' => $data->user_id,
+                'amount'  => $data->amount,
+                'status'  => 'out',
+                'insertTo'=> 'sys'
+            ]);
 
             // notif to user
+            $rateReceived = Helper::format_harga($challenge->point);
             Helper::sendNotif([
                 'type'          => "daily_challenge",
-                'message'       => "Your request daily challenge of {$data->name} was approved",
+                'message'       => "Your request daily challenge of {$data->name} was approved, and you received for {$rateReceived}",
                 'from_user_id'  => "2",
                 'to_user_id'    => $data->user_id
             ]);

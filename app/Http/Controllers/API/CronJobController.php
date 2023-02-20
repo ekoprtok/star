@@ -68,24 +68,24 @@ class CronJobController extends Controller {
                             'isMore'    => $acumRateMax.' => low'
                         ];
 
-                        // add wallet user
-                        $addWalletUser = Helper::createdWalletHistory([
-                            'trx_id'    => $dataTrxPackage->id,
-                            'type'      => '8',
-                            'user_id'   => $firstParentId,
-                            'amount'    => (float)($acumRate * $rDonation),
-                            'status'    => 'in'
-                        ]);
+                        // // add wallet user
+                        // $addWalletUser = Helper::createdWalletHistory([
+                        //     'trx_id'    => $dataTrxPackage->id,
+                        //     'type'      => '8',
+                        //     'user_id'   => $firstParentId,
+                        //     'amount'    => (float)($acumRate * $rDonation),
+                        //     'status'    => 'in'
+                        // ]);
 
-                        // reduce wallet owner
-                        $reduceWalletOwner = Helper::createdOwnerWalletHistory([
-                            'user_id'  => $firstParentId,
-                            'amount'   => (float)($acumRate * $rDonation),
-                            'type'     => '3',
-                            'status'   => 'out',
-                            'trx_id'   => $dataTrxPackage->id,
-                            'insertTo' => 'sys'
-                        ]);
+                        // // reduce wallet owner
+                        // $reduceWalletOwner = Helper::createdOwnerWalletHistory([
+                        //     'user_id'  => $firstParentId,
+                        //     'amount'   => (float)($acumRate * $rDonation),
+                        //     'type'     => '3',
+                        //     'status'   => 'out',
+                        //     'trx_id'   => $dataTrxPackage->id,
+                        //     'insertTo' => 'sys'
+                        // ]);
 
                         foreach ($parents as $kp => $vp) {
                             // stop if max rate

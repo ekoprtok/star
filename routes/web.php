@@ -46,6 +46,10 @@ Route::prefix('admin-tree')->middleware(['auth','verified','checkLogin'])->group
     Route::get('/', [DashboardController::class, 'adminTree'])->name('dashboard.tree.admin');
 });
 
+Route::prefix('admin-balance')->middleware(['auth','verified','checkLogin'])->group(function () {
+    Route::get('/', [DashboardController::class, 'adminBalance'])->name('admin.balance');
+});
+
 Route::prefix('detail-user')->middleware(['auth','verified','checkLogin'])->group(function () {
     Route::get('/{id}', [DashboardController::class, 'detailUser'])->name('dashboard.admin.detail.user');
 });

@@ -110,19 +110,24 @@
 
     @if(!Route::is('dashboard.admin.detail.user'))
     // info dashboard
-    $.ajax({
-        url      : "{{ route('admin.dashboard') }}",
-        data     : {
-            id : "{{ Auth::user()->id }}"
-        },
-        dataType : 'jSON',
-        error: function(request, status, error) {
-            showResponseHeader(request);
-        },
-        success: function(response) {
-            setHtmlProps(response)
-        }
-    })
+    getDashboard();
+    function getDashboard(start = null, end = null) {
+        $.ajax({
+            url      : "{{ route('admin.dashboard') }}",
+            data     : {
+                id : "{{ Auth::user()->id }}",
+                startDate : start,
+                endDate   : end
+            },
+            dataType : 'jSON',
+            error: function(request, status, error) {
+                showResponseHeader(request);
+            },
+            success: function(response) {
+                setHtmlProps(response)
+            }
+        })
+    }
     @endif
 </script>
 
@@ -193,7 +198,7 @@
             success  : function (r) {
                 let option = '<option value="">Select Type</option>';
                 r.data.map((item, index) => {
-                    option += `<option value="${item.id}" input-type="${item.isText}">${item.name}</option>`;
+                    option += `<option value="${item.id}" input-type="${item.isText}" rt="${item.point}" rt_f="${item.point_f}">${item.name}</option>`;
                 })
                 $('.master_daily_challenge').html(option);
             }

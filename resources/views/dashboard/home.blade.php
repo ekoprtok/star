@@ -200,22 +200,39 @@
 
                     <div class="my-3">
                         <div class="nk-block-head-xs">
-                            <div class="nk-block-between-md g-2">
-                                <div class="nk-block-head-content">
+                            <div class="">
+                                <div class="d-flex flex-row align-items-center justify-content-between">
                                     <h5 class="nk-block-title title">Income</h5>
+                                    <div class="d-flex flex-row align-items-center">
+                                        <div class="form-group mb-0 d-flex align-items-center flex-row me-2">
+                                            <label class="me-2">Start</label>
+                                            <input class="form-control" name="startDate" type="date">
+                                        </div>
+
+                                        <div class="form-group mb-0 d-flex align-items-center flex-row me-2">
+                                            <label class="me-2">End</label>
+                                            <input class="form-control" name="endDate" type="date">
+                                        </div>
+
+                                        <div>
+                                            <button class="btn btn-primary startFilter">Apply</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                         <div class="row g-2">
-                            <div class="col-sm-3">
+
+                            <div class="col-sm-2">
                                 <div class="card bg-light">
                                     <div class="nk-wgw sm">
-                                        <a class="nk-wgw-inner" href="#">
+                                        <a class="nk-wgw-inner">
                                             <div class="nk-wgw-name">
-                                                <h5 class="nk-wgw-title title">Current Balance</h5>
+                                                <h5 class="nk-wgw-title title">Total Deposit</h5>
                                             </div>
                                             <div class="nk-wgw-balance">
-                                                <div class="current_balance fw-500 fs-5">
+                                                <div class="t_deposit fw-500 fs-5">
                                                     <div class="spinner-border spinner-border-sm" role="status">
                                                         <span class="visually-hidden">Loading...</span>
                                                     </div>
@@ -226,15 +243,15 @@
                                 </div>
                             </div>
 
-                            {{-- <div class="col-sm-3">
+                            <div class="col-sm-2">
                                 <div class="card bg-light">
                                     <div class="nk-wgw sm">
-                                        <a class="nk-wgw-inner" href="#">
+                                        <a class="nk-wgw-inner">
                                             <div class="nk-wgw-name">
-                                                <h5 class="nk-wgw-title title">Daily Income</h5>
+                                                <h5 class="nk-wgw-title title">Total System Fund</h5>
                                             </div>
                                             <div class="nk-wgw-balance">
-                                                <div class="daily_income fw-500 fs-5">
+                                                <div class="t_system fw-500 fs-5">
                                                     <div class="spinner-border spinner-border-sm" role="status">
                                                         <span class="visually-hidden">Loading...</span>
                                                     </div>
@@ -245,15 +262,15 @@
                                 </div>
                             </div>
 
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                                 <div class="card bg-light">
                                     <div class="nk-wgw sm">
-                                        <a class="nk-wgw-inner" href="#">
+                                        <a class="nk-wgw-inner">
                                             <div class="nk-wgw-name">
-                                                <h5 class="nk-wgw-title title">Weekly Income</h5>
+                                                <h5 class="nk-wgw-title title">Total Admin Fund</h5>
                                             </div>
                                             <div class="nk-wgw-balance">
-                                                <div class="weekly_income fw-500 fs-5">
+                                                <div class="t_admin fw-500 fs-5">
                                                     <div class="spinner-border spinner-border-sm" role="status">
                                                         <span class="visually-hidden">Loading...</span>
                                                     </div>
@@ -264,15 +281,15 @@
                                 </div>
                             </div>
 
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                                 <div class="card bg-light">
                                     <div class="nk-wgw sm">
-                                        <a class="nk-wgw-inner" href="#">
+                                        <a class="nk-wgw-inner">
                                             <div class="nk-wgw-name">
-                                                <h5 class="nk-wgw-title title">Monthly Income</h5>
+                                                <h5 class="nk-wgw-title title">Total Donate</h5>
                                             </div>
                                             <div class="nk-wgw-balance">
-                                                <div class="monthly_income fw-500 fs-5">
+                                                <div class="t_donate fw-500 fs-5">
                                                     <div class="spinner-border spinner-border-sm" role="status">
                                                         <span class="visually-hidden">Loading...</span>
                                                     </div>
@@ -281,11 +298,49 @@
                                         </a>
                                     </div>
                                 </div>
-                            </div> --}}
+                            </div>
+
+                            <div class="col-sm-2">
+                                <div class="card bg-light">
+                                    <div class="nk-wgw sm">
+                                        <a class="nk-wgw-inner">
+                                            <div class="nk-wgw-name">
+                                                <h5 class="nk-wgw-title title">Total Withdrawal</h5>
+                                            </div>
+                                            <div class="nk-wgw-balance">
+                                                <div class="t_wd fw-500 fs-5">
+                                                    <div class="spinner-border spinner-border-sm" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2">
+                                <div class="card bg-light">
+                                    <div class="nk-wgw sm">
+                                        <a class="nk-wgw-inner" title="daily blessing, reward, social event, different rate, package redeem, end of donation">
+                                            <div class="nk-wgw-name d-flex flex-row justify-content-between align-items-center">
+                                                <h5 class="nk-wgw-title title">Total Bonus etc</h5>
+                                                <i class="ni ni-info"></i>
+                                            </div>
+                                            <div class="nk-wgw-balance">
+                                                <div class="t_bonus fw-500 fs-5">
+                                                    <div class="spinner-border spinner-border-sm" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
                     </div>
-
                     {{-- <div class="my-3">
                         <div class="nk-block-head-xs">
                             <div class="nk-block-between-md g-2">
@@ -386,9 +441,9 @@
                                         <h5 class="title">Refer Us & Earn</h5>
                                         <div class="title-sub">Use the bellow link to invite your friends.</div>
                                     </div>
-                                    <div class="nk-refwg-action">
+                                    {{-- <div class="nk-refwg-action">
                                         <a href="#" class="btn btn-primary">Invite</a>
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 <div class="nk-refwg-url">
                                     <div class="form-control-wrap">
@@ -501,12 +556,17 @@
                             <span class="form-control">{{ date('d F Y') }}</span>
                             <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                             <input type="hidden" name="package_id">
+                            <input type="hidden" name="rate">
                         </div>
                         <div class="form-group mb-2">
                             <label class="mb-1">Daily Challenge</label>
                             <select class="form-select master_daily_challenge" name="dialy_challenge_id" required>
 
                             </select>
+                        </div>
+                        <div class="form-group mb-2 rate_container" hidden>
+                            <label class="mb-1">Rate</label>
+                            <span class="form-control rate"></span>
                         </div>
                         <div class="typeInput" hidden>
                             <div class="form-group mb-2 file" hidden>
@@ -549,6 +609,23 @@
           </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modalProof" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Proof</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center fs-5">
+                <img src="" class="img-proof">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+    </div>
 @endsection
 
 @push('script')
@@ -563,6 +640,8 @@
         $('.master_daily_challenge').change(function () {
             let dialy_challenge_id = $(this).val();
             let isType             = $('.master_daily_challenge option:selected').attr('input-type');
+            let rate_f             = $('.master_daily_challenge option:selected').attr('rt_f');
+            let rate               = $('.master_daily_challenge option:selected').attr('rt');
             $('.write').attr('hidden', (isType == '1' ? false : true));
             $('textarea[name="text_review"]').attr('required', (isType == '1' ? true : false));
 
@@ -572,6 +651,10 @@
 
             $('input[name="file_path"]').val('');
             $('.file_path_err,.text_review_err').html('');
+
+            $('.rate_container').attr('hidden', false);
+            $('input[name="rate"]').val(rate);
+            $('.rate').html(rate_f);
         });
 
         $.ajax({
@@ -729,6 +812,7 @@
             $('select[name="dialy_challenge_id"]').val('');
             $('select[name="dialy_challenge_id"]').val('');
             $('.typeInput').attr('hidden', true);
+            $('.rate_container').attr('hidden', true);
             $('.file_path_err,.text_review_err').html('');
         });
 
@@ -789,5 +873,19 @@
                 }
             })
         });
+
+        function modalPop(url) {
+            $('#modalProof').modal('show');
+            $('.img-proof').attr('src', url);
+        }
+
+        $('.startFilter').click(function () {
+            $('.t_deposit,.t_system,.t_admin,.t_donate,.t_wd,.t_bonus').html(`
+                <div class="spinner-border spinner-border-sm" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            `);
+            getDashboard($('input[name="startDate"]').val(), $('input[name="endDate"]').val());
+        })
     </script>
 @endpush

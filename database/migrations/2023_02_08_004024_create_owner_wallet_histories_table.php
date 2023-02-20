@@ -20,7 +20,7 @@ class CreateOwnerWalletHistoriesTable extends Migration
             $table->string('trx_user_id');
             $table->string('type');
             $table->string('owner_wallet_id');
-            $table->string('amount');
+            $table->float('amount', 14, 3);
             $table->enum('status', ['in', 'out'])->default('in');
             $table->timestamps();
         });

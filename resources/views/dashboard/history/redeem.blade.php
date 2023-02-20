@@ -20,6 +20,7 @@
                                 <th>User</th>
                                 <th>Package</th>
                                 <th>Amount</th>
+                                <th>Description</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -50,6 +51,7 @@
             { data: 'email' },
             { data: 'name' },
             { data: 'ramount', className : 'text-end' },
+            { data: 'description' },
             { data: 'status', className : 'text-center' },
             { data: 'action', className : 'text-center' },
         ],

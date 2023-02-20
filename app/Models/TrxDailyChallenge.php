@@ -16,6 +16,7 @@ class TrxDailyChallenge extends Model
         'package_id',
         'dialy_challenge_id',
         'file_path',
+        'amount',
         'status',
         'responsed_by',
         'responsed_at',

@@ -18,12 +18,17 @@ use App\Models\UserPackage;
 use App\Models\Member;
 use App\Models\Rank;
 use App\Models\OwnerWallet;
+use App\Models\UserWalletHistory;
+use App\Models\OwnerWalletHistory;
+use App\Models\OwnerWalletRealHistory;
 use Carbon\Carbon;
 use Helper;
 
 class DashboardController extends Controller {
 
     public function index(Request $request) {
+        $startDate      = ($request->startDate) ? $request->startDate :  null;
+        $endDate        = ($request->endDate) ? $request->endDate : null;
         $id             = $request->id;
         $userWallet     = UserWallet::where('user_id', $id)->first();
         $userData       = User::find($id);
@@ -45,13 +50,21 @@ class DashboardController extends Controller {
             }
         }
 
-        $dataDepoDaily   = TrxDeposit::selectRaw('SUM(amount) as amount')->whereDate('submitted_at', date('Y-m-d'))->first();
-        $dataDepoMonth   = TrxDeposit::selectRaw('SUM(amount) as amount')->whereMonth('submitted_at', date('m'))->whereYear('submitted_at', date('Y'))->first();
-        $dataDepoWeekly  = TrxDeposit::selectRaw('SUM(amount) as amount')
-                                                        ->whereBetween('submitted_at', [Carbon::now()->subWeek()->format("Y-m-d H:i:s"), Carbon::now()])
-                                                        ->first();
-
-        $balanceOwner   = OwnerWallet::first();
+        if ($startDate && $endDate) {
+            $dataDepo   = UserWalletHistory::selectRaw('SUM(amount) as amount')->whereIn('type', ['1'])->whereBetween('created_at', [$startDate, $endDate])->first();
+            $wSystem    = OwnerWalletHistory::selectRaw('SUM(amount) as amount')->whereIn('type', ['1','4','5','6'])->whereBetween('created_at', [$startDate, $endDate])->first();
+            $wAdmin     = OwnerWalletRealHistory::selectRaw('SUM(amount) as amount')->whereIn('type', ['4'])->whereBetween('created_at', [$startDate, $endDate])->first();
+            $dataDonate = UserWalletHistory::selectRaw('SUM(amount) as amount')->where('type', '4')->whereBetween('created_at', [$startDate, $endDate])->first();
+            $dataWD     = UserWalletHistory::selectRaw('SUM(amount) as amount')->where('type', '2')->whereBetween('created_at', [$startDate, $endDate])->first();
+            $dataBonus  = UserWalletHistory::selectRaw('SUM(amount) as amount')->whereIn('type', ['5','6','7','8','9','10'])->whereBetween('created_at', [$startDate, $endDate])->first();
+        }else {
+            $dataDepo   = UserWalletHistory::selectRaw('SUM(amount) as amount')->whereIn('type', ['1'])->first();
+            $wSystem    = OwnerWalletHistory::selectRaw('SUM(amount) as amount')->whereIn('type', ['1','4','5','6'])->first();
+            $wAdmin     = OwnerWalletRealHistory::selectRaw('SUM(amount) as amount')->whereIn('type', ['4'])->first();
+            $dataDonate = UserWalletHistory::selectRaw('SUM(amount) as amount')->where('type', '4')->first();
+            $dataWD     = UserWalletHistory::selectRaw('SUM(amount) as amount')->where('type', '2')->first();
+            $dataBonus  = UserWalletHistory::selectRaw('SUM(amount) as amount')->whereIn('type', ['5','6','7','8','9','10'])->first();
+        }
         return response()->json([
             'daily_challenge'   => TrxDailyChallenge::where('status', '0')->count(),
             'deposit'           => TrxDeposit::where('status', '0')->count(),
@@ -61,16 +74,18 @@ class DashboardController extends Controller {
             'notification_count'=> count($notif_data),
             'notification'      => $notif_data,
             'redeem'            => TrxPackageRedeem::where('status', '0')->count(),
-            'daily_income'      => Helper::format_harga(($dataDepoDaily ? $dataDepoDaily->amount : 0)),
-            'weekly_income'     => Helper::format_harga(($dataDepoWeekly ? $dataDepoWeekly->amount : 0)),
-            'monthly_income'    => Helper::format_harga(($dataDepoMonth ? $dataDepoMonth->amount : 0)),
-            'current_balance'   => Helper::format_harga(($balanceOwner ? $balanceOwner->rbalance_amount : 0)),
             'social_event'      => TrxSocialEvent::where('status', '0')->count(),
             'balance'           => $balance,
             'balance_available' => Helper::format_harga($balance_avai),
             'config'            => Helper::config(),
             'username'          => $username,
-            'rank'              => $rank
+            'rank'              => $rank,
+            't_deposit'         => Helper::format_harga(($dataDepo ? $dataDepo->amount : 0)),
+            't_system'          => Helper::format_harga(($wSystem ? $wSystem->amount : 0)),
+            't_admin'           => Helper::format_harga(($wAdmin ? $wAdmin->amount : 0)),
+            't_donate'          => Helper::format_harga(($dataDonate ? $dataDonate->amount : 0)),
+            't_wd'              => Helper::format_harga(($dataWD ? $dataWD->amount : 0)),
+            't_bonus'           => Helper::format_harga(($dataBonus ? $dataBonus->amount : 0)),
         ]);
     }
 
@@ -163,7 +178,7 @@ class DashboardController extends Controller {
                             ->leftJoin('users', 'users.id', '=', 'user_wallets.user_id')
                             ->selectRaw('trx_int_transfers.submitted_at, CONCAT(trx_int_transfers.amount,"~",users.email) as description, trx_int_transfers.status, "Internal Transfer" as type, NULL as file');
         $redeem      = TrxPackageRedeem::where('user_id', $user->id)->leftJoin('packages', 'packages.id', '=', 'trx_package_redeems.package_id')->selectRaw('submitted_at, CONCAT(ramount,"~",name) as description, status, "Package Redeem" as type, NULL as file');
-        $challeng    = TrxDailyChallenge::where('user_id', $user->id)->leftJoin('daily_challenges', 'daily_challenges.id', '=', 'trx_daily_challenges.dialy_challenge_id')->selectRaw('submitted_at, IF(daily_challenges.isText="1", file_path, "-") as description, status, "Daily Challenge" as type, IF(daily_challenges.isText="1", "-", file_path) as file');
+        $challeng    = TrxDailyChallenge::where('user_id', $user->id)->leftJoin('daily_challenges', 'daily_challenges.id', '=', 'trx_daily_challenges.dialy_challenge_id')->selectRaw('submitted_at, CONCAT_WS("~", daily_challenges.name, amount) as description, status, "Daily Challenge" as type, IF(daily_challenges.isText="1", "-", file_path) as file');
         $data        = TrxSocialEvent::where('user_id', $user->id)->selectRaw('submitted_at, description, status, "Social Event" as type, file_path as file')
         // $data        = TrxPackage::where('trx_packages.user_id', $user_id)->leftJoin('packages', 'packages.id', '=', 'trx_packages.package_id')->selectRaw('trx_packages.submitted_at, packages.name as description, "~" as status, "Package" as type, NULL as file')
                         ->union($internal)
@@ -192,14 +207,19 @@ class DashboardController extends Controller {
                 }elseif($value->type == 'Withdrawal') {
                     $dataAmount         = explode('~', $value->description);
                     $amount             = Helper::format_harga((isset($dataAmount[0]) ? $dataAmount[0] : 0));
-                    $received           = Helper::format_harga((isset($dataAmount[1]) ? $dataAmount[1] : 0));
-                    $fee                = Helper::format_harga((isset($dataAmount[2]) ? $dataAmount[2] : 0));
+                    $received           = Helper::format_harga((isset($dataAmount[1]) ? $dataAmount[1] : 0), '$', 3);
+                    $fee                = Helper::format_harga((isset($dataAmount[2]) ? $dataAmount[2] : 0), '$', 3);
                     $value->description = $amount.' (net: '.$received.', fee: '.$fee.')';
+                }elseif($value->type == 'Daily Challenge') {
+                    $dataAmount         = explode('~', $value->description);
+                    $desc               = (isset($dataAmount[0]) ? $dataAmount[0] : '-');
+                    $amount             = Helper::format_harga((isset($dataAmount[1]) ? $dataAmount[1] : 0));
+                    $value->description = $desc.' ('.$amount.')';
                 }else {
                     $value->description = ($value->type != 'Package' && $value->type != 'Daily Challenge' && $value->type != 'Social Event') ? Helper::format_harga($value->description) : $value->description;
                 }
                 $folder             = ($value->type == 'Social Event') ? 'socialEvent' : ($value->type == 'Deposit' ? 'deposit' : 'dailyChallenge');
-                $value->file        = ($value->file) ? '<a href="'.asset('uploads/'.$folder.'/'.$value->file).'" target="_blank">'.$value->file.'</a>' : '-';
+                $value->file        = ($value->file) ? '<a href="javascript:void(0)" onclick="modalPop(\''.asset('uploads/'.$folder.'/'.$value->file).'\')">'.$value->file.'</a>' : '-';
                 $value->status      = ($value->status != '~') ? '<span class="badge bg-'.Helper::invoiceStatusClass($value->status).'">'.Helper::statusApproval($value->status).'</span>' : '-';
             }
         }
@@ -226,6 +246,80 @@ class DashboardController extends Controller {
         return response()->json([
             'exist'     => ($user > 0) ? true : false,
             'message'   => ($user > 0) ? '' : 'Referral code does not exist yet',
+        ]);
+    }
+
+    public function adminBalance(Request $request) {
+        $draw   = $request->get('draw');
+        $search = $request->get('search')['value'];
+        $offset = $request->get('start') - 1;
+        $limit  = $request->get('length');
+
+        $data   = OwnerWalletHistory::select('owner_wallet_histories.*', 'users.email as user')->where(function ($query) use ($search) {
+            $query->where('trx_at', 'LIKE', '%' . $search . '%');
+        })->leftJoin('users', 'users.id', '=', 'owner_wallet_histories.trx_user_id')->orderByDesc('trx_at')
+            ->offset($offset)
+            ->limit($limit)
+            ->get();
+
+        if ($data) {
+            foreach ($data as $key => $value) {
+                $value->type   = Helper::typeTrx($value->type);
+                $value->amount = '<span class="text-'.($value->status == 'in' ? 'success' : 'danger').'">'.($value->status == 'in' ? '+' : '-').Helper::format_harga($value->amount).'</span>';
+            }
+        }
+
+        $dataCount = OwnerWalletHistory::where(function ($query) use ($search) {
+            $query->where('trx_at', 'LIKE', '%' . $search . '%');
+        })->count();
+
+        return response()->json([
+            'draw'            => $draw,
+            'recordsTotal'    => $dataCount,
+            'recordsFiltered' => $dataCount,
+            'data'            => $data,
+            'success'         => true,
+        ]);
+    }
+
+    public function adminBalanceReal(Request $request) {
+        $draw   = $request->get('draw');
+        $search = $request->get('search')['value'];
+        $offset = $request->get('start') - 1;
+        $limit  = $request->get('length');
+
+        $data   = OwnerWalletRealHistory::select('owner_wallet_real_histories.*', 'users.email as user')->where(function ($query) use ($search) {
+            $query->where('trx_at', 'LIKE', '%' . $search . '%');
+        })->leftJoin('users', 'users.id', '=', 'owner_wallet_real_histories.trx_user_id')->orderByDesc('trx_at')
+            ->offset($offset)
+            ->limit($limit)
+            ->get();
+
+        if ($data) {
+            foreach ($data as $key => $value) {
+                $value->type   = Helper::typeTrx($value->type);
+                $value->amount = '<span class="text-'.($value->status == 'in' ? 'success' : 'danger').'">'.($value->status == 'in' ? '+' : '-').Helper::format_harga($value->amount).'</span>';
+            }
+        }
+
+        $dataCount = OwnerWalletRealHistory::where(function ($query) use ($search) {
+            $query->where('trx_at', 'LIKE', '%' . $search . '%');
+        })->count();
+
+        return response()->json([
+            'draw'            => $draw,
+            'recordsTotal'    => $dataCount,
+            'recordsFiltered' => $dataCount,
+            'data'            => $data,
+            'success'         => true,
+        ]);
+    }
+
+    public function adminBalanceWallet() {
+        $data = OwnerWallet::first();
+        return response()->json([
+            'owner_balance'     => Helper::format_harga(($data ? $data->rbalance_amount : 0)),
+            'owner_balance_r'   => Helper::format_harga(($data ? $data->rbalance_amount_real : 0)),
         ]);
     }
 

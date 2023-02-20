@@ -58,6 +58,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/daily-list', [DailyController::class, 'dailyChallenge'])->name('daily.list');
     Route::post('/rank-list', [RankController::class, 'index'])->name('admin.rank.list');
 
+    Route::post('/admin-balance', [DashboardController::class, 'adminBalance'])->name('admin.balance.list');
+    Route::post('/admin-balance-real', [DashboardController::class, 'adminBalanceReal'])->name('admin.balance.real.list');
+    Route::get('/admin-balance-wallet', [DashboardController::class, 'adminBalanceWallet'])->name('admin.balance.wallet');
+
     // admin proses redeem
     Route::post('/admin-redeem-process', [PackageController::class, 'adminProcessRedeem'])->name('admin.redeem.process');
 

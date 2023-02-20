@@ -81,8 +81,14 @@
                         </li>
                         <li class="nk-menu-item">
                             <a href="{{ route('dashboard.users') }}" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-wallet-saving"></em></span>
+                                <span class="nk-menu-icon"><em class="icon ni ni-users"></em></span>
                                 <span class="nk-menu-text">Users</span>
+                            </a>
+                        </li>
+                        <li class="nk-menu-item">
+                            <a href="{{ route('admin.balance') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-wallet-saving"></em></span>
+                                <span class="nk-menu-text">Balance</span>
                             </a>
                         </li>
                         <li class="nk-menu-item">

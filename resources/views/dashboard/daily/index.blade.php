@@ -27,7 +27,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Daily</th>
-                                <th>Point</th>
+                                <th>Rate</th>
                                 <th>Type Input</th>
                                 <th class="text-center">Action</th>
                             </tr>
