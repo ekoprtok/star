@@ -17,7 +17,8 @@
                         <thead>
                             <tr>
                                 <th>Date Of Submitted</th>
-                                <th>User</th>
+                                <th>Email</th>
+                                <th>Username</th>
                                 <th>Amount Request</th>
                                 <th>Amount Received</th>
                                 <th>File</th>
@@ -98,6 +99,7 @@
         columns: [
             { data: 'submitted_at' },
             { data: 'email' },
+            { data: 'username' },
             { data: 'amount' },
             { data: 'received_amount' },
             { data: 'file_path' },

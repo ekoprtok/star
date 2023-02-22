@@ -235,7 +235,7 @@ class HistoryController extends Controller {
         $offset = $request->get('start') - 1;
         $limit  = $request->get('length');
 
-        $data   = TrxDeposit::select('trx_deposits.*', 'B.email', 'A.user_id')->where(function ($query) use ($search) {
+        $data   = TrxDeposit::select('trx_deposits.*', 'B.email', 'B.username', 'A.user_id')->where(function ($query) use ($search) {
             $query->where('amount', 'LIKE', '%' . $search . '%');
         })->leftJoin('user_wallets as A', 'A.id', '=', 'trx_deposits.user_wallet_id')
             ->leftJoin('users as B', 'B.id', '=', 'A.user_id')
