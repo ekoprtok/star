@@ -483,6 +483,7 @@ class Helper {
             '8'  => 'Different Rate',
             '9'  => 'Package Redeem',
             '10' => 'End Of Donation',
+            '11' => 'Daily Challenge',
         ];
 
         return ($id != '-') ? (isset($data[$id]) ? $data[$id] : $data[0]) : $data;

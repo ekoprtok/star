@@ -22,6 +22,8 @@
        </div>
     </div>
  </div>
+
+ <span class="balance_available" hidden></span>
 @endsection
 
 @push('script')
@@ -62,7 +64,7 @@
     function buying(id) {
         Swal.fire({
             title             : "Confirmation",
-            text              : "Are you sure to donate?",
+            html              : "Your available balance "+$('.balance_available').html()+"<br> Are you sure to donate?",
             showCloseButton   : true,
             showCancelButton  : true,
             confirmButtonText : "Yes"

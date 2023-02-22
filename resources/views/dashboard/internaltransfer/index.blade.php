@@ -43,9 +43,10 @@
                            <div class="form-group">
                               <label class="form-label">Wallet Balance</label>
                               <div class="form-control-wrap">
-                                  <h3 class="balance">0</h3>
+                                  <h3 class="balance_available">0</h3>
+                                  <h3 class="balance_avail_r" hidden>0</h3>
                               </div>
-                              <small>your available balance <small class="balance_available"></small></small>
+                              <small>your available balance will be <small class="balance_available ba_f"></small></small>
                               <br>
                               <br>
                            </div>
@@ -65,28 +66,46 @@
 
 @push('script')
 <script>
+    $('input[name="amount"]').keyup(function () {
+        const avail   = $('.balance_avail_r').html();
+        let value     = $(this).val();
+        let estimated = parseFloat(avail) - parseFloat(value);
+        console.log(estimated);
+        $('.ba_f').html('$'+(Number.isNaN(estimated) ? avail : (estimated < 0 ? 0 : estimated.toFixed(2))));
+    });
+
     $("#form").submit(function(e) {
         e.preventDefault();
-        $.ajax({
-            url: "{{ route('internal.process') }}",
-            type: "POST",
-            data: $('#form').serialize(),
-            dataType: "jSON",
-            error: function(request, status, error) {
-                showResponseHeader(request);
-            },
-            success: function(r) {
-                NioApp.Toast(r.message, (r.success ? "success" : "error"), {
-                    position: "top-right"
-                });
+        Swal.fire({
+            title             : "Confirmation",
+            html              : "Are you sure to transfer to "+$('input[name="email"]').val(),
+            showCloseButton   : true,
+            showCancelButton  : true,
+            confirmButtonText : "Yes"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "{{ route('internal.process') }}",
+                    type: "POST",
+                    data: $('#form').serialize(),
+                    dataType: "jSON",
+                    error: function(request, status, error) {
+                        showResponseHeader(request);
+                    },
+                    success: function(r) {
+                        NioApp.Toast(r.message, (r.success ? "success" : "error"), {
+                            position: "top-right"
+                        });
 
-                if (r.success) {
-                    setTimeout(() => {
-                        location.href = "{{ route('dashboard') }}";
-                    }, 1000);
-                }
+                        if (r.success) {
+                            setTimeout(() => {
+                                location.href = "{{ route('dashboard') }}";
+                            }, 1000);
+                        }
+                    }
+                })
             }
-        })
+        });
     });
 </script>
 @endpush

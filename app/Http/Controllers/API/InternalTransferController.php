@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\TrxIntTransfer;
 use App\Models\User;
 use App\Models\UserWallet;
+use App\Models\TrxWithdrawal;
 
 class InternalTransferController extends Controller {
 
@@ -21,7 +22,8 @@ class InternalTransferController extends Controller {
         $user_id  = $request->user_id;
         $wallet   = UserWallet::where('user_id', $user_id)->first();
         $checkTrx = TrxIntTransfer::selectRaw('SUM(amount) as pending')->where(['user_wallet_id' => $wallet->id, 'status' => '0'])->first();
-        $amount   = ($wallet->rbalance_amount - $checkTrx->pending);
+        $trxWd    = TrxWithdrawal::selectRaw('SUM(amount) as pending')->where(['user_wallet_id' => $wallet->id, 'status' => '0'])->first();
+        $amount   = ($wallet->rbalance_amount - $checkTrx->pending - $trxWd->pending);
 
         if ($request->amount <= 0) {
             return response()->json([
@@ -62,12 +64,58 @@ class InternalTransferController extends Controller {
             'to_wallet_id'      => $walletTo->id,
             'amount'            => $request->amount,
             'file_path'         => 'kosong',
-            'status'            => '0'
+            'status'            => '1',
+            'responsed_by'      => $wallet->user_id,
+            'responsed_at'      => date('Y-m-d H:i:s'),
+        ]);
+
+        // patching
+
+        $oldWallet      = UserWallet::whereId($walletTo->id)->first();
+        $oldWalletFrom  = UserWallet::whereId($wallet->id)->first();
+        $userTo         = User::find($oldWallet->user_id);
+        $userFrom       = User::find($oldWalletFrom->user_id);
+        $amount         = Helper::format_harga($request->amount);
+
+        // to, add balance
+        // wallet user
+        $process = Helper::createdWalletHistory([
+            'trx_id'  => $create->id,
+            'type'    => '3',
+            'user_id' => $oldWallet->user_id,
+            'amount'  => $request->amount,
+            'status'  => 'in'
+        ]);
+
+        // from, reduce balance
+        // wallet user from
+        $process = Helper::createdWalletHistory([
+            'trx_id'  => $create->id,
+            'type'    => '3',
+            'user_id' => $oldWalletFrom->user_id,
+            'amount'  => $request->amount,
+            'status'  => 'out'
+        ]);
+
+        // notif to user to
+        $process = Helper::sendNotif([
+            'type'          => "internal_transfer",
+            'message'       => "You get a transfer from an {$userFrom->email} of {$amount}",
+            'from_user_id'  => "2",
+            'to_user_id'    => $oldWallet->user_id
+        ]);
+
+        // notif to user from
+        $process = Helper::sendNotif([
+            'type'          => "internal_transfer",
+            'message'       => "Your transfer of {$amount} to {$userTo->email} was successfully sent",
+            'from_user_id'  => "2",
+            'to_user_id'    => $oldWalletFrom->user_id
         ]);
 
         return response()->json([
-            'success' => ($create ? true : false),
-            'message' => ($create ? 'Your deposit has been successfully created.' : 'Error processing data, please try again.')
+            'success' => ($process ? true : false),
+            'message' => ($process ? 'Your deposit has been successfully created.' : 'Error processing data, please try again.')
         ]);
     }
 

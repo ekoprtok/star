@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\TrxWithdrawal;
 use App\Models\User;
 use App\Models\UserWallet;
+use App\Models\TrxIntTransfer;
 
 class WithdrawController extends Controller {
 
@@ -20,22 +21,24 @@ class WithdrawController extends Controller {
         $user_id    = $request->user_id;
         $wallet     = UserWallet::where('user_id', $user_id)->first();
         $fee        = (Helper::config('withdrawal_fee') / 100) * $request->amount;
-        $checkTrx   = TrxWithdrawal::selectRaw('SUM(amount) as pending')->where(['user_wallet_id' => $wallet->id, 'status' => '0'])->first();
+        $checkTrx   = TrxWithdrawal::selectRaw('SUM(amount) as pending')->where(['status' => '0', 'user_wallet_id' => $wallet->id])->first();
+        $trxInternal= TrxIntTransfer::selectRaw('SUM(amount) as pending')->where(['status' => '0', 'user_wallet_id' => $wallet->id])->first();
         $amount     = $request->amount - $fee;
-        $amountBal  = $wallet->rbalance_amount - $checkTrx->pending;
+        $amountVal  = $request->amount;
+        $amountBal  = $wallet->rbalance_amount - ($checkTrx ? $checkTrx->pending : 0) - ($trxInternal ? $trxInternal->pending : 0);
         $minWd      = Helper::config('withdrawal_min');
+
+        if ($amountVal < $minWd) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Minimum withdrawal is '.Helper::format_harga($minWd)
+            ]);
+        }
 
         if ($amount <= 0) {
             return response()->json([
                 'success' => false,
                 'message' => 'Withdrawal request amount must greater than 0'
-            ]);
-        }
-
-        if ($amount < $minWd) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Minimum withdrawal is '.Helper::format_harga($minWd)
             ]);
         }
 
@@ -100,14 +103,14 @@ class WithdrawController extends Controller {
 
             // add fee to owner
             // wallet owner
-            $process = Helper::createdOwnerWalletHistory([
-                'user_id'   => $oldWallet->user_id,
-                'amount'    => $withdraw->withdrawal_fee,
-                'type'      => '2',
-                'status'    => 'in',
-                'trx_id'    => $request->id,
-                'insertTo'  => 'real'
-            ]);
+            // $process = Helper::createdOwnerWalletHistory([
+            //     'user_id'   => $oldWallet->user_id,
+            //     'amount'    => $withdraw->withdrawal_fee,
+            //     'type'      => '2',
+            //     'status'    => 'in',
+            //     'trx_id'    => $request->id,
+            //     'insertTo'  => 'real'
+            // ]);
 
             // wallet owner
             $process = Helper::createdOwnerWalletHistory([

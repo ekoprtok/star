@@ -10,6 +10,8 @@ use App\Models\UserPackage;
 use App\Models\UserWallet;
 use App\Models\HisKindMeter;
 use App\Models\TrxPackageRedeem;
+use App\Models\TrxWithdrawal;
+use App\Models\TrxIntTransfer;
 use App\Models\User;
 use App\Models\AllQueue;
 use Helper;
@@ -158,15 +160,17 @@ class PackageController extends Controller {
     }
 
     public function packageBuy(Request $request) {
-        $id             = $request->id;
-        $user_id        = $request->user_id;
-        $trxPackage     = UserPackage::where(['user_id' => $user_id, 'package_id' => $id, 'status' => '1'])->count();
-        $checkPackage   = Package::find($id);
-        $checkWallet    = UserWallet::where('user_id', $user_id)->first();
-
+        $id              = $request->id;
+        $user_id         = $request->user_id;
+        $trxPackage      = UserPackage::where(['user_id' => $user_id, 'package_id' => $id, 'status' => '1'])->count();
+        $checkPackage    = Package::find($id);
+        $checkWallet     = UserWallet::where('user_id', $user_id)->first();
+        $checkPendingWd  = TrxWithdrawal::selectRaw('SUM(amount) as amount')->where(['user_wallet_id' => $checkWallet->id, 'status' => '0'])->first();
+        $checkPendingInt = TrxIntTransfer::selectRaw('SUM(amount) as amount')->where(['user_wallet_id' => $checkWallet->id, 'status' => '0'])->first();
         // check balance user
-        $price          = Helper::ratePackage($checkPackage->rdonation, $checkPackage->rjoin_fee);
-        if ($checkWallet->rbalance_amount < $price) {
+        $price      = Helper::ratePackage($checkPackage->rdonation, $checkPackage->rjoin_fee);
+        $available  = $checkWallet->rbalance_amount - (($checkPendingWd->amount) ? $checkPendingWd->amount : 0) - (($checkPendingInt->amount) ? $checkPendingInt->amount : 0);
+        if ($available < $price) {
             return response()->json([
                 'success' => false,
                 'message' => "Sorry, your balance isn't enough"

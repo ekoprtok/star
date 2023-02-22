@@ -322,7 +322,7 @@
                             <div class="col-sm-2">
                                 <div class="card bg-light">
                                     <div class="nk-wgw sm">
-                                        <a class="nk-wgw-inner" title="daily blessing, reward, social event, different rate, package redeem, end of donation">
+                                        <a class="nk-wgw-inner" title="daily challenge, daily blessing, reward, social event, different rate, package redeem, end of donation">
                                             <div class="nk-wgw-name d-flex flex-row justify-content-between align-items-center">
                                                 <h5 class="nk-wgw-title title">Total Bonus etc</h5>
                                                 <i class="ni ni-info"></i>
@@ -392,7 +392,7 @@
                             <div class="nk-wg7">
                                 <div class="nk-wg7-stats">
                                     <div class="nk-wg7-title">Available balance in USD</div>
-                                    <div class="number-lg balance">
+                                    <div class="number-lg balance_available">
                                         <div class="spinner-border spinner-border-sm" role="status">
                                             <span class="visually-hidden">Loading...</span>
                                         </div>

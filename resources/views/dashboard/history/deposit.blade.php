@@ -18,7 +18,8 @@
                             <tr>
                                 <th>Date Of Submitted</th>
                                 <th>User</th>
-                                <th>Amount</th>
+                                <th>Amount Request</th>
+                                <th>Amount Received</th>
                                 <th>File</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -98,6 +99,7 @@
             { data: 'submitted_at' },
             { data: 'email' },
             { data: 'amount' },
+            { data: 'received_amount' },
             { data: 'file_path' },
             { data: 'status' },
             { data: 'action', className : 'text-center' },

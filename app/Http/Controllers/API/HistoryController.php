@@ -252,8 +252,9 @@ class HistoryController extends Controller {
                 }else {
                     $value->action = '-';
                 }
-                $value->amount  = Helper::format_harga($value->amount);
-                $value->status  = '<span class="badge bg-'.Helper::invoiceStatusClass($value->status).'">'.Helper::statusApproval($value->status).'</span>';
+                $value->amount           = Helper::format_harga($value->amount);
+                $value->received_amount  = Helper::format_harga($value->received_amount);
+                $value->status           = '<span class="badge bg-'.Helper::invoiceStatusClass($value->status).'">'.Helper::statusApproval($value->status).'</span>';
             }
         }
 

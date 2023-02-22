@@ -21,7 +21,7 @@
                             <div class="nk-wg7">
                                 <div class="nk-wg7-stats">
                                     <div class="nk-wg7-title">Available balance in USD</div>
-                                    <div class="number-lg balance">
+                                    <div class="number-lg balance_available">
                                         <div class="spinner-border spinner-border-sm" role="status">
                                             <span class="visually-hidden">Loading...</span>
                                         </div>

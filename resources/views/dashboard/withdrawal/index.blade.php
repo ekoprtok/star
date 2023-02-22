@@ -39,14 +39,15 @@
                             <div class="form-group">
                                 <label class="form-label">Wallet Balance</label>
                                 <div class="form-control-wrap">
-                                    <h3 class="balance">0</h3>
+                                    <h3 class="balance_available">0</h3>
                                 </div>
                                 <small>each withdrawal will be deducted by a fee of <small class="withdrawal_fee"></small>%</small><br>
-                                <small>your available balance <small class="balance_available"></small></small>
+                                <small>your available balance will be <small class="balance_available ba_f"></small></small>
                                 <br>
                                 <label class="form-label">Estimated Value Received</label>
                                 <div class="form-control-wrap">
-                                    <h4 class="balance_estimated">0</h4>
+                                    <h4 class="balance_estimated">$0</h4>
+                                    <h4 class="balance_avail_r" hidden>0</h4>
                                 </div>
                                 <br>
                                 <div>
@@ -76,9 +77,12 @@
     getAddress();
     $('input[name="amount"]').keyup(function() {
         const fee     = $('.withdrawal_fee').html();
+        const avail   = $('.balance_avail_r').html();
         let value     = $(this).val();
         let estimated = parseFloat(value) - ((parseFloat(fee) / 100) * parseFloat(value));
-        $('.balance_estimated').html(estimated || 0);
+        let newAvail  = avail - estimated;
+        $('.balance_estimated').html('$'+(estimated || 0));
+        $('.ba_f').html('$'+(Number.isNaN(newAvail) ? avail : (newAvail < 0 ? 0 : newAvail.toFixed(2))));
     })
 
     $("#form").submit(function(e) {
