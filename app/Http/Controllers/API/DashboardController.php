@@ -55,14 +55,14 @@ class DashboardController extends Controller {
             $dataDepo   = OwnerWalletRealHistory::selectRaw('SUM(amount) as amount')->whereIn('type', ['1'])->whereDate('created_at', '>=', $startDate)->whereDate('created_at', '<=', $endDate)->first();
             $dataDonate = OwnerWalletHistory::selectRaw('SUM(amount) as amount')->where('type', '1')->whereDate('created_at', '>=', $startDate)->whereDate('created_at', '<=', $endDate)->first();
             $dataWD     = OwnerWalletRealHistory::selectRaw('SUM(amount) as amount')->where('type', '2')->whereDate('created_at', '>=', $startDate)->whereDate('created_at', '<=', $endDate)->first();
-            $dataBonus  = OwnerWalletHistory::selectRaw('SUM(amount) as amount')->whereIn('type', ['4','5','6','7','8','9','10'])->whereDate('created_at', '>=', $startDate)->whereDate('created_at', '<=', $endDate)->first();
+            $dataBonus  = OwnerWalletHistory::selectRaw('SUM(amount) as amount')->whereIn('type', ['3','4','5','6','7','8','9'])->whereDate('created_at', '>=', $startDate)->whereDate('created_at', '<=', $endDate)->first();
             $wSystem    = ($dataDepo ? $dataDepo->amount : 0) - ($dataDonate ? $dataDonate->amount : 0) - ($dataWD ? $dataWD->amount : 0) + ($dataBonus ? $dataBonus->amount : 0);
             $wAdmin     = ($dataDonate ? $dataDonate->amount : 0);
         }else {
             $dataDepo   = OwnerWalletRealHistory::selectRaw('SUM(amount) as amount')->whereIn('type', ['1'])->first();
             $dataDonate = OwnerWalletHistory::selectRaw('SUM(amount) as amount')->where('type', '1')->first();
             $dataWD     = OwnerWalletRealHistory::selectRaw('SUM(amount) as amount')->where('type', '2')->first();
-            $dataBonus  = OwnerWalletHistory::selectRaw('SUM(amount) as amount')->whereIn('type', ['4','5','6','7','8','9','10'])->first();
+            $dataBonus  = OwnerWalletHistory::selectRaw('SUM(amount) as amount')->whereIn('type', ['3','4','5','6','7','8','9'])->first();
             $wSystem    = ($dataDepo ? $dataDepo->amount : 0) - ($dataDonate ? $dataDonate->amount : 0) - ($dataWD ? $dataWD->amount : 0) + ($dataBonus ? $dataBonus->amount : 0);
             $wAdmin     = ($dataDonate ? $dataDonate->amount : 0);
         }

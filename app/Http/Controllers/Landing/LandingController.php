@@ -11,6 +11,10 @@ class LandingController extends Controller {
         return view('landing.index');
     }
 
+    public function maintenance() {
+        return view('landing.maintenance');
+    }
+
     public function news() {
         return view('landing.news');
     }
